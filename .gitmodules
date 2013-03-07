@@ -1,0 +1,3 @@
+[submodule "modules/rbenv"]
+	path = modules/rbenv
+	url = https://github.com/alup/puppet-rbenv
