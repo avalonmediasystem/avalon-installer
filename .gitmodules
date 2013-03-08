@@ -10,3 +10,6 @@
 [submodule "modules/epel"]
 	path = modules/epel
 	url = git@github.com:stahnma/puppet-module-epel.git
+[submodule "modules/fedora"]
+	path = modules/fedora
+	url = git@github.com:mbklein/puppet-fcrepo.git
