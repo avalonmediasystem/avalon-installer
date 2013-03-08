@@ -8,11 +8,11 @@ Vagrant::Config.run do |config|
 	config.vm.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
   config.vm.forward_port 8080, 38080
 
-  config.vm.provision :shell, :path => "shell/puppet_modules.sh"
+  config.vbguest.auto_update = false
 
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "avalon.pp"
-    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/etc/puppet/modules:/vagrant/modules"
+    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules"
   end
 end
