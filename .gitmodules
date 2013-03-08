@@ -9,4 +9,7 @@
 	url = https://github.com/ripienaar/puppet-concat.git
 [submodule "modules/epel"]
 	path = modules/epel
-	url = git@github.com:stahnma/puppet-module-epel.git
+  url = git@github.com:stahnma/puppet-module-epel.git
+[submodule "modules/mysql"]
+	path = modules/mysql
+	url = git@github.com:puppetlabs/puppetlabs-mysql.git
