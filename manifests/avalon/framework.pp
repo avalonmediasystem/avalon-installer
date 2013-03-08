@@ -1,4 +1,4 @@
-class avalon::webapp {
+class avalon::framework {
   include epel
   include nulrepo
 
@@ -8,7 +8,8 @@ class avalon::webapp {
   }
 
   file { "/home/vagrant/.bash_profile":
-    source => "puppet:///local/bash_profile"
+    source => "puppet:///local/bash_profile",
+    ensure => present
   }
 
   rbenv::install { "vagrant":
@@ -20,6 +21,7 @@ class avalon::webapp {
     user => "vagrant",
     home => "/home/vagrant",
     global => true,
+    source => "puppet:///local/ruby-def",
     require => Rbenv::Install["vagrant"]
   }
 }
