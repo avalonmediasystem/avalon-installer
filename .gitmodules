@@ -13,3 +13,7 @@
 [submodule "modules/fedora"]
 	path = modules/fedora
 	url = git@github.com:mbklein/puppet-fcrepo.git
+  url = git@github.com:stahnma/puppet-module-epel.git
+[submodule "modules/mysql"]
+	path = modules/mysql
+	url = git@github.com:puppetlabs/puppetlabs-mysql.git
