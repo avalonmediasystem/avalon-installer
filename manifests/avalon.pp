@@ -26,6 +26,7 @@ class avalon {
     require    => Class['fedora']
   }
   include avalon::framework
+  include solr
   # TODO: Solr
   # TODO: Matterhorn
   # TODO: Webapp
