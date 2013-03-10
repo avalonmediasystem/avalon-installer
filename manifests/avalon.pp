@@ -4,7 +4,7 @@ class avalon {
   
   package { "tomcat": }
 
-  class { "fedora::config":
+  class { "fcrepo::config":
     fedora_base => "/usr/local",
     fedora_home => "/usr/local/fedora",
     tomcat_home => "/usr/local/tomcat",
@@ -12,9 +12,9 @@ class avalon {
     user        => "tomcat7"
   }
 
-  include fedora::derby
+  include fcrepo::derby
   
-  class { fedora:
+  class { fcrepo:
     require => Package['tomcat']
   }
 
@@ -23,7 +23,7 @@ class avalon {
     ensure     => true,
     enable     => true,
     hasrestart => true,
-    require    => Class['fedora']
+    require    => Class['fcrepo']
   }
   include avalon::framework
   # TODO: Solr
