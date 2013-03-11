@@ -1,7 +1,22 @@
 class avalon {
   include epel
   include nulrepo
-  
+  include apache
+  }
+
+  exec { 'passenger_gem_install':
+    user    => 'vagrant',
+    command => 'gem install passenger',
+    unless  => 'gem list passenger | grep passenger',
+    path    => ['/home/vagrant/.rbenv/shims',
+                '/home/vagrant/.rbenv/bin',
+                '/usr/local/bin',
+                '/bin', '/usr/bin', '/usr/local/sbin',
+                '/usr/sbin','/sbin','/home/vagrant/bin',],
+    require => Rbenv::Compile ["1.9.3-p392"],
+  }
+
+
   package { "tomcat": ensure => installed }
 
   class { "fcrepo::config":
@@ -33,6 +48,7 @@ class avalon {
   # TODO: Solr
   # TODO: Matterhorn
   # TODO: Webapp
-}
+         #apache
+         #passenger
 
-include avalon
+  include avalon
