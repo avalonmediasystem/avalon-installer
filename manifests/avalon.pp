@@ -20,13 +20,14 @@ class avalon {
 
   service { 'tomcat':
     name       => 'tomcat',
-    ensure     => true,
+    ensure     => running,
     enable     => true,
     hasrestart => true,
     require    => Class['fcrepo']
   }
 
   include avalon::framework
+  include solr
   include matterhorn
 
   # TODO: Solr
