@@ -1,9 +1,10 @@
 class avalon::framework {
   include epel
   include nulrepo
+  include mediainfo
 
   package { ["curl", "gcc-c++", "libcurl-devel", "sqlite", "v8-devel", 
-    "libxml2-devel", "libxslt-devel", "make", "mediainfo", "zip"]:
+    "libxml2-devel", "libxslt-devel", "make", "zip"]:
     ensure => present
   }
 

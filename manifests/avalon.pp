@@ -2,7 +2,7 @@ class avalon {
   include epel
   include nulrepo
   
-  package { "tomcat": }
+  package { "tomcat": ensure => installed }
 
   class { "fcrepo::config":
     fedora_base => "/usr/local",
@@ -25,7 +25,10 @@ class avalon {
     hasrestart => true,
     require    => Class['fcrepo']
   }
+
   include avalon::framework
+  include matterhorn
+
   # TODO: Solr
   # TODO: Matterhorn
   # TODO: Webapp
