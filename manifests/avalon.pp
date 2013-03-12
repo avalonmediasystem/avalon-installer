@@ -4,20 +4,12 @@ class avalon {
   include apache
   }
 
-  exec { 'passenger_gem_install':
-    user    => 'vagrant',
-    command => 'gem install passenger',
-    unless  => 'gem list passenger | grep passenger',
-    path    => ['/home/vagrant/.rbenv/shims',
-                '/home/vagrant/.rbenv/bin',
-                '/usr/local/bin',
-                '/bin', '/usr/bin', '/usr/local/sbin',
-                '/usr/sbin','/sbin','/home/vagrant/bin',],
-    require => Rbenv::Compile ["1.9.3-p392"],
+
+
+  package { "tomcat":
+    ensure  =>  installed,
+    require => Class['nulrepo'],
   }
-
-
-  package { "tomcat": ensure => installed }
 
   class { "fcrepo::config":
     fedora_base => "/usr/local",
@@ -27,8 +19,9 @@ class avalon {
     user        => "tomcat7"
   }
 
-  include fcrepo::derby
-  
+  #include fcrepo::derby
+  include fcrepo::mysql
+
   class { fcrepo:
     require => Package['tomcat']
   }
