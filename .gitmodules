@@ -19,3 +19,9 @@
 [submodule "modules/solr"]
 	path = modules/solr
 	url = git@github.com:evilensky/puppet-solr.git
+[submodule "modules/apache"]
+	path = modules/apache
+	url = git@github.com:evilensky/puppetlabs-apache.git
+[submodule "modules/stdlib"]
+	path = modules/stdlib
+	url = git@github.com:puppetlabs/puppetlabs-stdlib.git
