@@ -10,7 +10,3 @@ fi
 PATH=$PATH:$HOME/bin
 
 export PATH
-
-if [ -f ~/.rbenvrc ]; then
-	source ~/.rbenvrc
-fi
