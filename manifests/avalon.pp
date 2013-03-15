@@ -2,41 +2,42 @@ class avalon {
   include epel
   include nulrepo
   include apache
+  include matterhorn
+  include tomcat
+  include mysql
+  include avalon::framework
   }
 
 
-
-  package { "tomcat":
-    ensure  =>  installed,
-    require => Class['nulrepo'],
-  }
 
   class { "fcrepo::config":
     fedora_base => "/usr/local",
     fedora_home => "/usr/local/fedora",
     tomcat_home => "/usr/local/tomcat",
     server_host => "localhost",
-    user        => "tomcat7"
+    user        => "tomcat7",
+    require     => Class['tomcat'],
   }
 
   #include fcrepo::derby
+  #heirafy
   include fcrepo::mysql
 
   class { fcrepo:
-    require => Package['tomcat']
+    require => Class['tomcat'],
   }
 
-  service { 'tomcat':
-    name       => 'tomcat',
-    ensure     => running,
-    enable     => true,
-    hasrestart => true,
-    require    => Class['fcrepo']
+  class { solr:
+    require => Class['tomcat'],
   }
+
+  class { tomcat:
+    require => Class['nulrepo'],
+  }
+
 
   include avalon::framework
   include solr
-  include matterhorn
 
   # TODO: Solr
   # TODO: Matterhorn

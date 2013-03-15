@@ -13,6 +13,7 @@ Vagrant::Config.run do |config|
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "avalon.pp"
-    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules"
+    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules --hiera_config=/vagrant/heira/heira.yml"
   end
 end
+
