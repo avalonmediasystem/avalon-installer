@@ -3,6 +3,7 @@ class avalon::framework {
   include epel
   include nulrepo
   include mediainfo
+  include matterhorn
   include rvm
 
   package { ['curl', 'sqlite', 'v8-devel', 'zip']:
@@ -27,8 +28,8 @@ class avalon::framework {
     ensure  => present,
     require => Rvm_system_ruby['ruby-1.9.3-p392'],
   }
-
-
+  ##TODO Parameterize at worst, be more clever
+  ##TODO move into "avalon" class (Ruby/Apache/Passenger)
   rvm_gem {
   'ruby-1.9.3-p392@avalon/bundler':
     ensure  => '~> 1.2.3',
