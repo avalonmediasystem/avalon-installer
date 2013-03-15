@@ -1,6 +1,3 @@
-[submodule "modules/rbenv"]
-	path = modules/rbenv
-	url = https://github.com/alup/puppet-rbenv.git
 [submodule "modules/staging"]
 	path = modules/staging
 	url = https://github.com/nanliu/puppet-staging.git
@@ -21,7 +18,7 @@
 	url = git@github.com:evilensky/puppet-solr.git
 [submodule "modules/apache"]
 	path = modules/apache
-	url = git@github.com:evilensky/puppetlabs-apache.git
+	url = git@github.com:puppetlabs/puppetlabs-apache.git
 [submodule "modules/stdlib"]
 	path = modules/stdlib
 	url = git@github.com:puppetlabs/puppetlabs-stdlib.git
@@ -31,3 +28,6 @@
 [submodule "modules/matterhorn"]
 	path = modules/matterhorn
 	url = git@github.com:evilensky/puppet-matterhorn
+[submodule "modules/rvm"]
+	path = modules/rvm
+	url = git://github.com/blt04/puppet-rvm.git
