@@ -6,16 +6,19 @@ class avalon {
   include tomcat
   include mysql
   include avalon::framework
+  include avalon::packages
   }
 
+  class { 'nulrepo':
+    require => Class['epel'],
+  }
 
-
-  class { "fcrepo::config":
-    fedora_base => "/usr/local",
-    fedora_home => "/usr/local/fedora",
-    tomcat_home => "/usr/local/tomcat",
-    server_host => "localhost",
-    user        => "tomcat7",
+  class { 'fcrepo::config':
+    fedora_base => '/usr/local',
+    fedora_home => '/usr/local/fedora',
+    tomcat_home => '/usr/local/tomcat',
+    server_host => 'localhost',
+    user        => 'tomcat7',
     require     => Class['tomcat'],
   }
 
