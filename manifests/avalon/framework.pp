@@ -2,13 +2,14 @@
 class avalon::framework {
   include epel
   include nulrepo
-  include mediainfo
   include matterhorn
   include rvm
 
-  package { ['curl', 'sqlite', 'v8-devel', 'zip']:
-    ensure => present
+  package { ['curl', 'sqlite', 'v8-devel', 'zip', 'libyaml-devel',]:
+    ensure  => present,
+    require => Class['epel'],
   }
+
   #todo parameterize everything that follows.
   file { '/home/vagrant/.bash_profile':
     ensure => present,
@@ -21,6 +22,7 @@ class avalon::framework {
   'ruby-1.9.3-p392':
     ensure      => 'present',
     default_use => true,
+    require     => Package['libyaml-devel'],
   }
 
   rvm_gemset {
