@@ -2,6 +2,7 @@ class avalon::framework {
   include epel
   include nulrepo
   include mediainfo
+  include matterhorn
 
   package { ["curl", "gcc-c++", "sqlite", "v8-devel", 
     "libxml2-devel", "libxslt-devel", "make", "zip"]:
@@ -26,6 +27,7 @@ class avalon::framework {
     require => Rbenv::Install["vagrant"]
   }
   ##TODO Parameterize at worst, be more clever
+  ##TODO move into "avalon" class (Ruby/Apache/Passenger)
   exec { 'passenger_gem_install':
   user    => 'vagrant',
   command => 'gem install passenger',
