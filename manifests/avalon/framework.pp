@@ -2,20 +2,24 @@
 class avalon::framework {
   include epel
   include nulrepo
-  include mediainfo
   include matterhorn
   include rvm
 
   package { ['curl', 'sqlite', 'v8-devel', 'zip']:
     ensure => present
   }
+
+  user { 'avalon':
+    ensure => present,
+  }
+
   #todo parameterize everything that follows.
   file { '/home/vagrant/.bash_profile':
     ensure => present,
     source => 'puppet:///local/bash_profile',
   }
 
-  rvm::system_user { vagrant: ; }
+  rvm::system_user { avalon: ; }
 
   rvm_system_ruby {
   'ruby-1.9.3-p392':
@@ -32,7 +36,6 @@ class avalon::framework {
   ##TODO move into "avalon" class (Ruby/Apache/Passenger)
   rvm_gem {
   'ruby-1.9.3-p392@avalon/bundler':
-    ensure  => '~> 1.2.3',
     require => Rvm_gemset['ruby-1.9.3-p392@avalon'],
   }
 
