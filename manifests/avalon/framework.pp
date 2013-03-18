@@ -6,7 +6,7 @@ class avalon::framework {
   include rvm
 
   package { ['curl', 'sqlite', 'v8-devel', 'zip']:
-    ensure => present
+    ensure => present,
     require => Class['epel'],
   }
 
@@ -26,7 +26,7 @@ class avalon::framework {
   'ruby-1.9.3-p392':
     ensure      => 'present',
     default_use => true,
-    require     => Package['libyaml-devel'],
+   # require     => Package['libyaml-devel'],
   }
 
   rvm_gemset {
