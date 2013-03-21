@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <solr persistent="true">
-  <cores defaultCoreName="collection1" adminPath="/admin/cores" zkClientTimeout="${zkClientTimeout:15000}" hostPort="8983" hostContext="solr">
-    <core instanceDir="collection1/" name="collection1"/>
-    <core schema="schema.xml" instanceDir="avalon/" name="avalon" config="solrconfig.xml" dataDir="data"/>
+  <cores defaultCoreName="avalon" adminPath="/admin/cores" zkClientTimeout="${zkClientTimeout:15000}" hostPort="8983" hostContext="solr">
+    <core instanceDir="avalon/" name="avalon"/>
   </cores>
 </solr>
