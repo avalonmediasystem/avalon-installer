@@ -31,3 +31,6 @@
 [submodule "modules/rvm"]
 	path = modules/rvm
 	url = git://github.com/blt04/puppet-rvm.git
+[submodule "modules/mediainfo"]
+	path = modules/mediainfo
+	url = git://github.com/greatseth/mediainfo.git
