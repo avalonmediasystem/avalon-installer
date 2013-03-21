@@ -7,6 +7,7 @@ Vagrant::Config.run do |config|
   config.vm.share_folder "files", "/etc/puppet/files", "files"
 	config.vm.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
   config.vm.forward_port 8080, 38080
+  config.vm.forward_port 9090, 39090
 
   config.vbguest.auto_update = false
 
