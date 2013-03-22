@@ -1,14 +1,26 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+require 'ipaddr'
 
-private_addr = ENV['VAGRANT_HOSTADDR'] || "192.168.56.100"
-private_mask = ENV['VAGRANT_HOSTMASK'] || "255.255.255.0"
 Vagrant::Config.run do |config|
+  private_ip = { :addr => nil, :mask => nil }
+  begin
+    ifinfo = `VBoxManage list hostonlyifs`
+    interfaces = ifinfo.split(/\n\n/).collect { |intf| Hash[intf.split(/\n/).collect { |l| l.split(/:\s+/) }] }
+    private_ip[:addr] = ENV['VAGRANT_HOSTADDR'] || IPAddr.new(interfaces[0]['IPAddress']).succ.to_s
+    private_ip[:mask] = ENV['VAGRANT_HOSTMASK'] || interfaces[0]['NetworkMask']
+  rescue
+  end
+  if private_ip.nil?
+    $stderr.puts "No usable host only network interface found. Disabling."
+  else
+    config.vm.network :hostonly, private_ip[:addr], :netmask => private_ip[:mask]
+  end
+
   config.vm.box = "nulib"
   config.vm.box_url = "http://yumrepo-public.library.northwestern.edu/nulib.box"
   config.vm.share_folder "files", "/etc/puppet/files", "files"
-  config.vm.network :hostonly, private_addr, :netmask => private_mask
-	config.vm.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
+  config.vm.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
   config.vm.forward_port 8080, 38080
   config.vm.forward_port 9090, 39090
 
