@@ -11,7 +11,7 @@ Vagrant::Config.run do |config|
     private_ip[:mask] = ENV['VAGRANT_HOSTMASK'] || interfaces[0]['NetworkMask']
   rescue
   end
-  if private_ip.nil?
+  if private_ip[:addr].nil?
     $stderr.puts "No usable host only network interface found. Disabling."
   else
     config.vm.network :hostonly, private_ip[:addr], :netmask => private_ip[:mask]
