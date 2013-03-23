@@ -22,12 +22,14 @@ Vagrant::Config.run do |config|
   config.vm.share_folder "files", "/etc/puppet/files", "files"
   config.vm.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
   config.vm.forward_port 8080, 38080
-  config.vm.forward_port 9090, 39090
+  config.vm.forward_port 8983, 38983
 
   config.vbguest.auto_update = false
 
-  config.vm.provision :shell do |shell|
-    shell.inline = "ifdown eth1 ; ifup eth1"
+  unless private_ip[:addr].nil?
+    config.vm.provision :shell do |shell|
+      shell.inline = "ifdown eth1 ; ifup eth1"
+    end
   end
 
   config.vm.provision :puppet do |puppet|
