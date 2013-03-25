@@ -17,6 +17,7 @@ class avalon {
   	require => [Class['fcrepo::config'], Class['fcrepo::mysql'], Package['tomcat']] 
   }
   include solr
+  include red5
   include avalon::packages
   include avalon::web
   include avalon::framework
