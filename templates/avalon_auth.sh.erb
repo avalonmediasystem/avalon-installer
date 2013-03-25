@@ -1,0 +1,16 @@
+#!/bin/bash
+
+while read uri; do
+  saveIFS=$IFS
+  IFS='=&'
+  parm=($uri)
+  IFS=$saveIFS
+  raw=`wget -O - "<%=File.join(avalon_server,"/authorize.txt?token=${parm[1]}")%> 2>/dev/null`
+  resp="${raw//[[:space:]]/}"
+  valid=`echo ${parm[1]} | grep ^${resp}`
+  if [ -n "${valid}" ] && [ -n "${resp}" ]; then
+    echo $uri
+  else
+    echo "<%=File.join(stream_base,"forbidden")%>"
+  fi
+done
