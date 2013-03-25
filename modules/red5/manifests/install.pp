@@ -21,7 +21,8 @@ class red5::install {
     require => [Staging::File["red5-1.0.1.tar.gz"],User['red5']],
   }
 
-  file { "/usr/local/red5-server-1.0":
+  file { 'red5-permissions':
+    path    => "/usr/local/red5-server-1.0",
     owner   => 'red5',
     group   => 'red5',
     recurse => true,
