@@ -14,6 +14,6 @@ class avalon::framework {
   	ensure => directory,
   	owner  => 'avalon',
   	group  => 'avalon',
-  	mode   => '0777'
+  	mode   => '0775'
 	}
 }

@@ -14,9 +14,9 @@ class avalon::security(
   staging::extract { "red5-avalon.tar.gz":
     target  => '/usr/local/red5/webapps',
     subdir  => red5,
-    notify  => File['red5-permissions'],
+#    notify  => File['red5-permissions'],
     creates => '/usr/local/red5/webapps/avalon',
-    require => [Staging::File["red5-avalon.tar.gz"]]
+    require => [Staging::File["red5-avalon.tar.gz"],Class['red5::install']]
   }
 
   file { '/usr/local/red5/webapps/avalon/WEB-INF/red5-web.properties':
@@ -31,6 +31,12 @@ class avalon::security(
   file { '/usr/local/sbin/avalon_auth':
     content => template('avalon_auth.sh.erb'),
     require => File['/usr/local/sbin']
+  }
+
+  file { '/usr/local/red5/webapps/avalon/streams':
+    ensure => link,
+    target => '/var/avalon/rtmp_streams',
+    require => [File['/var/avalon/rtmp_streams'],Staging::Extract['red5-avalon.tar.gz']]
   }
 
 #  file { '/etc/httpd/conf.d/avalon_hls_security.conf': 

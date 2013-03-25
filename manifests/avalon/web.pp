@@ -2,9 +2,20 @@ class avalon::web {
   include apache
   include rvm
 
+  group { 'avalon':
+    ensure     => present
+  }
+
   user { 'avalon':
     ensure     => present,
+    gid        => 'avalon',
     managehome => true,
+    require    => Group['avalon']
+  }
+
+  exec { 'avalon_group_membership':
+    command    => '/usr/sbin/usermod -G avalon red5 ; /usr/sbin/usermod -G avalon matterhorn',
+    require    => [User['red5'],Class['matterhorn'],Group['avalon']]
   }
 
   ssh_authorized_key { 'vagrant_key_shared_with_avalon':
