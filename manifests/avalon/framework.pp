@@ -10,5 +10,10 @@ class avalon::framework {
     source => 'puppet:///local/bash_profile',
   }
 
-
+  file { ['/var/avalon/','/var/avalon/dropbox','/var/avalon/masterfiles','/var/avalon/rtmp_streams','/var/avalon/hls_streams']:
+  	ensure => directory,
+  	owner  => 'avalon',
+  	group  => 'avalon',
+  	mode   => '0777'
+	}
 }
