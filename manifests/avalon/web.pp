@@ -72,5 +72,16 @@ class avalon::web {
     maxpoolsize => '30',
     spawnmethod => 'smart-lv2';
   }
+
+  apache::vhost { 'localhost':
+    priority        => '10',
+    port            => '80',
+    docroot         => '/var/www/avalon/current/',
+    passenger       => true,
+    # rvm has a dependency for mod_ssl
+    ssl => false,
+  }
+
+
 }
 
