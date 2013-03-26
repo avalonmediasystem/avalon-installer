@@ -13,9 +13,14 @@ class avalon::web {
     require    => Group['avalon']
   }
 
-  exec { 'avalon_group_membership':
-    command    => '/usr/sbin/usermod -G avalon red5 ; /usr/sbin/usermod -G avalon matterhorn',
-    require    => [User['red5'],Class['matterhorn'],Group['avalon']]
+  exec { "/usr/sbin/usermod -a -G avalon red5":
+    unless  => "/bin/cat /etc/group | grep ^avalon | grep red5",
+    require => [User['red5'], Group['avalon']];
+  }
+
+  exec { "/usr/sbin/usermod -a -G avalon matterhorn":
+    unless  => "/bin/cat /etc/group | grep ^avalon | grep matterhorn",
+    require => [User['matterhorn'], Group['avalon']];
   }
 
   ssh_authorized_key { 'vagrant_key_shared_with_avalon':
@@ -51,6 +56,7 @@ class avalon::web {
     'ruby-1.9.3-p392':
       ensure      => 'present',
       default_use => true,
+      require     => Class['avalon::packages']
   }
 
   rvm_gemset {
@@ -73,13 +79,14 @@ class avalon::web {
     spawnmethod => 'smart-lv2';
   }
 
-  apache::vhost { 'localhost':
+  apache::vhost { 'avalon.dev':
+    serveraliases   => ['*'],
     priority        => '10',
     port            => '80',
     docroot         => '/var/www/avalon/current/',
     passenger       => true,
     # rvm has a dependency for mod_ssl
-    ssl => false,
+    ssl             => false,
   }
 
 
