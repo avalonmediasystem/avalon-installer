@@ -22,6 +22,7 @@ class avalon {
   include avalon::web
   include avalon::framework
   include avalon::security
+  include avalon::mysql
 }
 
 include avalon 

@@ -1,6 +1,8 @@
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  pool: 5
-  timeout: 5000
-
+  adapter: mysql2
+  encoding: utf8
+  reconnect: true
+  database: avalonweb
+  username: avalonweb
+  password: SW5GI4aQLVmPLg
+  host: localhost
