@@ -30,6 +30,13 @@ class avalon::web {
     type   => 'ssh-rsa',
   }
 
+  ssh_authorized_key { 'avalon_key_for_capistrano_deploy':
+    ensure => present,
+    user   => 'avalon',
+    key    => 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC5u3clpfgbu1gwMDSXvUc6+cqsDNBwUMNwNGklJjVsFMbX36y9izY2/tK4mNBxJNW1Tek1O/nwkrbIoxaIzPLQS+nyf/Sz05wY3cUfSIptJazI82pu4lNtUK51RruRjsw49yzoUfMwHSetPqC+TgipNHo4QdizzVe9l0koznNeDtNm+JmlvdV78Dwrc6VFfaVwAOvXw2MMxvma1Ow58W648c/H9EDnr9YvILon1t3mqcEXlhPaRmbZe4IyYaeCRitIbKa+Twxw2VVSDAi7U2YhXYDUC2yIH2lcL+kSmHG+CYfuxsK9PmU1yHNzcWr9obXqXTSzi389k7EK60np7kDN',
+    type   => 'ssh-rsa'
+  }
+  
   file { ['/var/www', '/var/www/avalon']:
     ensure  => 'directory',
     owner   => 'avalon',
