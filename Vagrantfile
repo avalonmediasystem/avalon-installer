@@ -22,6 +22,7 @@ Vagrant::Config.run do |config|
   config.vm.share_folder "files", "/etc/puppet/files", "files"
   config.vm.share_folder("templates", "/tmp/vagrant-puppet/templates", "templates")
   config.vm.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
+  config.vm.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   config.vm.forward_port 8080, 38080
   config.vm.forward_port 8983, 38983
   config.vm.forward_port 80, 4000

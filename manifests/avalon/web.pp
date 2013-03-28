@@ -1,6 +1,9 @@
-class avalon::web {
+class avalon::web(
+  $ruby_version = "ruby-1.9.3-p392"
+) {
   include apache
   include rvm
+  include staging
 
   group { 'avalon':
     ensure     => present
@@ -60,26 +63,26 @@ class avalon::web {
   rvm::system_user { avalon: ; }
 
   rvm_system_ruby {
-    'ruby-1.9.3-p392':
+    $ruby_version:
       ensure      => 'present',
       default_use => true,
       require     => Class['avalon::packages']
   }
 
   rvm_gemset {
-    'ruby-1.9.3-p392@avalon':
+    ["${ruby_version}@avalon","${ruby_version}@global"]:
       ensure  => present,
-      require => Rvm_system_ruby['ruby-1.9.3-p392'],
+      require => Rvm_system_ruby[$ruby_version],
   }
 
   rvm_gem {
-    'ruby-1.9.3-p392@avalon/bundler':
-      require => Rvm_gemset['ruby-1.9.3-p392@avalon'],
+    "${ruby_version}@global/bundler":
+      require => Rvm_gemset["${ruby_version}@global"],
   }
 
   class { 'rvm::passenger::apache':
     version => '3.0.19',
-    ruby_version => 'ruby-1.9.3-p392',
+    ruby_version => $ruby_version,
     mininstances => '3',
     maxinstancesperapp => '0',
     maxpoolsize => '30',
@@ -96,6 +99,32 @@ class avalon::web {
     ssl             => false,
   }
 
+  staging::file { "avalon-bare-deploy.tar.gz":
+    source  => "https://github.com/avalonmediasystem/avalon/archive/bare-deploy.tar.gz",
+    subdir  => avalon,
+  }
 
+  staging::extract { "avalon-bare-deploy.tar.gz":
+    target  => "${staging::path}/avalon",
+    subdir  => avalon,
+    require => Staging::File["avalon-bare-deploy.tar.gz"]
+  }
+
+  exec { "deploy-setup":
+    command => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle install",
+    onlyif  => "/usr/bin/test ! -e /var/www/avalon/current",
+    cwd     => "${staging::path}/avalon/avalon-bare-deploy",
+    require => [Staging::Extract["avalon-bare-deploy.tar.gz"],Apache::Vhost['avalon.dev'],Rvm_gem["${ruby_version}@global/bundler"],Rvm_gem['passenger']]
+  }
+
+  exec { "deploy-application":
+    command     => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle exec cap vagrant deploy >> ${staging::path}/avalon/deploy.log 2>&1",
+    environment => "HOME=/root",
+    creates     => "/var/www/avalon/current",
+    cwd         => "${staging::path}/avalon/avalon-bare-deploy",
+    timeout     => 0,
+    notify      => Service['httpd'],
+    require     => Exec['deploy-setup']
+  }
 }
 
