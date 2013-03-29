@@ -1,7 +1,10 @@
 #builds ffmpeg from a locally supplied ffmpeg srpm
 class avalon::ffmpeg {
 
-  $ffmpeg     = 'ffmpeg-1.0.1-59.el6.src.rpm'
+  $ffmpeg_ver = '1.2-59a.el6'
+  $specfile   = 'ffmpeg12.spec'
+
+  $ffmpeg     = "ffmpeg-${ffmpeg_ver}.src.rpm"
   $ffmpeg_req = ['SDL-devel',
                  'a52dec-devel',
                  'bzip2-devel',
@@ -34,8 +37,8 @@ class avalon::ffmpeg {
   $build_cmd  = "#!/bin/bash
 cd /home/makerpm/
 rpmdev-setuptree
-rpm -i ffmpeg-1.0.1-59.el6.src.rpm
-rpmbuild -ba rpmbuild/SPECS/ffmpeg10.spec\n"
+rpm -i ffmpeg-${ffmpeg_ver}.src.rpm
+rpmbuild -ba rpmbuild/SPECS/${specfile}\n"
 
 #default path
 Exec { path => ['/usr/bin', '/usr/sbin/', '/sbin/', '/bin',] }
@@ -47,7 +50,7 @@ Exec { path => ['/usr/bin', '/usr/sbin/', '/sbin/', '/bin',] }
   }
   
   exec { 'install_ffmpeg_rpm':
-    command => 'rpm -i /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-libs-1.0.1-59.el6.x86_64.rpm && rpm -i /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-1.0.1-59.el6.x86_64.rpm',
+    command => "rpm -i /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-libs-${ffmpeg_ver}.x86_64.rpm && rpm -i /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-${ffmpeg_ver}.x86_64.rpm",
     unless  => 'rpm -q ffmpeg',
     require => Exec["su -l makerpm -c '/home/makerpm/install_ffmpeg_src.sh'"],
   }
@@ -76,13 +79,13 @@ Exec { path => ['/usr/bin', '/usr/sbin/', '/sbin/', '/bin',] }
   
   exec { "su -l makerpm -c '/home/makerpm/install_ffmpeg_src.sh'":
     cwd     => '/home/makerpm',
-    require => [File['/home/makerpm/install_ffmpeg_src.sh'],File['/home/makerpm/ffmpeg-1.0.1-59.el6.src.rpm']],
-    creates => '/home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-1.0.1-59.el6.x86_64.rpm',
+    require => [File['/home/makerpm/install_ffmpeg_src.sh'],File["/home/makerpm/ffmpeg-${ffmpeg_ver}.src.rpm"]],
+    creates => "/home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-${ffmpeg_ver}.x86_64.rpm",
     timeout => 3000,
   }
   
-  file { '/home/makerpm/ffmpeg-1.0.1-59.el6.src.rpm':
-    source  => 'puppet:///local/ffmpeg/ffmpeg-1.0.1-59.el6.src.rpm',
+  file { "/home/makerpm/ffmpeg-${ffmpeg_ver}.src.rpm":
+    source  => "puppet:///local/ffmpeg/ffmpeg-${ffmpeg_ver}.src.rpm",
     ensure  => file,
     mode    => 0755,
     owner   => makerpm,
