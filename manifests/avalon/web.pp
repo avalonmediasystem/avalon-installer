@@ -126,5 +126,11 @@ class avalon::web(
     notify      => Service['httpd'],
     require     => Exec['deploy-setup']
   }
+
+  file { '/var/www/avalon/current/public/streams':
+    ensure      => link,
+    target      => '/var/avalon/hls_streams',
+    require     => Exec['deploy-application']
+  }
 }
 

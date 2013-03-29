@@ -25,7 +25,7 @@ class avalon::security(
   }
 
   file { '/usr/local/sbin':
-    ensure => directory
+    ensure  => directory
   }
 
   file { '/usr/local/sbin/avalon_auth':
@@ -34,9 +34,18 @@ class avalon::security(
   }
 
   file { '/usr/local/red5/webapps/avalon/streams':
-    ensure => link,
-    target => '/var/avalon/rtmp_streams',
-    require => [File['/var/avalon/rtmp_streams'],Staging::Extract['red5-avalon.tar.gz']]
+    ensure  => directory,
+    owner   => 'red5',
+    group   => 'avalon',
+    mode    => 0775,
+    require => Staging::Extract['red5-avalon.tar.gz']
+  }
+
+  file { '/var/avalon/rtmp_streams':
+    ensure  => link,
+    force   => true,
+    target  => '/usr/local/red5/webapps/avalon/streams',
+    require => File['/usr/local/red5/webapps/avalon/streams']
   }
 
 #  file { '/etc/httpd/conf.d/avalon_hls_security.conf': 
