@@ -54,6 +54,14 @@ class avalon::web(
     recurse => true
   }
 
+  file{ '/var/www/avalon/shared/avalon.yml':
+    ensure  => present,
+    content => template('avalon/shared/avalon_yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    require => File['/var/www/avalon/shared']
+  }
+
   file{ ['/var/www/avalon/shared/log', '/var/www/avalon/shared/pids']:
     ensure  => 'directory',
     owner   => 'avalon',
@@ -131,6 +139,20 @@ class avalon::web(
     ensure      => link,
     target      => '/var/avalon/hls_streams',
     require     => Exec['deploy-application']
+  }
+
+  file { '/etc/init.d/avalon_delayed_job':
+    source      => 'puppet:///local/avalon/avalon_delayed_job_init_script',
+    ensure      => present,
+    mode        => 0755,
+    require     => Exec['deploy-application']
+  }
+
+  service { 'avalon_delayed_job':
+    ensure     => running,
+    enable     => true,
+    hasrestart => true,
+    require     => File['/etc/init.d/avalon_delayed_job']
   }
 }
 

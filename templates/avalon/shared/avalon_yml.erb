@@ -6,7 +6,7 @@ production:
     password: 'avalon'
     notification_email_address: ''
   matterhorn:
-    root: 'http://localhost:8080/'
+    root: '<%=matterhorn_public_url%>'
     baseApplication: 'avalon'
     use_red5: true
     cleanup_log: 'log/matterhorn_cleanup.log'
@@ -23,5 +23,5 @@ production:
         enable_starttls_auto: false
   streaming:
     stream_token_ttl: 20 #minutes
-    rtmp_base: 'rtmp://localhost/avalon'
-    http_base: 'http://localhost/streams'
+    rtmp_base: '<%=red5_public_url%>/avalon'
+    http_base: '<%=avalon_public_url%>/streams'
