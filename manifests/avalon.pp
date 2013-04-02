@@ -3,6 +3,9 @@ class avalon {
   include nulrepo
   include apache
   include concat::setup
+  class { matterhorn::config:
+    http_port => '18080'
+  }
   include matterhorn
   class { tomcat::install: 
     http_port => '8983'
