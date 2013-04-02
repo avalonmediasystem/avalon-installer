@@ -1,0 +1,10 @@
+RewriteEngine on
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{QUERY_STRING} token=([^&]+)
+RewriteRule \.m3u8$ ${avalon_auth:%{REQUEST_URI}?token=%1}
+
+RewriteCond %{QUERY_STRING} !token=
+RewriteRule \.m3u8$ - [F]
+
+RewriteRule forbidden$ - [F]

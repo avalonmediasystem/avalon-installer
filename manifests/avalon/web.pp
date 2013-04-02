@@ -130,8 +130,6 @@ class avalon::web(
     environment => "HOME=/root",
     creates     => "/var/www/avalon/current",
     cwd         => "${staging::path}/avalon/avalon-bare-deploy",
-    timeout     => 0,
-    notify      => Service['httpd'],
     require     => Exec['deploy-setup']
   }
 
@@ -139,6 +137,15 @@ class avalon::web(
     ensure      => link,
     target      => '/var/avalon/hls_streams',
     require     => Exec['deploy-application']
+  }
+
+  file { '/var/www/avalon/current/public/streams/.htaccess':
+    source      => 'puppet:///local/avalon/streams_htaccess',
+    ensure      => present,
+    mode        => 0755,
+    owner       => 'avalon',
+    group       => 'avalon',
+    require     => [File['/var/www/avalon/current/public/streams'], File['/usr/local/sbin/avalon_auth']]
   }
 
   file { '/etc/init.d/avalon_delayed_job':

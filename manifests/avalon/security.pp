@@ -1,9 +1,9 @@
 class avalon::security(
-  $stream_base   = $avalon::security::stream_base,
-  $avalon_server = $avalon::security::avalon_server,
-  $adobe_hls     = $avalon::security::adobe_hls,
-  $stream_dir    = $avalon::security::stream_dir,
-  $server_home   = $avalon::security::server_home
+  $stream_base   = $avalon::security::params::stream_base,
+  $avalon_server = $avalon::security::params::avalon_server,
+  $adobe_hls     = $avalon::security::params::adobe_hls,
+  $stream_dir    = $avalon::security::params::stream_dir,
+  $server_home   = $avalon::security::params::server_home
 ) inherits avalon::security::params {
 
   staging::file { "red5-avalon.tar.gz":
@@ -30,6 +30,7 @@ class avalon::security(
 
   file { '/usr/local/sbin/avalon_auth':
     content => template('avalon_auth.sh.erb'),
+    mode    => 0755,
     require => File['/usr/local/sbin']
   }
 
@@ -48,10 +49,9 @@ class avalon::security(
     require => File['/usr/local/red5/webapps/avalon/streams']
   }
 
-#  file { '/etc/httpd/conf.d/avalon_hls_security.conf': 
-#    content => template('avalon_httpd.conf.erb'),
-#    notify  => Service['httpd'],
-#    require => [File['/usr/local/sbin/avalon_auth']]
-#  }
+  file { '/etc/httpd/conf.d/05-mod_rewrite.conf': 
+    ensure  => present,
+    source  => 'puppet:///local/avalon/mod_rewrite.conf'
+  }
 
 }
