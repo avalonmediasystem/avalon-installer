@@ -11,6 +11,7 @@ port_mappings = {
 Vagrant::Config.run do |config|
   config.vm.box = "nulib"
   config.vm.box_url = "http://yumrepo-public.library.northwestern.edu/nulib.box"
+  config.vm.host_name = "avalon-box"
   config.vm.share_folder "files", "/etc/puppet/files", "files"
   config.vm.share_folder("templates", "/tmp/vagrant-puppet/templates", "templates")
   config.vm.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
