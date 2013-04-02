@@ -1,5 +1,8 @@
 RewriteEngine on
 
+RewriteCond %{REMOTE_ADDR} ^(127\.0\.0\.1|::1)$
+RewriteRule .+ - [L]
+
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteCond %{QUERY_STRING} token=([^&]+)
 RewriteRule \.m3u8$ ${avalon_auth:%{REQUEST_URI}?token=%1}

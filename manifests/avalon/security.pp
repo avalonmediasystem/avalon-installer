@@ -51,7 +51,9 @@ class avalon::security(
 
   file { '/etc/httpd/conf.d/05-mod_rewrite.conf': 
     ensure  => present,
-    source  => 'puppet:///local/avalon/mod_rewrite.conf'
+    source  => 'puppet:///local/avalon/mod_rewrite.conf',
+    notify  => Service['httpd'],
+    require => File['/usr/local/sbin/avalon_auth'],
   }
 
 }

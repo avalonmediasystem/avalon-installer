@@ -103,6 +103,7 @@ class avalon::web(
     port            => '80',
     docroot         => '/var/www/avalon/current/',
     passenger       => true,
+    notify          => Service['httpd'],
     # rvm has a dependency for mod_ssl
     ssl             => false,
   }
