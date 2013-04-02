@@ -6,25 +6,25 @@
 	url = https://github.com/ripienaar/puppet-concat.git
 [submodule "modules/epel"]
 	path = modules/epel
-	url = git@github.com:stahnma/puppet-module-epel.git
+	url = https://github.com/stahnma/puppet-module-epel.git
 [submodule "modules/fcrepo"]
 	path = modules/fcrepo
-	url = git@github.com:avalonmediasystem/puppet-fcrepo.git
+	url = https://github.com/avalonmediasystem/puppet-fcrepo.git
 [submodule "modules/mysql"]
 	path = modules/mysql
-  url = git@github.com:puppetlabs/puppetlabs-mysql.git
+  url = https://github.com/puppetlabs/puppetlabs-mysql.git
 [submodule "modules/solr"]
 	path = modules/solr
-	url = git@github.com:avalonmediasystem/puppet-solr.git
+	url = https://github.com/avalonmediasystem/puppet-solr.git
 [submodule "modules/stdlib"]
 	path = modules/stdlib
-	url = git@github.com:puppetlabs/puppetlabs-stdlib.git
+	url = https://github.com/puppetlabs/puppetlabs-stdlib.git
 [submodule "modules/tomcat"]
 	path = modules/tomcat
-	url = git@github.com:avalonmediasystem/puppet-tomcat
+	url = https://github.com/avalonmediasystem/puppet-tomcat
 [submodule "modules/matterhorn"]
 	path = modules/matterhorn
-	url = git@github.com:avalonmediasystem/puppet-matterhorn
+	url = https://github.com/avalonmediasystem/puppet-matterhorn
 [submodule "modules/rvm"]
 	path = modules/rvm
-	url = git://github.com/blt04/puppet-rvm.git
+	url = https://github.com/blt04/puppet-rvm.git
