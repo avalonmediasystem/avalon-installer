@@ -5,6 +5,10 @@ class avalon::web(
   include rvm
   include staging
 
+  exec { '/usr/local/rvm/scripts/rvm':
+    subscribe  => Class['rvm::system']
+  }
+
   group { 'avalon':
     ensure     => present
   }
@@ -127,7 +131,7 @@ class avalon::web(
   }
 
   exec { "deploy-application":
-    command     => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle exec cap vagrant deploy >> ${staging::path}/avalon/deploy.log 2>&1",
+    command     => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle exec cap puppet deploy >> ${staging::path}/avalon/deploy.log 2>&1",
     environment => "HOME=/root",
     creates     => "/var/www/avalon/current",
     cwd         => "${staging::path}/avalon/avalon-bare-deploy",
