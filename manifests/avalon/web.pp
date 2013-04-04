@@ -135,7 +135,7 @@ class avalon::web(
     ]
   }
 
-  file { '/opt/staging/avalon/deployment_key':
+  file { "${staging::path}/avalon/deployment_key":
     ensure      => present,
     source      => "puppet:///local/deployment_key",
     owner       => root,
@@ -149,7 +149,7 @@ class avalon::web(
     environment => "HOME=/root",
     creates     => "/var/www/avalon/current",
     cwd         => "${staging::path}/avalon/avalon-bare-deploy",
-    require     => [Exec['deploy-setup'],File['/opt/staging/avalon/deployment_key']]
+    require     => [Exec['deploy-setup'],File["${staging::path}/avalon/deployment_key"]]
   }
 
   file { '/var/www/avalon/current/public/streams':
