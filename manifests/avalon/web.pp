@@ -127,15 +127,29 @@ class avalon::web(
     command => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle install",
     onlyif  => "/usr/bin/test ! -e /var/www/avalon/current",
     cwd     => "${staging::path}/avalon/avalon-bare-deploy",
-    require => [Staging::Extract["avalon-bare-deploy.tar.gz"],Apache::Vhost['avalon.dev'],Rvm_gem["${ruby_version}@global/bundler"],Rvm_gem['passenger']]
+    require => [
+      Staging::Extract["avalon-bare-deploy.tar.gz"],
+      Apache::Vhost['avalon.dev'],
+      Rvm_gem["${ruby_version}@global/bundler"],
+      Rvm_gem['passenger']
+    ]
   }
+
+  file { '/opt/staging/avalon/deployment_key':
+    ensure      => present,
+    source      => "puppet:///local/deployment_key",
+    owner       => root,
+    mode        => 0600,
+    require     => Exec['deploy-setup']
+  }
+
 
   exec { "deploy-application":
     command     => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle exec cap puppet deploy >> ${staging::path}/avalon/deploy.log 2>&1",
     environment => "HOME=/root",
     creates     => "/var/www/avalon/current",
     cwd         => "${staging::path}/avalon/avalon-bare-deploy",
-    require     => Exec['deploy-setup']
+    require     => [Exec['deploy-setup'],File['/opt/staging/avalon/deployment_key']]
   }
 
   file { '/var/www/avalon/current/public/streams':
