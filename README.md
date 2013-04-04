@@ -37,7 +37,7 @@
 		wget https://github.com/avalonmediasystem/avalon-vagrant/archive/flat.tar.gz
 		tar xzf flat.tar.gz
 
-7. Change to the `avalon-vagrant-flat` directory
+7. In a terminal window, `cd` to the `avalon-vagrant-flat` directory you just extracted
 
 8. Set up the installation variables
 
