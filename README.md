@@ -2,13 +2,26 @@
 
 ## Vagrant Virtual Machine Install
 
-1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) for your host machine
-2. Download and install [Vagrant](http://downloads.vagrantup.com/) for your host machine
+This method will create a [VirtualBox](https://www.virtualbox.org/) virtual machine, and then install a complete (though small) Avalon Media System instance inside of it. It uses [Vagrant](http://www.vagrantup.com/) and [Puppet](https://github.com/puppetlabs/puppet) to automate the entire process, end to end.
+
+1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) (v4.2.8 or higher) for your host machine
+2. Download and install [Vagrant](http://downloads.vagrantup.com/) (v1.1.5 or higher) for your host machine
 3. Download and extract the Avalon [install script](https://github.com/avalonmediasystem/avalon-vagrant/archive/flat.tar.gz)
 4. In a terminal window, `cd` to the `avalon-vagrant-flat` directory you just extracted
 5. Type `vagrant up`
 6. Be patient. The script needs to download and launch a bare-bones Linux VM, then install and configure several dozen dependencies and servers. This could take 30 minutes or more even with a fast connection.
 7. When the script finishes, open a web browser and attach to [http://localhost:10080/](http://localhost:10080/)
+
+### Controlling the Virtual Machine
+
+<table>
+	<tr><th>In order to...</th><th>Type...</th></tr>
+  <tr><td>...put the Avalon VM into "sleep state"</td><td><pre>vagrant suspend</pre></td></tr>
+  <tr><td>...resume a suspended VM</td><td><pre>vagrant resume</pre></td></tr>
+  <tr><td>...shut down the Avalon VM, but keep it around</td><td><pre>vagrant halt</pre></td></tr>
+  <tr><td>...terminate the VM and delete it from the host machine</td><td><pre>vagrant destroy</pre></td></tr>
+  <tr><td>...restart a halted VM, or recreate a destroyed one</td><td><pre>vagrant up</pre></td></tr>
+</table>
 
 ## Manual Puppet Install
 
@@ -51,8 +64,8 @@
 
 10. Execute the puppet script
 
-		/usr/bin/ruby /usr/bin/puppet apply --fileserverconfig=$VAGRANT/fileserver.conf --modulepath=$VAGRANT/modules --hiera_config=$VAGRANT/heira/heira.yml --templatedir=$VAGRANT/templates ./avalon.pp --detailed-exitcodes
+		puppet apply --fileserverconfig=$VAGRANT/fileserver.conf --modulepath=$VAGRANT/modules --hiera_config=$VAGRANT/heira/heira.yml --templatedir=$VAGRANT/templates ./avalon.pp --detailed-exitcodes
 
 11. Be patient. The script needs to download and launch a bare-bones Linux VM, then install and configure several dozen dependencies and servers. This could take 30 minutes or more even with a fast connection.
 
-12. When the script finishes, open a web browser and connect to the public address you configured above
+12. When the script finishes, open a web browser and connect to the public address you configured above (e.g., `http://avalon.example.edu/`)
