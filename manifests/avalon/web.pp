@@ -143,12 +143,12 @@ class avalon::web(
     require     => Exec['deploy-setup']
   }
 
-
   exec { "deploy-application":
     command     => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle exec cap puppet deploy >> ${staging::path}/avalon/deploy.log 2>&1",
     environment => "HOME=/root",
     creates     => "/var/www/avalon/current",
     cwd         => "${staging::path}/avalon/avalon-bare-deploy",
+    timeout     => 2400, # It shouldn't take 45 minutes, but Rubygems can be a bear
     require     => [Exec['deploy-setup'],File["${staging::path}/avalon/deployment_key"]]
   }
 
