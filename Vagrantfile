@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "nulib"
   config.vm.box_url = "http://yumrepo-public.library.northwestern.edu/nulib.box"
   config.vm.hostname = "avalon-box"
-  config.vm.synced_folder "files", "/etc/puppet/files"
+  config.vm.synced_folder "files", "/etc/puppet/avalon_files"
   config.vm.synced_folder "templates", "/tmp/vagrant-puppet/templates"
   config.vm.provider :virtualbox do |vb|
     vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
