@@ -76,3 +76,15 @@ This method will create a [VirtualBox](https://www.virtualbox.org/) virtual mach
 <span style="color:red">
 **NOTE:** Puppet needs to download dozens of system packages, software distributions, source files, and other information, largely from trusted third party repositories. Sometimes, one or more repositories might be offline, unresponsive, or otherwise unavailable, causing Puppet to display a series of errors about failed dependencies. Fortunately, Puppet can usually figure out how to make things right. Simply repeat the `puppet apply ...` command in step 10 to try to repair the install.
 </span>
+
+## Ports
+
+The Avalon Media System requires several ports to be open to client browsers. The Vagrant install handles all the port forwarding for local access automatically, but the manual install will require attention to make sure the required ports are open and accessible.
+
+  Port     | Purpose              | External? | Vagrant Mapping 
+ ----------|----------------------|-----------|-----------------
+  80       | HTTP (Avalon)        | Yes       | 10080           
+  1935     | RTMP (red5)          | Yes       | 11935           
+  5080     | HTTP (red5)          | No        | -               
+  8983     | HTTP (Fedora/Solr)   | No        | -               
+  18080    | HTTP (Matterhorn)    | Yes       | 18080           
