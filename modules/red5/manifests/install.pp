@@ -6,12 +6,14 @@ class red5::install {
   }
 
   group { 'red5':
-    ensure => present
+    ensure  => present,
+    system  => true,
   }
 
   user { 'red5':
     ensure => present,
     gid => 'red5',
+    system     => true,
     require => Group['red5']
   }
 

@@ -10,13 +10,15 @@ class avalon::web(
   }
 
   group { 'avalon':
-    ensure     => present
+    ensure     => present,
+    system     => true,
   }
 
   user { 'avalon':
     ensure     => present,
     gid        => 'avalon',
     managehome => true,
+    system     => true,
     require    => Group['avalon']
   }
 

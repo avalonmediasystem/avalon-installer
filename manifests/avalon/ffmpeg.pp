@@ -47,6 +47,7 @@ Exec { path => ['/usr/bin', '/usr/sbin/', '/sbin/', '/bin',] }
     ensure     => present,
     home       => '/home/makerpm',
     managehome => true,
+    system     => true,
   }
   
   exec { 'install_ffmpeg_rpm':
