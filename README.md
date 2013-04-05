@@ -9,19 +9,22 @@ This method will create a [VirtualBox](https://www.virtualbox.org/) virtual mach
 3. Download and extract the Avalon [install script](https://github.com/avalonmediasystem/avalon-vagrant/archive/flat.tar.gz)
 4. In a terminal window, `cd` to the `avalon-vagrant-flat` directory you just extracted
 5. Type `vagrant up`
-6. Be patient. The script needs to download and launch a bare-bones Linux VM, then install and configure several dozen dependencies and servers. This could take 30 minutes or more even with a fast connection.
+6. Be patient. The script needs to download and launch a bare-bones Linux VM, then download, install and configure a whole lot of dependencies and servers. This could take 30 minutes or more even with a fast connection.
 7. When the script finishes, open a web browser and attach to [http://localhost:10080/](http://localhost:10080/)
+
+<span style="color:red">
+**NOTE:** The installer needs to download dozens of system packages, software distributions, source files, and other information, largely from trusted third party repositories. Sometimes, one or more repositories might be offline, unresponsive, or otherwise unavailable, causing the Puppet provisioning software to display a series of errors about failed dependencies. *Don't Panic.* Fortunately, Puppet can usually figure out how to make things right. Simply type `vagrant provision` to try to repair the install. If it doesn't seem to work, you can always `vagrant destroy` and `vagrant up` again to start over.
+</span>
 
 ### Controlling the Virtual Machine
 
-<table>
-	<tr><th>In order to...</th><th>Type...</th></tr>
-  <tr><td>...put the Avalon VM into "sleep state"</td><td><pre>vagrant suspend</pre></td></tr>
-  <tr><td>...resume a suspended VM</td><td><pre>vagrant resume</pre></td></tr>
-  <tr><td>...shut down the Avalon VM, but keep it around</td><td><pre>vagrant halt</pre></td></tr>
-  <tr><td>...terminate the VM and delete it from the host machine</td><td><pre>vagrant destroy</pre></td></tr>
-  <tr><td>...restart a halted VM, or recreate a destroyed one</td><td><pre>vagrant up</pre></td></tr>
-</table>
+ In order to...                                          | Type...
+---------------------------------------------------------|-------------------
+ ...put the Avalon VM into "sleep state"                 | `vagrant suspend`
+ ...resume a suspended VM                                | `vagrant resume`
+ ...shut down the Avalon VM, but keep it around          | `vagrant halt`
+ ...terminate the VM and delete it from the host machine | `vagrant destroy`
+ ...restart a halted VM, or recreate a destroyed one     | `vagrant up`
 
 ## Manual Puppet Install
 
@@ -29,43 +32,47 @@ This method will create a [VirtualBox](https://www.virtualbox.org/) virtual mach
 
 2. Become root
 
-		sudo -s
+        sudo -s
 
 3. Disable SELinux (which we're not currently set up to support)
 
-		echo 0 > /selinux/enforce
-		Edit `/etc/selinux/config` and change the value of `SELINUX` from `enforcing` to `permissive`
+        echo 0 > /selinux/enforce
+        Edit `/etc/selinux/config` and change the value of `SELINUX` from `enforcing` to `permissive`
 
 4. Install puppet from the Puppet Labs repository
 
-		rpm -ivh http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-6.noarch.rpm
-		yum install puppet
+        rpm -ivh http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-6.noarch.rpm
+        yum install puppet
 
 5. Install git
 
-		yum install git
+        yum install git
 
 6. Download and extract the Avalon [install script](https://github.com/avalonmediasystem/avalon-vagrant/archive/flat.tar.gz)
 
-		wget https://github.com/avalonmediasystem/avalon-vagrant/archive/flat.tar.gz
-		tar xzf flat.tar.gz
+        wget https://github.com/avalonmediasystem/avalon-vagrant/archive/flat.tar.gz
+        tar xzf flat.tar.gz
 
 7. `cd avalon-vagrant-flat`
 
 8. Set up the installation variables
 
-		VAGRANT=`pwd`
-		ln -s $VAGRANT/files /etc/puppet/avalon_files
-		cd $VAGRANT/manifests
+        VAGRANT=`pwd`
+        ln -s $VAGRANT/files /etc/puppet/avalon_files
+        cd $VAGRANT/manifests
 
 9. If the hostname clients should connect to is different from the default machine hostname, tell puppet about it
 
-		export FACTER_avalon_public_address=avalon.example.edu
+        export FACTER_avalon_public_address=avalon.example.edu
 
 10. Execute the puppet script
 
-		puppet apply --fileserverconfig=$VAGRANT/fileserver.conf --modulepath=$VAGRANT/modules --hiera_config=$VAGRANT/heira/heira.yml --templatedir=$VAGRANT/templates ./avalon.pp --detailed-exitcodes
+        puppet apply --fileserverconfig=$VAGRANT/fileserver.conf --modulepath=$VAGRANT/modules --hiera_config=$VAGRANT/heira/heira.yml --templatedir=$VAGRANT/templates ./avalon.pp --detailed-exitcodes
 
-11. Be patient. The script needs to download and launch a bare-bones Linux VM, then install and configure several dozen dependencies and servers. This could take 30 minutes or more even with a fast connection.
+11. Be patient. The manifest needs to download, install and configure a whole lot of dependencies and servers. This could take 30 minutes or more even with a fast connection.
 
 12. When the script finishes, open a web browser and connect to the public address you configured above (e.g., `http://avalon.example.edu/`)
+
+<span style="color:red">
+**NOTE:** Puppet needs to download dozens of system packages, software distributions, source files, and other information, largely from trusted third party repositories. Sometimes, one or more repositories might be offline, unresponsive, or otherwise unavailable, causing Puppet to display a series of errors about failed dependencies. Fortunately, Puppet can usually figure out how to make things right. Simply repeat the `puppet apply ...` command in step 10 to try to repair the install.
+</span>
