@@ -10,7 +10,6 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "http://yumrepo-public.library.northwestern.edu/nulib.box"
   config.vm.hostname = "avalon-box"
   config.vm.synced_folder "files", "/etc/puppet/avalon_files"
-  config.vm.synced_folder "templates", "/tmp/vagrant-puppet/templates"
   config.vm.provider :virtualbox do |vb|
     vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
@@ -25,7 +24,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :puppet do |puppet|
     puppet.facter.merge! mapping_facts
     puppet.manifests_path = "manifests"
-    puppet.manifest_file  = "avalon.pp"
+    puppet.manifest_file  = "init.pp"
     puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules --hiera_config=/vagrant/heira/heira.yml --templatedir=/tmp/vagrant-puppet/templates"
   end
 end
