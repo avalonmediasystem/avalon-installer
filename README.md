@@ -50,7 +50,7 @@ This method will create a [VirtualBox](https://www.virtualbox.org/) virtual mach
 
 6. Download and extract the Avalon [install script](https://github.com/avalonmediasystem/avalon-vagrant/archive/flat.tar.gz)
 
-        wget https://github.com/avalonmediasystem/avalon-vagrant/archive/flat.tar.gz
+        wget https://github.com/avalonmediasystem/avalon-vagrant/archive/flat.tar.gz -O flat.tar.gz
         tar xzf flat.tar.gz
 
 7. `cd avalon-vagrant-flat`
