@@ -67,7 +67,7 @@ This method will create a [VirtualBox](https://www.virtualbox.org/) virtual mach
 
 10. Execute the puppet script
 
-        puppet apply --fileserverconfig=$VAGRANT/fileserver.conf --modulepath=$VAGRANT/modules --hiera_config=$VAGRANT/heira/heira.yml --templatedir=$VAGRANT/templates ./avalon.pp --detailed-exitcodes
+        puppet apply --fileserverconfig=$VAGRANT/fileserver.conf --modulepath=$VAGRANT/modules --hiera_config=$VAGRANT/heira/heira.yml --templatedir=$VAGRANT/templates ./init.pp --detailed-exitcodes
 
 11. Be patient. The manifest needs to download, install and configure a whole lot of dependencies and servers. This could take 30 minutes or more even with a fast connection.
 
