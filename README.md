@@ -71,7 +71,7 @@ This method will create a [VirtualBox](https://www.virtualbox.org/) virtual mach
 
 11. Be patient. The manifest needs to download, install and configure a whole lot of dependencies and servers. This could take 30 minutes or more even with a fast connection.
 
-12. When the script finishes, open a web browser and connect to the public address you configured above (e.g., `http://avalon.example.edu/`)
+12. When the script finishes, open a web browser and connect to the public address you configured above (e.g., `http://avalon.example.edu/`) Create a new user with email archivist1@example.com, this is the default collection_manager and group_manager.
 
 <span style="color:red">
 **NOTE:** Puppet needs to download dozens of system packages, software distributions, source files, and other information, largely from trusted third party repositories. Sometimes, one or more repositories might be offline, unresponsive, or otherwise unavailable, causing Puppet to display a series of errors about failed dependencies. Fortunately, Puppet can usually figure out how to make things right. Simply repeat the `puppet apply ...` command in step 10 to try to repair the install.
