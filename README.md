@@ -6,8 +6,8 @@ This method will create a [VirtualBox](https://www.virtualbox.org/) virtual mach
 
 1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) (v4.2.8 or higher) for your host machine
 2. Download and install [Vagrant](http://downloads.vagrantup.com/) (v1.1.5 or higher) for your host machine
-3. Download and extract the Avalon [install script](https://github.com/avalonmediasystem/avalon-vagrant/archive/flat.tar.gz)
-4. In a terminal window, `cd` to the `avalon-vagrant-flat` directory you just extracted
+3. Download and extract the Avalon [install script](https://github.com/avalonmediasystem/avalon-installer/archive/flat.tar.gz)
+4. In a terminal window, `cd` to the `avalon-installer-flat` directory you just extracted
 5. Type `vagrant up`
 6. Be patient. The script needs to download and launch a bare-bones Linux VM, then download, install and configure a whole lot of dependencies and servers. This could take 30 minutes or more even with a fast connection.
 7. When the script finishes, open a web browser and attach to [http://localhost:10080/](http://localhost:10080/)
@@ -48,18 +48,18 @@ This method will create a [VirtualBox](https://www.virtualbox.org/) virtual mach
 
         yum install git
 
-6. Download and extract the Avalon [install script](https://github.com/avalonmediasystem/avalon-vagrant/archive/flat.tar.gz)
+6. Download and extract the Avalon [install script](https://github.com/avalonmediasystem/avalon-installer/archive/flat.tar.gz)
 
-        wget https://github.com/avalonmediasystem/avalon-vagrant/archive/flat.tar.gz -O flat.tar.gz
+        wget https://github.com/avalonmediasystem/avalon-installer/archive/flat.tar.gz -O flat.tar.gz
         tar xzf flat.tar.gz
 
-7. `cd avalon-vagrant-flat`
+7. `cd avalon-installer-flat`
 
 8. Set up the installation variables
 
-        VAGRANT=`pwd`
-        ln -s $VAGRANT/files /etc/puppet/avalon_files
-        cd $VAGRANT/manifests
+        INSTALL_DIR=`pwd`
+        ln -s $INSTALL_DIR/files /etc/puppet/avalon_files
+        cd $INSTALL_DIR/manifests
 
 9. If the hostname clients should connect to is different from the default machine hostname, tell puppet about it
 
@@ -67,7 +67,7 @@ This method will create a [VirtualBox](https://www.virtualbox.org/) virtual mach
 
 10. Execute the puppet script
 
-        puppet apply --fileserverconfig=$VAGRANT/fileserver.conf --modulepath=$VAGRANT/modules --hiera_config=$VAGRANT/heira/heira.yml --templatedir=$VAGRANT/templates ./init.pp --detailed-exitcodes
+        puppet apply --fileserverconfig=$INSTALL_DIR/fileserver.conf --modulepath=$INSTALL_DIR/modules --hiera_config=$INSTALL_DIR/heira/heira.yml --templatedir=$INSTALL_DIR/templates ./init.pp --detailed-exitcodes
 
 11. Be patient. The manifest needs to download, install and configure a whole lot of dependencies and servers. This could take 30 minutes or more even with a fast connection.
 
