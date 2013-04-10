@@ -10,7 +10,7 @@ This method will create a [VirtualBox](https://www.virtualbox.org/) virtual mach
 4. In a terminal window, `cd` to the `avalon-installer-flat` directory you just extracted
 5. Type `vagrant up`
 6. Be patient. The script needs to download and launch a bare-bones Linux VM, then download, install and configure a whole lot of dependencies and servers. This could take 30 minutes or more even with a fast connection.
-7. When the script finishes, open a web browser and attach to [http://localhost:10080/](http://localhost:10080/)
+7. When the script finishes, open a web browser and connect to [http://localhost:10080/](http://localhost:10080/)
 
 <span style="color:red">
 **NOTE:** The installer needs to download dozens of system packages, software distributions, source files, and other information, largely from trusted third party repositories. Sometimes, one or more repositories might be offline, unresponsive, or otherwise unavailable, causing the Puppet provisioning software to display a series of errors about failed dependencies. *Don't Panic.* Fortunately, Puppet can usually figure out how to make things right. Simply type `vagrant provision` to try to repair the install. If it doesn't seem to work, you can always `vagrant destroy` and `vagrant up` again to start over.
