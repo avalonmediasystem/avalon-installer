@@ -9,6 +9,11 @@ class avalon::web(
     subscribe  => Class['rvm::system']
   }
 
+  group { 'rvm': 
+    ensure     => present,
+    system     => true
+  }
+
   group { 'avalon':
     ensure     => present,
     system     => true,
@@ -68,13 +73,63 @@ class avalon::web(
     require => File['/var/www/avalon/shared']
   }
 
+  file{ "/var/www/avalon/shared/authentication.yml":
+    ensure  => present,
+    content => template('avalon/shared/authentication.yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    require => File['/var/www/avalon/shared']
+  }
+
+  file{ "/var/www/avalon/shared/database.yml":
+    ensure  => present,
+    content => template('avalon/shared/database.yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    require => File['/var/www/avalon/shared']
+  }
+
+  file{ "/var/www/avalon/shared/fedora.yml":
+    ensure  => present,
+    content => template('avalon/shared/fedora.yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    require => File['/var/www/avalon/shared']
+  }
+
+  file{ "/var/www/avalon/shared/matterhorn.yml":
+    ensure  => present,
+    content => template('avalon/shared/matterhorn.yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    require => File['/var/www/avalon/shared']
+  }
+
+  file{ "/var/www/avalon/shared/solr.yml":
+    ensure  => present,
+    content => template('avalon/shared/solr.yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    require => File['/var/www/avalon/shared']
+  }
+
+  file{ "/var/www/avalon/shared/role_map_${rails_env}.yml":
+    ensure  => present,
+    content => template('avalon/shared/role_map.yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    require => File['/var/www/avalon/shared']
+  }
+
   file{ ['/var/www/avalon/shared/log', '/var/www/avalon/shared/pids']:
     ensure  => 'directory',
     owner   => 'avalon',
     group   => 'avalon',
   }
 
-  rvm::system_user { avalon: ; }
+  rvm::system_user { 'avalon': 
+    require => [User['avalon'],Group['rvm']]
+  }
 
   rvm_system_ruby {
     $ruby_version:
@@ -103,8 +158,7 @@ class avalon::web(
     spawnmethod => 'smart-lv2';
   }
 
-  apache::vhost { 'avalon.dev':
-    serveraliases   => ['*'],
+  apache::vhost { $avalon_public_address:
     priority        => '10',
     port            => '80',
     docroot         => '/var/www/avalon/current/',
@@ -131,7 +185,7 @@ class avalon::web(
     cwd     => "${staging::path}/avalon/avalon-bare-deploy",
     require => [
       Staging::Extract["avalon-bare-deploy.tar.gz"],
-      Apache::Vhost['avalon.dev'],
+      Apache::Vhost[$avalon_public_address],
       Rvm_gem["${ruby_version}@global/bundler"],
       Rvm_gem['passenger']
     ]
@@ -147,7 +201,7 @@ class avalon::web(
 
   exec { "deploy-application":
     command     => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle exec cap puppet deploy >> ${staging::path}/avalon/deploy.log 2>&1",
-    environment => "HOME=/root",
+    environment => "HOME=/root RAILS_ENV=#{rails_env}",
     creates     => "/var/www/avalon/current",
     cwd         => "${staging::path}/avalon/avalon-bare-deploy",
     timeout     => 2400, # It shouldn't take 45 minutes, but Rubygems can be a bear

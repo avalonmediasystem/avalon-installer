@@ -11,9 +11,10 @@ class red5::install {
   }
 
   user { 'red5':
-    ensure => present,
-    gid => 'red5',
-    system     => true,
+    ensure  => present,
+    gid     => 'red5',
+    system  => true,
+    shell   => '/sbin/nologin',
     require => Group['red5']
   }
 

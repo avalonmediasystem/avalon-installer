@@ -23,6 +23,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision :puppet do |puppet|
     puppet.facter.merge! mapping_facts
+    puppet.facter['avalon_dropbox_password'] = "dropit!"
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "init.pp"
     puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules --hiera_config=/vagrant/heira/heira.yml --templatedir=/tmp/vagrant-puppet/templates"
