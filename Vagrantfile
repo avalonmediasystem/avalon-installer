@@ -1,3 +1,6 @@
+Dir[File.expand_path('../vendor/cache/gems/**/lib',__FILE__)].each { |lib| $: << lib }
+require 'highline/import'
+
 PORTS = {
   :avalon     => { :host =>  10080, :guest =>    80, :schema => "http" }, # HTTP (Apache => Passenger => Avalon)
   :red5       => { :host =>  11935, :guest =>  1935, :schema => "rtmp" }, # RTMP (Red5)
@@ -23,9 +26,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision :puppet do |puppet|
     puppet.facter.merge! mapping_facts
-    puppet.facter['avalon_dropbox_password'] = "dropit!"
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "init.pp"
-    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules --hiera_config=/vagrant/heira/heira.yml --templatedir=/tmp/vagrant-puppet/templates"
+    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules --hiera_config=/vagrant/hiera/hiera.yml --templatedir=/tmp/vagrant-puppet/templates"
   end
 end
