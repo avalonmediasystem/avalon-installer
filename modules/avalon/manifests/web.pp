@@ -202,7 +202,7 @@ class avalon::web(
 
   exec { "deploy-application":
     command     => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle exec cap puppet deploy >> ${staging::path}/avalon/deploy.log 2>&1",
-    environment => "HOME=/root RAILS_ENV=#{rails_env}",
+    environment => ["HOME=/root", "RAILS_ENV=${rails_env}"],
     creates     => "/var/www/avalon/current",
     cwd         => "${staging::path}/avalon/avalon-bare-deploy",
     timeout     => 2400, # It shouldn't take 45 minutes, but Rubygems can be a bear
@@ -236,7 +236,7 @@ class avalon::web(
   }
 
   file { '/etc/init.d/avalon_delayed_job':
-    source      => 'puppet:///modules/avalon/avalon_delayed_job_init_script',
+    content     => template('avalon/avalon_delayed_job_init_script.erb'),
     ensure      => present,
     mode        => 0755,
     require     => Exec['deploy-application']
@@ -246,7 +246,7 @@ class avalon::web(
     ensure     => running,
     enable     => true,
     hasrestart => true,
-    require     => File['/etc/init.d/avalon_delayed_job']
+    subscribe  => File['/etc/init.d/avalon_delayed_job']
   }
 }
 

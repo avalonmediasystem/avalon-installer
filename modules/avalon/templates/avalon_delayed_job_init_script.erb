@@ -5,7 +5,7 @@
 # processname: delayed_job
 
 RAILS_ROOT="/var/www/avalon/current"
-RAILS_ENV="production"
+RAILS_ENV="<%=rails_env%>"
 
 echo "Avalon delayed job $1..."
 su - avalon -c "cd $RAILS_ROOT && bundle exec rake RAILS_ENV=$RAILS_ENV delayed_job:$1 2>/dev/null"
