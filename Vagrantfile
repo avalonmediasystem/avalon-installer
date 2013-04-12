@@ -1,5 +1,6 @@
 Dir[File.expand_path('../vendor/cache/gems/**/lib',__FILE__)].each { |lib| $: << lib }
 require 'highline/import'
+require 'unix_crypt'
 require 'yaml'
 
 PORTS = {
@@ -9,16 +10,15 @@ PORTS = {
   :matterhorn => { :host =>  18080, :guest => 18080, :schema => "http" }  # HTTP (Felix => Matterhorn)
 }
 
-def load_facts
-  @facts = YAML.load(File.read(File.expand_path('../config/avalon-install.yml',__FILE__)))
+fact_file = File.expand_path('../config/avalon-install.yml',__FILE__)
+@facts = YAML.load(File.read(fact_file))
+unless @facts['avalon_dropbox_password'].nil?
+  salt = rand(36**8).to_s(36)
+  @facts['avalon_dropbox_password_hash'] = UnixCrypt::MD5.build(@facts.delete('avalon_dropbox_password'),salt)
+  File.open(fact_file,'w') { |f| f.write(YAML.dump(@facts)) }
 end
 
-load_facts
-
 Vagrant.configure("2") do |config|
-  config.vm.provision :shell, :inline => '/vagrant/process_facts /vagrant/config/avalon-install.yml'
-  load_facts
-
   config.vm.box = "nulib"
   config.vm.box_url = "http://yumrepo-public.library.northwestern.edu/nulib.box"
   config.vm.hostname = "avalon-box"
@@ -39,5 +39,6 @@ Vagrant.configure("2") do |config|
     puppet.manifest_file  = "init.pp"
     puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules --hiera_config=/vagrant/hiera/hiera.yml --templatedir=/tmp/vagrant-puppet/templates"
   end
+
 end
 
