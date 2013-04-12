@@ -11,6 +11,7 @@ class avalon::framework {
   
   group { 'dropbox':
     ensure => present,
+    system => true
   }
 
   user { $avalon_dropbox_user:

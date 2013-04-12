@@ -1,5 +1,6 @@
 Dir[File.expand_path('../vendor/cache/gems/**/lib',__FILE__)].each { |lib| $: << lib }
 require 'highline/import'
+require 'yaml'
 
 PORTS = {
   :avalon     => { :host =>  10080, :guest =>    80, :schema => "http" }, # HTTP (Apache => Passenger => Avalon)
@@ -8,7 +9,16 @@ PORTS = {
   :matterhorn => { :host =>  18080, :guest => 18080, :schema => "http" }  # HTTP (Felix => Matterhorn)
 }
 
+def load_facts
+  @facts = YAML.load(File.read(File.expand_path('../config/avalon-install.yml',__FILE__)))
+end
+
+load_facts
+
 Vagrant.configure("2") do |config|
+  config.vm.provision :shell, :inline => '/vagrant/process_facts /vagrant/config/avalon-install.yml'
+  load_facts
+
   config.vm.box = "nulib"
   config.vm.box_url = "http://yumrepo-public.library.northwestern.edu/nulib.box"
   config.vm.hostname = "avalon-box"
@@ -18,16 +28,16 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   end
 
-  mapping_facts = {}
   PORTS.each_pair do |name, mapping|
     config.vm.network :forwarded_port, mapping
-    mapping_facts["#{name}_public_url"] = "#{mapping[:schema]}://localhost:#{mapping[:host]}"
+    @facts["#{name}_public_url"] = "#{mapping[:schema]}://localhost:#{mapping[:host]}"
   end
 
   config.vm.provision :puppet do |puppet|
-    puppet.facter.merge! mapping_facts
+    puppet.facter.merge! @facts
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "init.pp"
     puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules --hiera_config=/vagrant/hiera/hiera.yml --templatedir=/tmp/vagrant-puppet/templates"
   end
 end
+

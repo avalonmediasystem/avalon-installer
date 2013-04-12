@@ -21,7 +21,7 @@ case "$1" in
 start)
 echo -n $"Starting $PROG: "
 cd $RED5_HOME
-sudo -u $USER $DAEMON >/dev/null 2>/dev/null &
+runuser $USER -c $DAEMON >/dev/null 2>/dev/null &
 RETVAL=$?
 if [ $RETVAL -eq 0 ]; then
 echo $! > $PIDFILE
