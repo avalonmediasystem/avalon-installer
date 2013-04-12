@@ -135,6 +135,7 @@ class avalon::web(
     $ruby_version:
       ensure      => 'present',
       default_use => true,
+      build_opts  => '--movable',
       require     => Class['avalon::packages']
   }
 
