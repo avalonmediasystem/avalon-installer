@@ -1,7 +1,5 @@
 --- 
+first_run: true
 avalon_dropbox_user: avalondrop
-avalon_dropbox_password: 
-avalon_dropbox_password_hash: 
 avalon_admin_user: archivist1@example.com
-avalon_admin_password: 
 rails_env: production
