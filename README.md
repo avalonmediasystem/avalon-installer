@@ -11,9 +11,15 @@ puppet) to automate the entire process, end to end.
 3. Download and extract the Avalon [install script](https://github.com/avalonmediasystem/avalon-installer/archive/flat.tar.gz)
 4. In a terminal window, `cd` to the `avalon-installer-flat` directory you just extracted
 5. Type `vagrant up`
-6. Be patient. The script needs to download and launch a bare-bones Linux VM, then download, install and configure a whole lot of 
+6. If this is the first time the script has been run, you will be asked for some information with which to initialize the
+   Avalon installation:
+    * A username for the Avalon dropbox user
+    * A password for the Avalon dropbox user
+    * The email address of the initial Avalon collection/group manager account
+    * The Rails environment to run Avalon under
+7. Be patient. The script needs to download and launch a bare-bones Linux VM, then download, install and configure a whole lot of 
    dependencies and servers. This could take 30 minutes or more even with a fast connection.
-7. When the script finishes, open a web browser and connect to [http://localhost:10080/](http://localhost:10080/)
+8. When the script finishes, open a web browser and connect to [http://localhost:10080/](http://localhost:10080/)
 
 <span style="color:red"> **NOTE:** The installer needs to download dozens of system packages, software distributions, source files,
 and other information, largely from trusted third party repositories. Sometimes, one or more repositories might be offline,
