@@ -159,8 +159,9 @@ class avalon::web(
     spawnmethod => 'smart-lv2';
   }
 
-  apache::vhost { $avalon_public_address:
+  apache::vhost { 'avalon':
     priority        => '10',
+    servername      => $avalon_public_address,
     port            => '80',
     docroot         => '/var/www/avalon/current/',
     passenger       => true,
@@ -186,7 +187,7 @@ class avalon::web(
     cwd     => "${staging::path}/avalon/avalon-bare-deploy",
     require => [
       Staging::Extract["avalon-bare-deploy.tar.gz"],
-      Apache::Vhost[$avalon_public_address],
+      Apache::Vhost['avalon'],
       Rvm_gem["${ruby_version}@global/bundler"],
       Rvm_gem['passenger']
     ]
