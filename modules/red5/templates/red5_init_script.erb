@@ -21,13 +21,14 @@ case "$1" in
 start)
 echo -n $"Starting $PROG: "
 cd $RED5_HOME
-runuser $USER -c $DAEMON >/dev/null 2>/dev/null &
+TMPPID=/tmp/$$.$PROG.pid
+runuser $USER -s /bin/bash -c "$DAEMON >/dev/null 2>/dev/null & echo \$! > $TMPPID"
 RETVAL=$?
 if [ $RETVAL -eq 0 ]; then
-echo $! > $PIDFILE
-touch /var/lock/subsys/$PROG
-
+    mv  $TMPPID $PIDFILE
+    touch /var/lock/subsys/$PROG
 fi
+rm -f $TMPPID
 [ $RETVAL -eq 0 ] && success $"$PROG startup" || failure $"$PROG startup"
 echo
 ;;
