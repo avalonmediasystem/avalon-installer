@@ -91,7 +91,7 @@ try to repair the install. If it doesn't seem to work, you can always `vagrant d
 
         FACTER_avalon_public_address=avalon.example.edu FACTER_avalon_dropbox_password=dropithere FACTER_rails_env=development \
           puppet apply --fileserverconfig=$INSTALL_DIR/fileserver.conf --modulepath=$INSTALL_DIR/modules \
-          --hiera_config=$INSTALL_DIR/heira/heira.yml --templatedir=$INSTALL_DIR/templates ./init.pp --detailed-exitcodes
+          --hiera_config=$INSTALL_DIR/hiera/hiera.yml --templatedir=$INSTALL_DIR/templates ./init.pp --detailed-exitcodes
 
 11. Be patient. The manifest needs to download, install and configure a whole lot of dependencies and servers. This could take 30
     minutes or more even with a fast connection.
