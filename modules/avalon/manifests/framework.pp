@@ -40,7 +40,7 @@ class avalon::framework {
   	ensure  => directory,
   	owner   => 'avalon',
   	group   => 'avalon',
-  	mode    => '0770',
+  	mode    => 0775,
     require => [File['/var/avalon'],User['avalon']]
 	}
 
