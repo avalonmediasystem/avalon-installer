@@ -29,12 +29,13 @@ Vagrant.configure("2") do |config|
     @facts["#{name}_public_url"] = "#{mapping[:schema]}://localhost:#{mapping[:host]}"
   end
 
+  config.vm.provision :shell, :inline => "authconfig --passalgo=sha512 --update" # use SHA512 hashes in /etc/shadow
+
   config.vm.provision :puppet do |puppet|
     puppet.facter.merge! @facts
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "init.pp"
-    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules --hiera_config=/vagrant/hiera/hiera.yml --templatedir=/tmp/vagrant-puppet/templates"
+    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules --hiera_config=/vagrant/hiera/hiera.yml"
   end
 
 end
-

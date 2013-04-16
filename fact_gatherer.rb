@@ -49,7 +49,7 @@ module FactGatherer
 
     unless @facts['avalon_dropbox_password'].nil?
       salt = rand(36**8).to_s(36)
-      @facts['avalon_dropbox_password_hash'] = UnixCrypt::MD5.build(@facts.delete('avalon_dropbox_password'),salt)
+      @facts['avalon_dropbox_password_hash'] = UnixCrypt::SHA512.build(@facts.delete('avalon_dropbox_password'),salt)
       facts_have_changed = true
     end
 
