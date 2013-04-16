@@ -41,6 +41,7 @@ Facter.add("avalon_dropbox_password") do
 end
 
 Facter.add("avalon_dropbox_password_hash") do
+  algorithms = { 'md5' => '1', 'sha256' => '5', 'sha512' => '6' }
   setcode do
     new_pw = Facter.value("avalon_dropbox_password")
     if new_pw.nil?
@@ -48,8 +49,15 @@ Facter.add("avalon_dropbox_password_hash") do
       avalon_user = Array(lines.find { |p| p.first == Facter.value("avalon_dropbox_user") and not (p[1].nil? or p[1].empty?) })
       avalon_user[1]
     else
+      alg = '1'
+      begin
+        config = File.read('/etc/login.defs')
+        entry  = config.lines.find { |l| l =~ /^ENCRYPT_METHOD\s+(\w+)/ }
+        alg = algorithms[$1.downcase]
+      rescue
+      end
       salt = rand(36**8).to_s(36)
-      new_pw.crypt("$1$#{salt}$")
+      new_pw.crypt("$#{alg}$#{salt}$")
     end
   end
 end
