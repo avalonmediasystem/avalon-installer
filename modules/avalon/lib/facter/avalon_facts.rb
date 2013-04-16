@@ -18,7 +18,7 @@ end
 
 Facter.add("red5_public_url") do
   setcode do
-    "rtmp://#{Facter.value("avalon_public_address")}:5080"
+    "rtmp://#{Facter.value("avalon_public_address")}"
   end
 end
 
