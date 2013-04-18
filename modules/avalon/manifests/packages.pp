@@ -5,4 +5,12 @@ class avalon::packages {
     ensure  => present,
     require => [Class['epel'],Class['nulrepo']],
   }
+
+  service { 'crond':
+    ensure     => running,
+    enable     => true,
+    hasrestart => true,
+    subscribe  => Package['cronie']
+  }
+
 }
