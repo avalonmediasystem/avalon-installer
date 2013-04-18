@@ -171,7 +171,7 @@ class avalon::web(
   }
 
   staging::file { "avalon-bare-deploy.tar.gz":
-    source  => "https://github.com/avalonmediasystem/avalon/archive/bare-deploy.tar.gz",
+    source  => "https://nodeload.github.com/avalonmediasystem/avalon/tar.gz/bare-deploy",
     subdir  => avalon,
   }
 
