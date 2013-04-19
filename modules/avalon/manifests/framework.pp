@@ -32,7 +32,7 @@ class avalon::framework {
     ensure  => directory,
     owner   => 'avalondrop',
     group   => 'dropbox',
-    mode    => 0755,
+    mode    => 2775,
     require => [File['/var/avalon'],User['avalondrop']]
   }
 
