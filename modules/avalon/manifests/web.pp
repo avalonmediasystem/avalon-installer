@@ -38,7 +38,7 @@ class avalon::web(
     gid        => 'avalon',
     managehome => true,
     system     => true,
-    require    => Group['avalon']
+    require    => [Group['avalon'], Group['dropbox']]
   }
 
   exec { "/usr/sbin/usermod -a -G avalon red5":
