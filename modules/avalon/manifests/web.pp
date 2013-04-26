@@ -13,7 +13,8 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 class avalon::web(
-  $ruby_version = "ruby-1.9.3-p392"
+  $ruby_version  = "ruby-1.9.3-p392",
+  $source_branch = "master"
 ) {
   include apache
   include rvm
@@ -217,7 +218,7 @@ class avalon::web(
 
   exec { "deploy-application":
     command     => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle exec cap puppet deploy >> ${staging::path}/avalon/deploy.log 2>&1",
-    environment => ["HOME=/root", "RAILS_ENV=${rails_env}"],
+    environment => ["HOME=/root", "RAILS_ENV=${rails_env}", "AVALON_BRANCH=${source_branch}"],
     creates     => "/var/www/avalon/current",
     cwd         => "${staging::path}/avalon/avalon-bare-deploy",
     timeout     => 2400, # It shouldn't take 45 minutes, but Rubygems can be a bear
