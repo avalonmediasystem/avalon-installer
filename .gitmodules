@@ -12,7 +12,7 @@
 	url = https://github.com/avalonmediasystem/puppet-fcrepo.git
 [submodule "modules/mysql"]
 	path = modules/mysql
-  url = https://github.com/puppetlabs/puppetlabs-mysql.git
+	url = https://github.com/puppetlabs/puppetlabs-mysql.git
 [submodule "modules/solr"]
 	path = modules/solr
 	url = https://github.com/avalonmediasystem/puppet-solr.git
