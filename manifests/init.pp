@@ -32,7 +32,4 @@ class { fcrepo:
 }
 include solr
 include red5
-class { avalon::web:
-  source_branch => 'release/1.0.0'
-}
 include avalon
