@@ -64,11 +64,10 @@ class avalon::framework {
     context => "/files/etc/ssh/sshd_config",
     changes => [
       "set Subsystem/sftp 'internal-sftp'",
-      "set Match[Condition/Group='dropbox']/Condition/Group 'dropbox'",
-      "set Match[Condition/Group='dropbox']/Settings/ChrootDirectory '/var/avalon'",
-      "set Match[Condition/Group='dropbox']/Settings/X11Forwarding 'no'",
-      "set Match[Condition/Group='dropbox']/Settings/AllowTcpForwarding 'no'",
-      "set Match[Condition/Group='dropbox']/Settings/ForceCommand 'internal-sftp'"
+      "set Match[Condition/User='$avalon_dropbox_user']/Condition/User '$avalon_dropbox_user'",
+      "set Match[Condition/User='$avalon_dropbox_user']/Settings/ChrootDirectory '/var/avalon'",
+      "set Match[Condition/User='$avalon_dropbox_user']/Settings/AllowTcpForwarding 'no'",
+      "set Match[Condition/User='$avalon_dropbox_user']/Settings/ForceCommand 'internal-sftp'"
     ],
     notify => Service["sshd"],
   }
