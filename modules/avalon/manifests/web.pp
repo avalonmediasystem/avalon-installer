@@ -37,6 +37,7 @@ class avalon::web(
   user { 'avalon':
     ensure     => present,
     gid        => 'avalon',
+    groups     => 'dropbox',
     managehome => true,
     system     => true,
     require    => [Group['avalon'], Group['dropbox']]
