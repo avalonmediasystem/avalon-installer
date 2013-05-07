@@ -27,6 +27,13 @@ module FactGatherer
       @facts = YAML.load(File.read(fact_file))
     else
       @facts = DEFAULT_FACTS
+      dbtext = <<-__EOC__
+The Avalon Dropbox (no connection to dropbox.com) is a directory on the Avalon server filesystem where large 
+files and batches can be placed in order to avoid having to upload them via HTTP. This installer sets up a limited, 
+sftp-only dropbox user with the credentials you specify.
+      __EOC__
+      say(HighLine.color(dbtext, :green))
+
       @facts['avalon_dropbox_user'] = ask("Username for Avalon Dropbox: ") do |q|
         q.validate = /.+{3}/
         q.default = @facts['avalon_dropbox_user']
