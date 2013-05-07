@@ -52,4 +52,5 @@ Vagrant.configure("2") do |config|
     puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules"
   end
 
+  config.vm.provision :shell, :inline => "wget -o /dev/null -q http://localhost/" # Preload the Avalon web app
 end
