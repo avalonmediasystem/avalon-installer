@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
     puppet.facter.merge! @facts
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "init.pp"
-    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules --hiera_config=/vagrant/hiera/hiera.yml"
+    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules"
   end
 
 end
