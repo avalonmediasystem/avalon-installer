@@ -13,7 +13,7 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 class avalon::web(
-  $ruby_version  = "ruby-1.9.3-p392",
+  $ruby_version  = "ruby-1.9.3-p429",
   $source_branch = "master"
 ) {
   include apache
