@@ -13,13 +13,17 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 class avalon::mysql {
-  include mysql
+  include avalon::mysql::params
+  
+  class { ::mysql:
+    bind_address => '0.0.0.0'
+  }
 
   mysql::db { 'avalonweb':
-    user     => 'avalonweb',
-    password => 'SW5GI4aQLVmPLg',
-    host     => 'localhost',
-    grant    => ['all'],
-    require  => Class['mysql::server']
+    user     => $avalon::mysql::params::user,
+    password => $avalon::mysql::params::password,
+    host     => $avalon::mysql::params::host,
+    grant    => $avalon::mysql::params::grant,
+    require  => $avalon::mysql::params::require
   }
 }

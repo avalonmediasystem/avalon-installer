@@ -12,9 +12,22 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-class avalon {
-  include apache
-  include avalon::packages
-  include avalon::web
-  include avalon::framework
+include epel
+include nulrepo
+class { tomcat::install: 
+  http_port => '8983'
 }
+include tomcat
+class { avalon::mysql::params:
+  host => '%'
+}
+include avalon::mysql
+class { fcrepo::config: 
+  user => 'tomcat7', 
+  server_host => 'localhost' 
+}
+class { fcrepo: 
+  require => [Class['fcrepo::config'], Class['fcrepo::mysql'], Package['tomcat']] 
+}
+include fcrepo::mysql
+include solr

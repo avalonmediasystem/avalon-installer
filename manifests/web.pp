@@ -12,9 +12,6 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-class avalon {
-  include apache
-  include avalon::packages
-  include avalon::web
-  include avalon::framework
-}
+include epel
+include nulrepo
+include avalon

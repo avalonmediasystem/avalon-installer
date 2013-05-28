@@ -15,7 +15,6 @@
 # Install and configure the Avalon application
 class avalon::framework {
   include epel
-  include matterhorn
   include rvm
   include stdlib
 
@@ -32,32 +31,32 @@ class avalon::framework {
     ensure   => present,
     system   => true,
     gid      => 'dropbox',
-    home     => '/dropbox', # because it's already chrooted to /var/avalon
+    home     => '/dropbox', # because it's already chrooted to $avalon_root_dir
     password => $avalon_dropbox_password_hash,
     require  => Group['dropbox']
   }
 
-  file { '/var/avalon':
+  file { $avalon_root_dir:
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
     mode    => 0755
   }
 
-  file { '/var/avalon/dropbox':
+  file { "$avalon_root_dir/dropbox":
     ensure  => directory,
     owner   => $avalon_dropbox_user,
     group   => 'dropbox',
     mode    => 2775,
-    require => [File['/var/avalon'],User[$avalon_dropbox_user]]
+    require => [File[$avalon_root_dir],User[$avalon_dropbox_user]]
   }
 
-  file { ['/var/avalon/masterfiles','/var/avalon/hls_streams']:
+  file { ["$avalon_root_dir/masterfiles","$avalon_root_dir/hls_streams"]:
   	ensure  => directory,
   	owner   => 'avalon',
   	group   => 'avalon',
   	mode    => 0775,
-    require => [File['/var/avalon'],User['avalon']]
+    require => [File[$avalon_root_dir],User['avalon']]
 	}
 
   augeas { "sshd_config":
@@ -65,7 +64,7 @@ class avalon::framework {
     changes => [
       "set Subsystem/sftp 'internal-sftp'",
       "set Match[Condition/User='$avalon_dropbox_user']/Condition/User '$avalon_dropbox_user'",
-      "set Match[Condition/User='$avalon_dropbox_user']/Settings/ChrootDirectory '/var/avalon'",
+      "set Match[Condition/User='$avalon_dropbox_user']/Settings/ChrootDirectory '$avalon_root_dir'",
       "set Match[Condition/User='$avalon_dropbox_user']/Settings/AllowTcpForwarding 'no'",
       "set Match[Condition/User='$avalon_dropbox_user']/Settings/ForceCommand 'internal-sftp'"
     ],

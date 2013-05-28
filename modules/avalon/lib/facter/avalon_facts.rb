@@ -24,15 +24,33 @@ Facter.add("avalon_public_url") do
   end
 end
 
+Facter.add("matterhorn_public_address") do
+  setcode do
+    Facter_value("avalon_public_address")
+  end
+end
+
 Facter.add("matterhorn_public_url") do
   setcode do
     "http://#{Facter.value("avalon_public_address")}:18080"
   end
 end
 
-Facter.add("red5_public_url") do
+Facter.add("rtmp_public_url") do
   setcode do
-    "rtmp://#{Facter.value("avalon_public_address")}"
+    "rtmp://#{Facter.value("avalon_public_address")}/avalon"
+  end
+end
+
+Facter.add("hls_public_url") do
+  setcode do
+    "#{Facter.value("avalon_public_url")}/streams"
+  end
+end
+
+Facter.add("tomcat_public_address") do
+  setcode do
+    Facter_value("avalon_public_address")
   end
 end
 
@@ -79,6 +97,12 @@ end
 Facter.add("avalon_admin_user") do
   setcode do
     "archivist1@example.com"
+  end
+end
+
+Facter.add("avalon_root_dir") do
+  setcode do
+    "/var/avalon"
   end
 end
 

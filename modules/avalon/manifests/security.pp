@@ -56,7 +56,7 @@ class avalon::security(
     require => Staging::Extract['red5-avalon.tar.gz']
   }
 
-  file { '/var/avalon/rtmp_streams':
+  file { "$avalon_root_dir/rtmp_streams":
     ensure  => link,
     force   => true,
     target  => '/usr/local/red5/webapps/avalon/streams',

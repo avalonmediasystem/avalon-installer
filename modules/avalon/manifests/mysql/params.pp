@@ -12,9 +12,10 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-class avalon {
-  include apache
-  include avalon::packages
-  include avalon::web
-  include avalon::framework
-}
+class avalon::mysql::params (
+  $user     = 'avalonweb',
+  $password = 'SW5GI4aQLVmPLg',
+  $host     = $tomcat_public_address,
+  $grant    = ['all'],
+  $require  = Class['mysql::server']
+) {}

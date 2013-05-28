@@ -1,7 +1,7 @@
 <%=rails_env%>: 
   dropbox:
-    path: '/var/avalon/dropbox/'
-    upload_uri: 'sftp://localhost/var/avalon/dropbox'
+    path: '<%=$avalon_root_dir%>/dropbox/'
+    upload_uri: 'sftp://<%=avalon_public_address%><%=$avalon_root_dir%>/dropbox'
   matterhorn:
     root: '<%=matterhorn_public_url%>'
     baseApplication: 'avalon'
@@ -19,5 +19,5 @@
         enable_starttls_auto: false
   streaming:
     stream_token_ttl: 20 #minutes
-    rtmp_base: '<%=red5_public_url%>/avalon'
-    http_base: '<%=avalon_public_url%>/streams'
+    rtmp_base: '<%=rtmp_public_url%>'
+    http_base: '<%=hls_public_url%>'

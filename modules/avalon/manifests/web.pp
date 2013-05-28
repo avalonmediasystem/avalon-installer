@@ -43,15 +43,15 @@ class avalon::web(
     require    => [Group['avalon'], Group['dropbox']]
   }
 
-  exec { "/usr/sbin/usermod -a -G avalon red5":
-    unless  => "/bin/cat /etc/group | grep ^avalon | grep red5",
-    require => [User['red5'], Group['avalon']];
-  }
-
-  exec { "/usr/sbin/usermod -a -G avalon matterhorn":
-    unless  => "/bin/cat /etc/group | grep ^avalon | grep matterhorn",
-    require => [User['matterhorn'], Group['avalon']];
-  }
+#  exec { "/usr/sbin/usermod -a -G avalon red5":
+#    unless  => "/bin/cat /etc/group | grep ^avalon | grep red5",
+#    require => [User['red5'], Group['avalon']];
+#  }
+#
+#  exec { "/usr/sbin/usermod -a -G avalon matterhorn":
+#    unless  => "/bin/cat /etc/group | grep ^avalon | grep matterhorn",
+#    require => [User['matterhorn'], Group['avalon']];
+#  }
 
   ssh_authorized_key { 'vagrant_key_shared_with_avalon':
     ensure => present,
@@ -239,18 +239,18 @@ class avalon::web(
 
   file { '/var/www/avalon/current/public/streams':
     ensure      => link,
-    target      => '/var/avalon/hls_streams',
+    target      => "$avalon_root_dir/hls_streams",
     require     => Exec['deploy-application']
   }
 
-  file { '/var/www/avalon/current/public/streams/.htaccess':
-    source      => 'puppet:///modules/avalon/streams_htaccess',
-    ensure      => present,
-    mode        => 0755,
-    owner       => 'avalon',
-    group       => 'avalon',
-    require     => [File['/var/www/avalon/current/public/streams'], File['/usr/local/sbin/avalon_auth']]
-  }
+#  file { '/var/www/avalon/current/public/streams/.htaccess':
+#    source      => 'puppet:///modules/avalon/streams_htaccess',
+#    ensure      => present,
+#    mode        => 0755,
+#    owner       => 'avalon',
+#    group       => 'avalon',
+#    require     => [File['/var/www/avalon/current/public/streams'], File['/usr/local/sbin/avalon_auth']]
+#  }
 
   file { '/etc/init.d/avalon_delayed_job':
     content     => template('avalon/avalon_delayed_job_init_script.erb'),
