@@ -45,7 +45,6 @@ def common_config(config, purpose, host_ip)
   config.vm.provision :shell, :inline => "authconfig --passalgo=sha512 --update" # use SHA512 hashes in /etc/shadow
 
   config.vm.provision(:puppet, :module_path => "modules") do |puppet|
-#    puppet.facter.merge! @facts
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "init.pp"
     puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --hiera_config=/vagrant/hiera/hiera.yml"

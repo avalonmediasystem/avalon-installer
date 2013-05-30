@@ -13,8 +13,9 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 class avalon::node::matterhorn {
+  package { "java-1.6.0-openjdk": ensure => present }
   include epel
   include nulrepo
   include avalon::info
-  include matterhorn
+  include ::matterhorn
 }
