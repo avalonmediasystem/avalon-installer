@@ -30,4 +30,11 @@ class avalon::info {
   $ldap_password          = hiera('ldap_password')
   $avalon_repo            = hiera('avalon_repo', "git://github.com/avalonmediasystem/avalon.git")
   $avalon_branch          = hiera('avalon_branch', "master")
+
+  file { $avalon::info::root_dir:
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => 0755
+  }
 }
