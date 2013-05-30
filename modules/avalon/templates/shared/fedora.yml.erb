@@ -1,4 +1,4 @@
-<%= rails_env %>:
+<%=scope.lookupvar('avalon::info::rails_env')%>:
   user: fedoraAdmin
   password: fedoraAdmin
-  url: http://<%=tomcat_public_address%>:8983/fedora
+  url: http://<%=scope.lookupvar('avalon::info::db_address')%>:8983/fedora

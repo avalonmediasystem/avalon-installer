@@ -2,4 +2,4 @@
 :yaml:
   :datadir: /vagrant/hiera/data/
 :hierarchy: common
-:logger: puppet
+#:logger: puppet

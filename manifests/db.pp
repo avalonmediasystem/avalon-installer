@@ -14,6 +14,7 @@
 
 include epel
 include nulrepo
+include avalon::info
 class { tomcat::install: 
   http_port => '8983'
 }

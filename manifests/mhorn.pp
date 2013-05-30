@@ -14,7 +14,5 @@
 
 include epel
 include nulrepo
-class { matterhorn::config:
-  http_port => '18080'
-}
+include avalon::info
 include matterhorn

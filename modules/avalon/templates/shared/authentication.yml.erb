@@ -1,6 +1,10 @@
 ---
-- :name: Local Account
-  :provider: :identity
+- :name: Northwestern University
+  :logo: nu_logo.png
+  :provider: :nuldap
   :params:
-    :fields:
-     - :email
+    :method: :ssl
+    :host: registry.northwestern.edu
+    :port: 636
+    :bind_dn: <%=scope.lookupvar('avalon::info::ldap_bind_dn')%>
+    :password: <%=scope.lookupvar('avalon::info::ldap_password')%>

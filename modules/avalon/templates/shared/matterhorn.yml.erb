@@ -1,2 +1,2 @@
-<%= rails_env %>:
-  url: http://matterhorn_system_account:CHANGE_ME@<%=matterhorn_public_address%>:18080/
+<%=scope.lookupvar('avalon::info::rails_env')%>:
+  url: http://matterhorn_system_account:CHANGE_ME@<%=scope.lookupvar('avalon::info::matterhorn_address')%>:8080/

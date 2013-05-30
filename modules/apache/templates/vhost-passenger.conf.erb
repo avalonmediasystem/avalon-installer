@@ -2,7 +2,7 @@
 # Default template in module puppetlabs-apache
 # Managed by Puppet
 # ************************************
-
+<% rails_env = scope.lookupvar('avalon::info::rails_env') %>
 NameVirtualHost <%= vhost_name %>:<%= port %>
 <VirtualHost <%= vhost_name %>:<%= port %>>
   ServerName <%= srvname %>

@@ -1,2 +1,2 @@
-<%= rails_env %>:
-  url: http://<%=tomcat_public_address%>:8983/solr/avalon
+<%=scope.lookupvar('avalon::info::rails_env')%>:
+  url: http://<%=scope.lookupvar('avalon::info::db_address')%>:8983/solr/avalon

@@ -74,73 +74,8 @@ class avalon::web(
     mode    => 755,
   }
 
-  file{ '/var/www/avalon/shared':
-    source  => 'puppet:///modules/avalon/shared',
-    owner   => 'avalon',
-    group   => 'avalon',
-    recurse => true
-  }
-
-  file{ '/var/www/avalon/shared/avalon.yml':
-    ensure  => present,
-    content => template('avalon/shared/avalon_yml.erb'),
-    owner   => 'avalon',
-    group   => 'avalon',
-    require => File['/var/www/avalon/shared']
-  }
-
-  file{ "/var/www/avalon/shared/authentication.yml":
-    ensure  => present,
-    content => template('avalon/shared/authentication.yml.erb'),
-    owner   => 'avalon',
-    group   => 'avalon',
-    require => File['/var/www/avalon/shared']
-  }
-
-  file{ "/var/www/avalon/shared/database.yml":
-    ensure  => present,
-    content => template('avalon/shared/database.yml.erb'),
-    owner   => 'avalon',
-    group   => 'avalon',
-    require => File['/var/www/avalon/shared']
-  }
-
-  file{ "/var/www/avalon/shared/fedora.yml":
-    ensure  => present,
-    content => template('avalon/shared/fedora.yml.erb'),
-    owner   => 'avalon',
-    group   => 'avalon',
-    require => File['/var/www/avalon/shared']
-  }
-
-  file{ "/var/www/avalon/shared/matterhorn.yml":
-    ensure  => present,
-    content => template('avalon/shared/matterhorn.yml.erb'),
-    owner   => 'avalon',
-    group   => 'avalon',
-    require => File['/var/www/avalon/shared']
-  }
-
-  file{ "/var/www/avalon/shared/solr.yml":
-    ensure  => present,
-    content => template('avalon/shared/solr.yml.erb'),
-    owner   => 'avalon',
-    group   => 'avalon',
-    require => File['/var/www/avalon/shared']
-  }
-
-  file{ "/var/www/avalon/shared/role_map_${rails_env}.yml":
-    ensure  => present,
-    content => template('avalon/shared/role_map.yml.erb'),
-    owner   => 'avalon',
-    group   => 'avalon',
-    require => File['/var/www/avalon/shared']
-  }
-
-  file{ ['/var/www/avalon/shared/log', '/var/www/avalon/shared/pids']:
-    ensure  => 'directory',
-    owner   => 'avalon',
-    group   => 'avalon',
+  class { 'avalon::shared':
+    require => File['/var/www/avalon']
   }
 
   rvm::system_user { 'avalon': 
@@ -177,7 +112,7 @@ class avalon::web(
 
   apache::vhost { 'avalon':
     priority        => '10',
-    servername      => $avalon_public_address,
+    servername      => $avalon::info::avalon_address,
     port            => '80',
     docroot         => '/var/www/avalon/current/',
     passenger       => true,
@@ -219,11 +154,11 @@ class avalon::web(
 
   exec { "deploy-application":
     command     => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle exec cap puppet deploy >> ${staging::path}/avalon/deploy.log 2>&1",
-    environment => ["HOME=/root", "RAILS_ENV=${rails_env}", "AVALON_BRANCH=${source_branch}"],
+    environment => ["HOME=/root", "RAILS_ENV=${avalon::info::rails_env}", "AVALON_BRANCH=${source_branch}"],
     creates     => "/var/www/avalon/current",
     cwd         => "${staging::path}/avalon/avalon-bare-deploy",
     timeout     => 2400, # It shouldn't take 45 minutes, but Rubygems can be a bear
-    require     => [Exec['deploy-setup'],File["${staging::path}/avalon/deployment_key"]]
+    require     => [Exec['deploy-setup'],File["${staging::path}/avalon/deployment_key"],Class['avalon::shared']]
   }
 
   file { '/var/www/avalon/current/.rvmrc':
@@ -239,7 +174,7 @@ class avalon::web(
 
   file { '/var/www/avalon/current/public/streams':
     ensure      => link,
-    target      => "$avalon_root_dir/hls_streams",
+    target      => "${avalon::info::root_dir}/hls_streams",
     require     => Exec['deploy-application']
   }
 

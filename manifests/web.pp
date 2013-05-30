@@ -14,4 +14,5 @@
 
 include epel
 include nulrepo
+include avalon::info
 include avalon

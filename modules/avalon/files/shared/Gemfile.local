@@ -1,1 +1,2 @@
+gem 'omniauth-nuldap', :git => "https://github.com/nulib/omniauth-nuldap.git" 
 gem 'mysql2'

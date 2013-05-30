@@ -15,7 +15,7 @@
 class avalon::mysql::params (
   $user     = 'avalonweb',
   $password = 'SW5GI4aQLVmPLg',
-  $host     = $tomcat_public_address,
+  $host     = $avalon::info::db_address,
   $grant    = ['all'],
   $require  = Class['mysql::server']
 ) {}

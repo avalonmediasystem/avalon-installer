@@ -18,8 +18,8 @@ class avalon::framework {
   include rvm
   include stdlib
 
-  if $avalon_dropbox_password_hash =~ /^$/  {
-    fail("Missing fact: avalon_dropbox_password")
+  if $avalon::info::dropbox_password_hash =~ /^$/  {
+    fail("Missing info: avalon::info::dropbox_password")
   }
   
   group { 'dropbox':
@@ -27,46 +27,46 @@ class avalon::framework {
     system => true
   }
 
-  user { $avalon_dropbox_user:
+  user { $avalon::info::dropbox_user:
     ensure   => present,
     system   => true,
     gid      => 'dropbox',
-    home     => '/dropbox', # because it's already chrooted to $avalon_root_dir
-    password => $avalon_dropbox_password_hash,
+    home     => '/dropbox', # because it's already chrooted to $avalon::info::root_dir
+    password => $avalon::info::dropbox_password_hash,
     require  => Group['dropbox']
   }
 
-  file { $avalon_root_dir:
+  file { $avalon::info::root_dir:
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
     mode    => 0755
   }
 
-  file { "$avalon_root_dir/dropbox":
+  file { "${avalon::info::root_dir}/dropbox":
     ensure  => directory,
-    owner   => $avalon_dropbox_user,
+    owner   => $avalon::info::dropbox_user,
     group   => 'dropbox',
     mode    => 2775,
-    require => [File[$avalon_root_dir],User[$avalon_dropbox_user]]
+    require => [File[$avalon::info::root_dir],User[$avalon::info::dropbox_user]]
   }
 
-  file { ["$avalon_root_dir/masterfiles","$avalon_root_dir/hls_streams"]:
+  file { ["${avalon::info::root_dir}/masterfiles","${avalon::info::root_dir}/hls_streams"]:
   	ensure  => directory,
   	owner   => 'avalon',
   	group   => 'avalon',
   	mode    => 0775,
-    require => [File[$avalon_root_dir],User['avalon']]
+    require => [File[$avalon::info::root_dir],User['avalon']]
 	}
 
   augeas { "sshd_config":
     context => "/files/etc/ssh/sshd_config",
     changes => [
       "set Subsystem/sftp 'internal-sftp'",
-      "set Match[Condition/User='$avalon_dropbox_user']/Condition/User '$avalon_dropbox_user'",
-      "set Match[Condition/User='$avalon_dropbox_user']/Settings/ChrootDirectory '$avalon_root_dir'",
-      "set Match[Condition/User='$avalon_dropbox_user']/Settings/AllowTcpForwarding 'no'",
-      "set Match[Condition/User='$avalon_dropbox_user']/Settings/ForceCommand 'internal-sftp'"
+      "set Match[Condition/User='${avalon::info::dropbox_user}']/Condition/User '${avalon::info::dropbox_user}'",
+      "set Match[Condition/User='${avalon::info::dropbox_user}']/Settings/ChrootDirectory '${avalon::info::root_dir}'",
+      "set Match[Condition/User='${avalon::info::dropbox_user}']/Settings/AllowTcpForwarding 'no'",
+      "set Match[Condition/User='${avalon::info::dropbox_user}']/Settings/ForceCommand 'internal-sftp'"
     ],
     notify => Service["sshd"],
   }

@@ -15,4 +15,5 @@
 include epel
 include nulrepo
 include red5
+include avalon::info
 include avalon::security

@@ -14,13 +14,12 @@
 
 module FactGatherer
   DEFAULT_FACTS = {
-    'avalon_dropbox_user' => 'avalondrop',
-    'avalon_admin_user' => 'archivist1@example.com',
+    'dropbox_user' => 'avalondrop',
+    'admin_user' => 'archivist1@example.com',
     'rails_env' => 'production'
   }
 
-  def gather_facts
-    fact_file = File.expand_path('../avalon-install.yml',__FILE__)
+  def gather_facts(fact_file)
     facts_have_changed = false
 
     if File.exists?(fact_file)
@@ -34,9 +33,9 @@ sftp-only dropbox user with the credentials you specify.
       __EOC__
       say(HighLine.color(dbtext, :green))
 
-      @facts['avalon_dropbox_user'] = ask("Username for Avalon Dropbox: ") do |q|
+      @facts['dropbox_user'] = ask("Username for Avalon Dropbox: ") do |q|
         q.validate = /.+{3}/
-        q.default = @facts['avalon_dropbox_user']
+        q.default = @facts['dropbox_user']
       end
 
       passwords = ['a','b']
@@ -53,11 +52,11 @@ sftp-only dropbox user with the credentials you specify.
           say("Passwords do not match")
         end
       end
-      @facts['avalon_dropbox_password'] = passwords[0]
+      @facts['dropbox_password'] = passwords[0]
 
-      @facts['avalon_admin_user'] = ask("Initial Avalon Collection/Group Manager E-Mail: ") do |q|
+      @facts['admin_user'] = ask("Initial Avalon Collection/Group Manager E-Mail: ") do |q|
         q.validate = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
-        q.default = @facts['avalon_admin_user']
+        q.default = @facts['admin_user']
       end
 
       @facts['rails_env'] = ask("Rails environment to run under: ") do |q|
@@ -68,9 +67,9 @@ sftp-only dropbox user with the credentials you specify.
       facts_have_changed = true
     end
 
-    unless @facts['avalon_dropbox_password'].nil?
+    unless @facts['dropbox_password'].nil?
       salt = rand(36**8).to_s(36)
-      @facts['avalon_dropbox_password_hash'] = UnixCrypt::SHA512.build(@facts.delete('avalon_dropbox_password'),salt)
+      @facts['dropbox_password_hash'] = UnixCrypt::SHA512.build(@facts.delete('dropbox_password'),salt)
       facts_have_changed = true
     end
 

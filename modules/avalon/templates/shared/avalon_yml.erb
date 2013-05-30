@@ -1,9 +1,9 @@
-<%=rails_env%>: 
+<%=scope.lookupvar('avalon::info::rails_env')%>: 
   dropbox:
-    path: '<%=$avalon_root_dir%>/dropbox/'
-    upload_uri: 'sftp://<%=avalon_public_address%><%=$avalon_root_dir%>/dropbox'
+    path: "<%=scope.lookupvar('avalon::info::root_dir')%>/dropbox/"
+    upload_uri: "sftp://<%=scope.lookupvar('avalon::info::public_address')%><%=scope.lookupvar('avalon::info::root_dir')%>/dropbox"
   matterhorn:
-    root: '<%=matterhorn_public_url%>'
+    root: "<%=scope.lookupvar('avalon::info::matterhorn_url')%>"
     baseApplication: 'avalon'
     cleanup_log: 'log/matterhorn_cleanup.log'
   mediainfo:
@@ -19,5 +19,5 @@
         enable_starttls_auto: false
   streaming:
     stream_token_ttl: 20 #minutes
-    rtmp_base: '<%=rtmp_public_url%>'
-    http_base: '<%=hls_public_url%>'
+    rtmp_base: "<%=scope.lookupvar('avalon::info::rtmp_url')%>"
+    http_base: "<%=scope.lookupvar('avalon::info::hls_url')%>"

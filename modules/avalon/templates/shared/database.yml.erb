@@ -1,8 +1,8 @@
-<%= rails_env %>:
+<%=scope.lookupvar('avalon::info::rails_env')%>:
   adapter: mysql2
   encoding: utf8
   reconnect: true
   database: avalonweb
   username: avalonweb
   password: SW5GI4aQLVmPLg
-  host: <%= tomcat_public_address %>
+  host: <%=scope.lookupvar('avalon::info::db_address')%>

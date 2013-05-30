@@ -22,13 +22,14 @@ include FactGatherer
 
 NETWORK_IP = "192.168.56"
 PORTS = {
-  :avalon     => { :host =>  10080, :guest =>    80, :schema => "http", :host_ip => "#{NETWORK_IP}.100" }, # HTTP (Apache => Passenger => Avalon)
-  :tomcat     => { :host =>  18983, :guest =>  8983, :schema => "http", :host_ip => "#{NETWORK_IP}.101" }, # HTTP (Tomcat => Solr/Fedora)
-  :matterhorn => { :host =>  18080, :guest => 18080, :schema => "http", :host_ip => "#{NETWORK_IP}.102" }, # HTTP (Felix => Matterhorn)
-  :red5       => { :host =>  11935, :guest =>  1935, :schema => "rtmp", :host_ip => "#{NETWORK_IP}.103" }  # RTMP (Red5)
+  :avalon     => { :port =>    80, :schema => "http", :host_ip => "#{NETWORK_IP}.100" }, # HTTP (Apache => Passenger => Avalon)
+  :db         => { :port =>  8983, :schema => "http", :host_ip => "#{NETWORK_IP}.101" }, # HTTP (Tomcat => Solr/Fedora)
+  :matterhorn => { :port =>  8080, :schema => "http", :host_ip => "#{NETWORK_IP}.102" }, # HTTP (Felix => Matterhorn)
+  :rtmp       => { :port =>  1935, :schema => "rtmp", :host_ip => "#{NETWORK_IP}.103" }  # RTMP (Red5)
 }
 
-gather_facts
+@fact_file = File.expand_path('../hiera/data/common.yaml',__FILE__)
+gather_facts(@fact_file)
 
 def common_config(config, purpose, host_ip)
   config.vm.box = "nulib"
@@ -44,21 +45,22 @@ def common_config(config, purpose, host_ip)
   config.vm.provision :shell, :inline => "authconfig --passalgo=sha512 --update" # use SHA512 hashes in /etc/shadow
 
   config.vm.provision :puppet do |puppet|
-    puppet.facter.merge! @facts
+#    puppet.facter.merge! @facts
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "#{purpose}.pp"
-    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules --graph --graphdir=/vagrant/graphs/#{purpose}"
+    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules --hiera_config=/vagrant/hiera/hiera.yml"
   end
 end
 
 Vagrant.configure("2") do |global_config|
   PORTS.each_pair do |name, mapping|
-    @facts["#{name}_public_url"]     = "#{mapping[:schema]}://#{mapping[:host_ip]}:#{mapping[:guest]}"
-    @facts["#{name}_public_address"] = mapping[:host_ip]
+    @facts["#{name}_url"]     = "#{mapping[:schema]}://#{mapping[:host_ip]}:#{mapping[:port]}"
+    @facts["#{name}_address"] = mapping[:host_ip]
   end
+  File.open(@fact_file,'w') { |f| f.write(YAML.dump(@facts)) }
 
   global_config.vm.define :db do |config|
-    common_config(config, "db", PORTS[:tomcat][:host_ip])
+    common_config(config, "db", PORTS[:db][:host_ip])
   end
 
   global_config.vm.define :web do |config|
@@ -70,6 +72,6 @@ Vagrant.configure("2") do |global_config|
   end
 
   global_config.vm.define :stream do |config|
-    common_config(config, "stream", PORTS[:red5][:host_ip])
+    common_config(config, "stream", PORTS[:rtmp][:host_ip])
   end
 end
