@@ -1,0 +1,7 @@
+---
+classes:
+  - avalon::node::db
+  - avalon::node::matterhorn
+  - avalon::dropbox
+  - avalon::node::stream
+  - avalon::node::web

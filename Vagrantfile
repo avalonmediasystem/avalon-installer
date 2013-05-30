@@ -15,6 +15,7 @@
 Dir[File.expand_path('../vendor/cache/gems/**/lib',__FILE__)].each { |lib| $: << lib }
 require 'highline/import'
 require 'unix_crypt'
+require 'ipaddr'
 require 'yaml'
 require './fact_gatherer'
 
@@ -22,11 +23,16 @@ include FactGatherer
 
 NETWORK_IP = "192.168.56"
 PORTS = {
-  :avalon     => { :port =>    80, :schema => "http", :host_ip => "#{NETWORK_IP}.100" }, # HTTP (Apache => Passenger => Avalon)
-  :db         => { :port =>  8983, :schema => "http", :host_ip => "#{NETWORK_IP}.101" }, # HTTP (Tomcat => Solr/Fedora)
-  :matterhorn => { :port =>  8080, :schema => "http", :host_ip => "#{NETWORK_IP}.102" }, # HTTP (Felix => Matterhorn)
-  :rtmp       => { :port =>  1935, :schema => "rtmp", :host_ip => "#{NETWORK_IP}.103" }  # RTMP (Red5)
+  :avalon     => { :name => 'web',    :port =>    80, :schema => "http" }, # HTTP (Apache => Passenger => Avalon)
+  :db         => { :name => 'db',     :port =>  8983, :schema => "http" }, # HTTP (Tomcat => Solr/Fedora)
+  :matterhorn => { :name => 'mhorn',  :port =>  8080, :schema => "http" }, # HTTP (Felix => Matterhorn)
+  :rtmp       => { :name => 'stream', :port =>  1935, :schema => "rtmp" }  # RTMP (Red5)
 }
+[:avalon,:db,:matterhorn,:rtmp].each do |role|
+  host_ip = IPAddr.new("#{NETWORK_IP}.100")
+  PORTS[role][:host_ip] = host_ip.to_s
+  host_ip = host_ip.succ if ENV['VAGRANT_MULTI']
+end
 
 @fact_file = File.expand_path('../hiera/data/common.yaml',__FILE__)
 gather_facts(@fact_file)
@@ -58,19 +64,13 @@ Vagrant.configure("2") do |global_config|
   end
   File.open(@fact_file,'w') { |f| f.write(YAML.dump(@facts)) }
 
-  global_config.vm.define :db do |config|
-    common_config(config, "db", PORTS[:db][:host_ip])
-  end
-
-  global_config.vm.define :web do |config|
-    common_config(config, "web", PORTS[:avalon][:host_ip])
-  end
-
-  global_config.vm.define :mhorn do |config|
-    common_config(config, "mhorn", PORTS[:matterhorn][:host_ip])
-  end
-
-  global_config.vm.define :stream do |config|
-    common_config(config, "stream", PORTS[:rtmp][:host_ip])
+  if ENV['VAGRANT_MULTI']
+    [:db,:avalon,:matterhorn,:rtmp].each do |role|
+      global_config.vm.define role do |config|
+        common_config(config, PORTS[role][:name], PORTS[role][:host_ip])
+      end
+    end
+  else
+    common_config(global_config, "box", "#{NETWORK_IP}.100")
   end
 end
