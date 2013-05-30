@@ -12,7 +12,9 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-include epel
-include nulrepo
-include avalon::info
-include avalon
+class avalon::node::matterhorn {
+  include epel
+  include nulrepo
+  include avalon::info
+  include matterhorn
+}

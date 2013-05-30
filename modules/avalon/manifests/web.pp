@@ -14,7 +14,8 @@
 
 class avalon::web(
   $ruby_version  = "ruby-1.9.3-p429",
-  $source_branch = "master"
+  $source_repo   = $avalon::info::avalon_repo,
+  $source_branch = $avalon::info::avalon_branch
 ) {
   include apache
   include rvm
@@ -154,7 +155,12 @@ class avalon::web(
 
   exec { "deploy-application":
     command     => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle exec cap puppet deploy >> ${staging::path}/avalon/deploy.log 2>&1",
-    environment => ["HOME=/root", "RAILS_ENV=${avalon::info::rails_env}", "AVALON_BRANCH=${source_branch}"],
+    environment => [
+      "HOME=/root", 
+      "RAILS_ENV=${avalon::info::rails_env}", 
+      "AVALON_REPO=${source_repo}",
+      "AVALON_BRANCH=${source_branch}"
+    ],
     creates     => "/var/www/avalon/current",
     cwd         => "${staging::path}/avalon/avalon-bare-deploy",
     timeout     => 2400, # It shouldn't take 45 minutes, but Rubygems can be a bear

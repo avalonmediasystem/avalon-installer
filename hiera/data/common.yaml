@@ -1,0 +1,5 @@
+---
+classes:
+  - epel
+  - nulrepo
+  - avalon::info

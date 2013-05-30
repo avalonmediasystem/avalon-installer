@@ -28,4 +28,6 @@ class avalon::info {
   $rails_env              = hiera('rails_env', "production")
   $ldap_bind_dn           = hiera('ldap_bind_dn')
   $ldap_password          = hiera('ldap_password')
+  $avalon_repo            = hiera('avalon_repo', "git://github.com/avalonmediasystem/avalon.git")
+  $avalon_branch          = hiera('avalon_branch', "master")
 }

@@ -12,8 +12,9 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-include epel
-include nulrepo
-include red5
-include avalon::info
-include avalon::security
+class avalon::node::web {
+  include epel
+  include nulrepo
+  include avalon::info
+  include avalon
+}
