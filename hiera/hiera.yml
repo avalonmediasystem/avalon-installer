@@ -1,5 +1,7 @@
 :backends: yaml
 :yaml:
   :datadir: /vagrant/hiera/data/
-:hierarchy: common
+:hierarchy: 
+  - %{::clientcert}
+  - common
 #:logger: puppet
