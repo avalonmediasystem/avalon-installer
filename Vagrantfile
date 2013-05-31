@@ -22,15 +22,15 @@ require './fact_gatherer'
 include FactGatherer
 
 NETWORK_IP = "192.168.56"
-PORTS = {
+@hosts = {
   :avalon     => { :name => 'web',    :port =>    80, :schema => "http" }, # HTTP (Apache => Passenger => Avalon)
   :db         => { :name => 'db',     :port =>  8983, :schema => "http" }, # HTTP (Tomcat => Solr/Fedora)
   :matterhorn => { :name => 'mhorn',  :port =>  8080, :schema => "http" }, # HTTP (Felix => Matterhorn)
   :rtmp       => { :name => 'stream', :port =>  1935, :schema => "rtmp" }  # RTMP (Red5)
 }
+host_ip = IPAddr.new("#{NETWORK_IP}.100")
 [:avalon,:db,:matterhorn,:rtmp].each do |role|
-  host_ip = IPAddr.new("#{NETWORK_IP}.100")
-  PORTS[role][:host_ip] = host_ip.to_s
+  @hosts[role][:host_ip] = host_ip.to_s
   host_ip = host_ip.succ if ENV['VAGRANT_MULTI']
 end
 
@@ -58,7 +58,7 @@ def common_config(config, purpose, host_ip)
 end
 
 Vagrant.configure("2") do |global_config|
-  PORTS.each_pair do |name, mapping|
+  @hosts.each_pair do |name, mapping|
     @facts["#{name}_url"]     = "#{mapping[:schema]}://#{mapping[:host_ip]}:#{mapping[:port]}"
     @facts["#{name}_address"] = mapping[:host_ip]
   end
@@ -66,8 +66,9 @@ Vagrant.configure("2") do |global_config|
 
   if ENV['VAGRANT_MULTI']
     [:db,:avalon,:matterhorn,:rtmp].each do |role|
-      global_config.vm.define role do |config|
-        common_config(config, PORTS[role][:name], PORTS[role][:host_ip])
+      box = @hosts[role][:name]
+      global_config.vm.define box do |config|
+        common_config(config, box, @hosts[role][:host_ip])
       end
     end
   else

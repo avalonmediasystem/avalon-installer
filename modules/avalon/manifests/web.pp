@@ -38,10 +38,10 @@ class avalon::web(
   user { 'avalon':
     ensure     => present,
     gid        => 'avalon',
-    groups     => 'dropbox',
+#    groups     => 'dropbox',
     managehome => true,
     system     => true,
-    require    => [Group['avalon'], Group['dropbox']]
+    require    => [Group['avalon']]
   }
 
 #  exec { "/usr/sbin/usermod -a -G avalon red5":
@@ -120,6 +120,7 @@ class avalon::web(
     notify          => Service['httpd'],
     # rvm has a dependency for mod_ssl
     ssl             => false,
+    require         => File['/etc/httpd/conf.d/passenger.conf']
   }
 
   staging::file { "avalon-bare-deploy.tar.gz":

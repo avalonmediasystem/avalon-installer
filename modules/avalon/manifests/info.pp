@@ -26,8 +26,6 @@ class avalon::info {
   $admin_user             = hiera('admin_user')
   $root_dir               = hiera('root_dir', "/var/avalon")
   $rails_env              = hiera('rails_env', "production")
-  $ldap_bind_dn           = hiera('ldap_bind_dn')
-  $ldap_password          = hiera('ldap_password')
   $avalon_repo            = hiera('avalon_repo', "git://github.com/avalonmediasystem/avalon.git")
   $avalon_branch          = hiera('avalon_branch', "master")
 
