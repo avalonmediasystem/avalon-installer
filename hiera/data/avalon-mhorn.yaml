@@ -1,4 +1,5 @@
 ---
 classes:
-  - avalon::node::matterhorn
+  - avalon::info
+  - matterhorn
   - avalon::dropbox

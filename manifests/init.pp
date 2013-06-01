@@ -12,4 +12,8 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
+$classes = hiera_array('classes')
+notify { 'classes': 
+  message => inline_template("Applying classes: <%= (@classes).join('; ') %>")
+}
 hiera_include('classes')

@@ -1,3 +1,11 @@
 ---
 classes:
-  - avalon::node::db
+  - avalon::info
+  - avalon::mysql::params
+  - avalon::mysql
+  - tomcat::install
+  - tomcat
+  - fcrepo::config
+  - fcrepo::mysql
+  - avalon::fcrepo
+  - solr

@@ -34,7 +34,7 @@ host_ip = IPAddr.new("#{NETWORK_IP}.100")
   host_ip = host_ip.succ if ENV['VAGRANT_MULTI']
 end
 
-@fact_file = File.expand_path('../hiera/data/common.yaml',__FILE__)
+@fact_file = File.expand_path('../hiera/data/vagrant.yaml',__FILE__)
 gather_facts(@fact_file)
 
 def common_config(config, purpose, host_ip)

@@ -1,4 +1,10 @@
 class avalon::shared {
+  $auth_config = hiera('auth_config', '')
+  $auth_yaml = $auth_config ? {
+    /.+/ => inline_template('<%=YAML.dump(auth_config)%>'),
+    /^$/ => template('avalon/shared/authentication.yml.erb')
+  }
+
   file{ '/var/www/avalon/shared':
     source  => 'puppet:///modules/avalon/shared',
     owner   => 'avalon',
@@ -16,7 +22,7 @@ class avalon::shared {
 
   file{ "/var/www/avalon/shared/authentication.yml":
     ensure  => present,
-    content => template('avalon/shared/authentication.yml.erb'),
+    content => $auth_yaml,
     owner   => 'avalon',
     group   => 'avalon',
     require => File['/var/www/avalon/shared']

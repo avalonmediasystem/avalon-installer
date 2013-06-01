@@ -1,7 +1,16 @@
 ---
 classes:
-  - avalon::node::db
-  - avalon::node::matterhorn
+  - avalon::info
+  - avalon::mysql::params
+  - avalon::mysql
+  - tomcat::install
+  - tomcat
+  - fcrepo::config
+  - fcrepo::mysql
+  - avalon::fcrepo
+  - solr
+  - matterhorn
+  - red5
   - avalon::dropbox
-  - avalon::node::stream
-  - avalon::node::web
+  - avalon::security
+  - avalon
