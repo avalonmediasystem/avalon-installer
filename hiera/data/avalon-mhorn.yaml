@@ -2,4 +2,5 @@
 classes:
   - avalon::info
   - matterhorn
+  - avalon::matterhorn
   - avalon::dropbox

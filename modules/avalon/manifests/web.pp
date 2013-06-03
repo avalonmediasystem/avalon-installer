@@ -30,28 +30,18 @@ class avalon::web(
     system     => true
   }
 
-  group { 'avalon':
-    ensure     => present,
-    system     => true,
-  }
-
   user { 'avalon':
     ensure     => present,
     gid        => 'avalon',
-#    groups     => 'dropbox',
+    groups     => 'dropbox',
     managehome => true,
     system     => true,
-    require    => [Group['avalon']]
+    require    => [Group['avalon'],Group['dropbox']]
   }
 
 #  exec { "/usr/sbin/usermod -a -G avalon red5":
 #    unless  => "/bin/cat /etc/group | grep ^avalon | grep red5",
 #    require => [User['red5'], Group['avalon']];
-#  }
-#
-#  exec { "/usr/sbin/usermod -a -G avalon matterhorn":
-#    unless  => "/bin/cat /etc/group | grep ^avalon | grep matterhorn",
-#    require => [User['matterhorn'], Group['avalon']];
 #  }
 
   ssh_authorized_key { 'vagrant_key_shared_with_avalon':

@@ -5,10 +5,10 @@ class avalon::dropbox {
     fail("Missing info: avalon::info::dropbox_password")
   }
   
-  group { 'dropbox':
-    ensure => present,
-    system => true
-  }
+#  group { 'dropbox':
+#    ensure => present,
+#    system => true
+#  }
 
   user { $avalon::info::dropbox_user:
     ensure   => present,

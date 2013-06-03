@@ -10,6 +10,7 @@ classes:
   - avalon::fcrepo
   - solr
   - matterhorn
+  - avalon::matterhorn
   - red5
   - avalon::dropbox
   - avalon::security
