@@ -27,7 +27,6 @@ class avalon::content::dropbox(
   }
 
   if $mount {
-    include avalon::ports::export
     mount { "${avalon::info::root_dir}/dropbox":
       device  => "${mount}:/${avalon::info::root_dir}/dropbox",
       require => File["${avalon::info::root_dir}/dropbox"]
@@ -61,7 +60,8 @@ class avalon::content::dropbox(
     }
 
     if $export {
-      concat::fragment { 'export-dropbox':
+     include avalon::ports::export
+     concat::fragment { 'export-dropbox':
         content => "${avalon::info::root_dir}/dropbox ${export}(rw,async)\n",
         target  => '/etc/exports'
       }

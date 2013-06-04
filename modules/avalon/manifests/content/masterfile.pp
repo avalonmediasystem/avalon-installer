@@ -12,7 +12,6 @@ class avalon::content::masterfile(
   }
 
   if $mount {
-    include avalon::ports::export
     mount { "${avalon::info::root_dir}/masterfiles":
       device  => "$mount:/${avalon::info::root_dir}/masterfiles",
       fstype  => "nfs",
@@ -23,6 +22,7 @@ class avalon::content::masterfile(
     }
   } else {
     if $export {
+      include avalon::ports::export
       concat::fragment { 'export-masterfiles':
         content => "${avalon::info::root_dir}/masterfiles ${export}(rw,async)\n",
         target  => '/etc/exports'
