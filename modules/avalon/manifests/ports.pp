@@ -96,11 +96,11 @@ class avalon::ports::pre {
     proto   => 'all',
     source  => '165.124.200.24/29',
     action  => 'accept'
-  }->
-  firewall { '005 accept all from vbox NAT':
-    proto   => 'all',
-    iniface => 'eth0',
-    action  => 'accept'
+#  }->
+#  firewall { '005 accept all from vbox NAT':
+#    proto   => 'all',
+#    iniface => 'eth0',
+#    action  => 'accept'
   }
 }
 

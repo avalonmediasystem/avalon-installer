@@ -4,5 +4,4 @@
 :hierarchy: 
   - %{::clientcert}
   - local
-  - vagrant
   - common
