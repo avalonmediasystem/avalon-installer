@@ -1,6 +1,6 @@
 :backends: yaml
 :yaml:
-  :datadir: /vagrant/hiera/data/
+  :datadir: /opt/avalon-installer/hiera/data
 :hierarchy: 
   - %{::clientcert}
   - local
