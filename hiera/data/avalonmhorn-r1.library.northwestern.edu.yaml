@@ -1,6 +1,10 @@
 ---
+avalon::content::dropbox::export: 192.168.56.100
+avalon::content::masterfile::export: 192.168.56.100
+avalon::content::stream::mount: 192.168.56.103
 classes:
-  - avalon::info
   - matterhorn
   - avalon::matterhorn
-  - avalon::dropbox
+  - avalon::content::dropbox
+  - avalon::content::masterfile
+  - avalon::content::stream

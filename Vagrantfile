@@ -53,7 +53,7 @@ def common_config(config, purpose, host_ip)
   config.vm.provision(:puppet, :module_path => "modules") do |puppet|
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "init.pp"
-    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --hiera_config=/vagrant/hiera/hiera.yml"
+    puppet.options = "--fileserverconfig=/vagrant/fileserver.conf --hiera_config=/vagrant/hiera/hiera.yaml"
   end
 end
 
@@ -62,6 +62,8 @@ Vagrant.configure("2") do |global_config|
     @facts["#{name}_url"]     = "#{mapping[:schema]}://#{mapping[:host_ip]}:#{mapping[:port]}"
     @facts["#{name}_address"] = mapping[:host_ip]
   end
+  @facts["stream_address"] = @hosts[:rtmp][:host_ip]
+
   File.open(@fact_file,'w') { |f| f.write(YAML.dump(@facts)) }
 
   if ENV['VAGRANT_MULTI']

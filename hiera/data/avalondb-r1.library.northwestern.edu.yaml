@@ -1,6 +1,5 @@
 ---
 classes:
-  - avalon::info
   - avalon::mysql::params
   - avalon::mysql
   - tomcat::install

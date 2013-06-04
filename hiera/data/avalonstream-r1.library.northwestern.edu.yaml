@@ -1,4 +1,5 @@
 ---
+avalon::content::stream::export: 192.168.56.102
 classes:
-  - avalon::info
   - avalon::security
+  - avalon::content::stream

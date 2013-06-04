@@ -16,4 +16,7 @@ $classes = hiera_array('classes')
 notify { 'classes': 
   message => inline_template("Applying classes: <%= (@classes).join('; ') %>")
 }
+include epel
+include nulrepo
+include avalon::info
 hiera_include('classes')

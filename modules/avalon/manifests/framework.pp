@@ -18,11 +18,11 @@ class avalon::framework {
   include rvm
   include stdlib
 
-  file { ["${avalon::info::root_dir}/masterfiles","${avalon::info::root_dir}/hls_streams"]:
-  	ensure  => directory,
-  	owner   => 'avalon',
-  	group   => 'avalon',
-  	mode    => 0775,
-    require => [File[$avalon::info::root_dir],User['avalon']]
-	}
+#  file { ["${avalon::info::root_dir}/masterfiles","${avalon::info::root_dir}/hls_streams"]:
+#  	ensure  => directory,
+#  	owner   => 'avalon',
+#  	group   => 'avalon',
+#  	mode    => 0775,
+#    require => [File[$avalon::info::root_dir],User['avalon']]
+#	}
 }

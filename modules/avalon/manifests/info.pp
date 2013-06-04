@@ -17,6 +17,7 @@ class avalon::info {
   $avalon_url             = hiera('avalon_url', "http://${avalon_address}")
   $matterhorn_address     = hiera('matterhorn_address', $avalon_address)
   $matterhorn_url         = hiera('matterhorn_url', "http://${matterhorn_address}:8080")
+  $stream_address         = hiera('stream_address', $avalon_address)
   $rtmp_url               = hiera('rtmp_url', "rtmp://${avalon_address}/avalon")
   $hls_url                = hiera('hls_url', "http://${avalon_address}/streams")
   $db_address             = hiera('db_address', $avalon_address)
