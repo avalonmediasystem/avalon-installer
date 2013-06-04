@@ -27,6 +27,7 @@ class avalon::content::dropbox(
   }
 
   if $mount {
+    include avalon::ports::export
     mount { "${avalon::info::root_dir}/dropbox":
       device  => "${mount}:/${avalon::info::root_dir}/dropbox",
       require => File["${avalon::info::root_dir}/dropbox"]

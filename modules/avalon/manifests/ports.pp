@@ -26,7 +26,7 @@ class avalon::ports::tomcat {
 }
 
 class avalon::ports::db {
-  firewall { '101 accept mysql from web and matterhorn':
+  firewall { '102 accept mysql from web and matterhorn':
     proto   => tcp,
     port    => 3306,
     source  => [$avalon::info::avalon_address, $avalon::info::matterhorn_address],
@@ -35,7 +35,7 @@ class avalon::ports::db {
 }
 
 class avalon::ports::matterhorn {
-  firewall { '101 accept all 8080':
+  firewall { '103 accept all 8080':
     proto   => tcp,
     port    => 8080,
     action  => accept
@@ -43,7 +43,7 @@ class avalon::ports::matterhorn {
 }
 
 class avalon::ports::rtmp {
-  firewall { '101 accept all 1935':
+  firewall { '104 accept all 1935':
     proto   => tcp,
     port    => 1935,
     action  => accept
@@ -51,9 +51,22 @@ class avalon::ports::rtmp {
 }
 
 class avalon::ports::dropbox {
-  firewall { '101 accept all sftp':
+  firewall { '105 accept all sftp':
     proto   => tcp,
     port    => 22,
+    action  => accept
+  }
+}
+
+class avalon::ports::export {
+  firewall { '200 accept nfs tcp':
+    proto   => tcp,
+    port    => [111,1110,2049,4045],
+    action  => accept
+  }->
+  firewall { '201 accept nfs udp':
+    proto   => udp,
+    port    => [111,1110,2049,4045],
     action  => accept
   }
 }

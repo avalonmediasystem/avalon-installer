@@ -12,6 +12,7 @@ class avalon::content::masterfile(
   }
 
   if $mount {
+    include avalon::ports::export
     mount { "${avalon::info::root_dir}/masterfiles":
       device  => "$mount:/${avalon::info::root_dir}/masterfiles",
       fstype  => "nfs",

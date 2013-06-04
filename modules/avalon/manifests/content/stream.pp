@@ -12,6 +12,7 @@ class avalon::content::stream(
   }
 
   if $mount {
+    include avalon::ports::export
     mount { "${avalon::info::root_dir}/rtmp_streams":
       device  => "$mount:/${avalon::info::root_dir}/rtmp_streams",
       require => File["${avalon::info::root_dir}/rtmp_streams"]
