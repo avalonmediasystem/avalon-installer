@@ -8,3 +8,5 @@ classes:
   - avalon::content::dropbox
   - avalon::content::masterfile
   - avalon::content::stream
+  - avalon::ports::matterhorn
+  - avalon::ports::dropbox

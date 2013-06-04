@@ -5,3 +5,4 @@ classes:
   - avalon
   - avalon::content::dropbox
   - avalon::content::masterfile
+  - avalon::ports::web

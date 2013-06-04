@@ -8,3 +8,5 @@ classes:
   - fcrepo::mysql
   - avalon::fcrepo
   - solr
+  - avalon::ports::tomcat
+  - avalon::ports::db

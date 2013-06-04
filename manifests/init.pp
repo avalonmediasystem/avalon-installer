@@ -19,4 +19,11 @@ notify { 'classes':
 include epel
 include nulrepo
 include avalon::info
+include avalon::ports
+
+Firewall {
+  before  => Class['avalon::ports::post'],
+  require => Class['avalon::ports::pre'],
+}
+
 hiera_include('classes')

@@ -3,3 +3,5 @@ avalon::content::stream::export: 192.168.56.102
 classes:
   - avalon::security
   - avalon::content::stream
+  - avalon::ports::web
+  - avalon::ports::rtmp
