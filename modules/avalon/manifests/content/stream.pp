@@ -1,4 +1,7 @@
-class avalon::content::stream inherits avalon::content::mountable {
+class avalon::content::stream(
+  $export = $avalon::content::mountable::export,
+  $mount  = $avalon::content::mountable::mount
+) inherits avalon::content::mountable {
   include avalon::content
   notify { 'stream mounts':
     message => "mount: $mount; export: $export"

@@ -1,4 +1,7 @@
-class avalon::content::masterfile inherits avalon::content::mountable {
+class avalon::content::masterfile(
+  $export = $avalon::content::mountable::export,
+  $mount  = $avalon::content::mountable::mount
+) inherits avalon::content::mountable {
   include avalon::content
   notify { 'masterfile mounts':
     message => "mount: $mount; export: $export"
