@@ -28,7 +28,7 @@ class avalon::content::stream(
     if $export {
       include avalon::ports::export
       concat::fragment { 'export-streams':
-        content => "${avalon::info::root_dir}/rtmp_streams ${export}(rw,async)\n${avalon::info::root_dir}/hls_streams ${export}(rw,async)]\n",
+        content => "${avalon::info::root_dir}/rtmp_streams ${export}(rw,async)\n${avalon::info::root_dir}/hls_streams ${export}(rw,async)\n",
         target  => '/etc/exports'
       }
     }
