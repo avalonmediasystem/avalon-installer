@@ -2,6 +2,7 @@
 avalon::content::dropbox::export: avalonweb-r1.library.northwestern.edu
 avalon::content::masterfile::export: avalonweb-r1.library.northwestern.edu
 avalon::content::stream::mount: avalonstream-r1.library.northwestern.edu
+matterhorn::config::static_hls: false
 classes:
   - matterhorn
   - avalon::matterhorn
