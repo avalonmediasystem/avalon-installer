@@ -5,11 +5,19 @@ class avalon::content {
       ensure => latest,
   }
 
-  service { "nfslock":
+  service { "rpcbind": 
       ensure => running,
       enable => true,
       require => [
           Package["nfs-utils"]
+      ],
+  }
+
+  service { "nfslock":
+      ensure => running,
+      enable => true,
+      require => [
+          Service["rpcbind"]
       ],
   }
 
