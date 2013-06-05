@@ -5,3 +5,5 @@ classes:
   - avalon::content::stream
   - avalon::ports::web
   - avalon::ports::rtmp
+  - avalon::security
+  - avalon::security::adobe
