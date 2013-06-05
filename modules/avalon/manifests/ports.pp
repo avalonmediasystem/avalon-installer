@@ -1,6 +1,24 @@
 class avalon::ports {
   class { '::firewall': }
 
+  augeas { "process-ALL":
+    context => "/files/etc/hosts.allow",
+    changes => [
+      "set 01/process ALL",
+      "set 01/client[.='127.0.0.1'] 127.0.0.1",
+    ],
+    onlyif => "match *[process='ALL'] size == 0",
+  }
+
+  augeas { "process-ALL-client":
+    context => "/files/etc/hosts.allow",
+    changes => [
+      "set *[process='ALL']/client[.='localhost4'] localhost4",
+      "set *[process='ALL']/client[.='localhost6'] localhost6",
+    ],
+    require => Augeas["process-ALL"],
+  }
+
   resources { "firewall": 
     purge => true
   }
