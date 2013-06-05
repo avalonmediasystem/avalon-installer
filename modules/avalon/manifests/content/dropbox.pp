@@ -4,6 +4,9 @@ class avalon::content::dropbox(
 ) {
   include stdlib
   include avalon::content
+  notify { 'dropbox mounts':
+    message => "mount: $mount; export: $export"
+  }
 
   if $avalon::info::dropbox_password_hash =~ /^$/  {
     fail("Missing info: avalon::info::dropbox_password")

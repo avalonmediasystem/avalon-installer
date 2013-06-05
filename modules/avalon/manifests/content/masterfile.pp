@@ -3,6 +3,9 @@ class avalon::content::masterfile(
   $mount  = false
 ) {
   include avalon::content
+  notify { 'masterfile mounts':
+    message => "mount: $mount; export: $export"
+  }
 
   file { "${avalon::info::root_dir}/masterfiles": 
     ensure  => directory,

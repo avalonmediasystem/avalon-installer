@@ -3,6 +3,9 @@ class avalon::content::stream(
   $mount  = false
 ) {
   include avalon::content
+  notify { 'stream mounts':
+    message => "mount: $mount; export: $export"
+  }
 
   file { ["${avalon::info::root_dir}/rtmp_streams","${avalon::info::root_dir}/hls_streams"]: 
     ensure  => directory,
@@ -22,8 +25,8 @@ class avalon::content::stream(
       require => File["${avalon::info::root_dir}/hls_streams"]
     }
   } else {
-    include avalon::ports::export
     if $export {
+      include avalon::ports::export
       concat::fragment { 'export-streams':
         content => "${avalon::info::root_dir}/rtmp_streams ${export}(rw,async)\n${avalon::info::root_dir}/hls_streams ${export}(rw,async)]\n",
         target  => '/etc/exports'
