@@ -1,13 +1,6 @@
 class avalon::content {
   include concat::setup
 
-  Mount {
-    fstype  => "nfs",
-    ensure  => "mounted",
-    options => "defaults",
-    atboot  => "true",
-  }
-
   package { ["nfs-utils"]:
       ensure => latest,
   }

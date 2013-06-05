@@ -1,7 +1,4 @@
-class avalon::content::stream(
-  $export = false,
-  $mount  = false
-) {
+class avalon::content::stream inherits avalon::content::mountable {
   include avalon::content
   notify { 'stream mounts':
     message => "mount: $mount; export: $export"
@@ -11,7 +8,7 @@ class avalon::content::stream(
     ensure  => directory,
     group   => 'avalon',
     mode    => 0775,
-    require => [File[$avalon::info::root_dir]]
+    require => File[$avalon::info::root_dir]
   }
 
   if $mount {

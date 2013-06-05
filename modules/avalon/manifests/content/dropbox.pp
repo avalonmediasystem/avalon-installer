@@ -1,7 +1,4 @@
-class avalon::content::dropbox(
-  $export = false,
-  $mount  = false
-) {
+class avalon::content::dropbox inherits avalon::content::mountable {
   include stdlib
   include avalon::content
   notify { 'dropbox mounts':
