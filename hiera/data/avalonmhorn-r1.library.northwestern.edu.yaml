@@ -1,7 +1,7 @@
 ---
-avalon::content::dropbox::export: 192.168.56.100
-avalon::content::masterfile::export: 192.168.56.100
-avalon::content::stream::mount: 192.168.56.103
+avalon::content::dropbox::export: avalonweb-r1.library.northwestern.edu
+avalon::content::masterfile::export: avalonweb-r1.library.northwestern.edu
+avalon::content::stream::mount: avalonstream-r1.library.northwestern.edu
 classes:
   - matterhorn
   - avalon::matterhorn

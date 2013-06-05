@@ -1,5 +1,5 @@
 ---
-avalon::content::stream::export: 192.168.56.102
+avalon::content::stream::export: avalonmhorn-r1.library.northwestern.edu
 classes:
 #  - avalon::security
   - avalon::content::stream

@@ -1,6 +1,6 @@
 ---
-avalon::content::dropbox::mount: 192.168.56.102
-avalon::content::masterfile::mount: 192.168.56.102
+avalon::content::dropbox::mount: avalonmhorn-r1.library.northwestern.edu
+avalon::content::masterfile::mount: avalonmhorn-r1.library.northwestern.edu
 classes:
   - avalon
   - avalon::content::dropbox
