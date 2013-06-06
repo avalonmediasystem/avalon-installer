@@ -3,6 +3,7 @@
     path: "<%=scope.lookupvar('avalon::info::root_dir')%>/dropbox/"
     upload_uri: "sftp://<%=scope.lookupvar('avalon::info::public_address')%><%=scope.lookupvar('avalon::info::root_dir')%>/dropbox"
   matterhorn:
+    media_path: "<%=scope.lookupvar('avalon::info::root_dir')%>/masterfiles"
     root: "<%=scope.lookupvar('avalon::info::matterhorn_url')%>"
     baseApplication: 'avalon'
     cleanup_log: 'log/matterhorn_cleanup.log'
