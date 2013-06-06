@@ -42,8 +42,8 @@ class avalon::mysql {
   }
 
   exec { 'create matterhorn tables':
-    command   => "mysql matterhorn < ${staging::path}/avalon/matterhorn.sql",
-    unless    => "mysql matterhorn -e 'show tables;' 2>&1 | grep 'mh_service_registration'",
+    command   => "/usr/bin/mysql matterhorn < ${staging::path}/avalon/matterhorn.sql",
+    unless    => "/usr/bin/mysql matterhorn -e 'show tables;' 2>&1 | grep 'mh_service_registration'",
     require   => [Mysql::Db['matterhorn'],Staging::File['matterhorn.sql']]
   }
 
