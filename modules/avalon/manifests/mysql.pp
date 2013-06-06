@@ -43,6 +43,10 @@ class avalon::mysql {
 
   $mysql_mhorn = "/usr/bin/mysql --user=${avalon::mysql::params::user} --password=${avalon::mysql::params::password} matterhorn"
 
+  database_user { "${avalon::mysql::params::user}@localhost":
+    ensure        => present,
+    password_hash => mysql_password($avalon::mysql::params::password)
+  }->
   database_grant { "${avalon::mysql::params::user}@localhost/matterhorn":
     privileges => ['all'],
   }->
