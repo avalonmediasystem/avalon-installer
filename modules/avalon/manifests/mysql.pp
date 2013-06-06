@@ -14,6 +14,7 @@
 
 class avalon::mysql {
   include avalon::mysql::params
+  include staging
   
   class { ::mysql:
     bind_address => '0.0.0.0'
@@ -33,14 +34,17 @@ class avalon::mysql {
     host     => $avalon::mysql::params::host,
     grant    => $avalon::mysql::params::grant,
     require  => $avalon::mysql::params::require
-  }->
+  }
+
   staging::file { 'matterhorn.sql':
     subdir    => 'avalon',
     source    => 'puppet:///modules/avalon/matterhorn_schema_mysql5.sql'
-  }->
+  }
+
   exec { 'create matterhorn tables':
     command   => "mysql matterhorn < ${staging::path}/avalon/matterhorn.sql",
-    unless    => "mysql matterhorn -e 'show tables;' 2>&1 | grep 'mh_service_registration'"
+    unless    => "mysql matterhorn -e 'show tables;' 2>&1 | grep 'mh_service_registration'",
+    require   => [Mysql::Db['matterhorn'],Staging::File['matterhorn.sql']]
   }
 
 }
