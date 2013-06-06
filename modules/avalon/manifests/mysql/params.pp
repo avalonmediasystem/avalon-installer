@@ -16,6 +16,5 @@ class avalon::mysql::params (
   $user     = 'avalonweb',
   $password = 'SW5GI4aQLVmPLg',
   $host     = $avalon::info::db_address,
-  $grant    = ['all'],
-  $require  = Class['mysql::server']
+  $grant    = ['all']
 ) {}
