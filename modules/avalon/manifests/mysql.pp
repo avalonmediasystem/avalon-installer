@@ -26,4 +26,12 @@ class avalon::mysql {
     grant    => $avalon::mysql::params::grant,
     require  => $avalon::mysql::params::require
   }
+
+  mysql::db { 'matterhorn':
+    user     => $avalon::mysql::params::user,
+    password => $avalon::mysql::params::password,
+    host     => $avalon::mysql::params::host,
+    grant    => $avalon::mysql::params::grant,
+    require  => $avalon::mysql::params::require
+  }
 }
