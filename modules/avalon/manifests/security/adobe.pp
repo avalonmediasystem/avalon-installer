@@ -18,14 +18,10 @@ class avalon::security::adobe {
     enable => true,
   }
 
-  concat { '/opt/adobe/ams/conf/ams.ini': 
-    notify => Service['ams']
-  }
-
-  concat::fragment { 'avalon-config':
-    content => "\n\nAVALON.AUTH_URL = ${avalon::info::avalon_url}/authorize\nAVALON.STREAM_PATH = /opt/adobe/ams/webroot/avalon\n",
-    target  => '/opt/adobe/ams/conf/ams.ini',
-    unless  => 'grep AVALON.AUTH_URL /opt/adobe/ams/conf/ams.ini'
+  exec { "add Avalon config to ams.ini":
+    command => 'printf "\n\nAVALON.AUTH_URL = ${avalon::info::avalon_url}/authorize\nAVALON.STREAM_PATH = /opt/adobe/ams/webroot/avalon\n" >> ams.ini',
+    cwd     => '/opt/adobe/ams/conf',
+    unless  => "grep '${avalon::info::avalon_url}/authorize' ams.ini"
   }
 
   file { '/opt/adobe/ams/Apache2.2/conf/avalon.conf':
@@ -33,27 +29,14 @@ class avalon::security::adobe {
     mode    => 0755
   }
 
-  concat { '/opt/adobe/ams/Apache2.2/conf/httpd.conf':
-    notify  => Service['httpd'],
-    require => File['/opt/adobe/ams/Apache2.2/conf/avalon.conf']
-  }
-
-  concat::fragment { 'avalon-httpd-include':
-    content => "\nInclude conf/avalon.conf",
-    target  => '/opt/adobe/ams/Apache2.2/conf/httpd.conf',
-    unless  => 'grep avalon.conf /opt/adobe/ams/Apache2.2/conf/httpd.conf'
+  exec { 'printf "\n\nInclude conf/avalon.conf\n" >> httpd.conf': 
+    cwd     => '/opt/adobe/ams/Apache2.2/conf/',
+    unless  => "grep avalon.conf httpd.conf"
   }
 
   file { '/opt/adobe/ams/webroot/avalon':
     ensure  => link,
     force   => true,
     target  => "${avalon::info::root_dir}/rtmp_streams"
-  }
-
-  file { '/etc/httpd/conf.d/05-mod_rewrite.conf': 
-    ensure  => present,
-    source  => 'puppet:///modules/avalon/mod_rewrite.conf',
-    notify  => Service['httpd'],
-    require => File['/usr/local/sbin/avalon_auth'],
   }
 }
