@@ -19,7 +19,7 @@ class avalon::security::adobe {
   }
 
   exec { "add Avalon config to ams.ini":
-    command => '/usr/bin/printf "\n\nAVALON.AUTH_URL = ${avalon::info::avalon_url}/authorize\nAVALON.STREAM_PATH = /opt/adobe/ams/webroot/avalon\n" >> ams.ini',
+    command => "/usr/bin/printf \"\n\nAVALON.AUTH_URL = ${avalon::info::avalon_url}/authorize\nAVALON.STREAM_PATH = /opt/adobe/ams/webroot/avalon\n\" >> ams.ini",
     cwd     => '/opt/adobe/ams/conf',
     unless  => "/bin/grep '${avalon::info::avalon_url}/authorize' ams.ini",
     notify  => Service['ams']
@@ -31,7 +31,7 @@ class avalon::security::adobe {
     notify  => Service['ams']
   }
 
-  exec { '/usr/bin/printf "\n\nInclude conf/avalon.conf\n" >> httpd.conf': 
+  exec { "/usr/bin/printf \"\n\nInclude conf/avalon.conf\n\" >> httpd.conf": 
     cwd     => '/opt/adobe/ams/Apache2.2/conf/',
     unless  => "/bin/grep avalon.conf httpd.conf",
     require => File['/opt/adobe/ams/Apache2.2/conf/avalon.conf'],
