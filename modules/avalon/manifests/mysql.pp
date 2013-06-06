@@ -41,9 +41,10 @@ class avalon::mysql {
     source    => 'puppet:///modules/avalon/matterhorn_schema_mysql5.sql'
   }
 
+  $mysql_mhorn = "/usr/bin/mysql --user=${avalon::mysql::params::user} --password=${avalon::mysql::params::password} matterhorn"
   exec { 'create matterhorn tables':
-    command   => "/usr/bin/mysql matterhorn < ${staging::path}/avalon/matterhorn.sql",
-    unless    => "/usr/bin/mysql matterhorn -e 'show tables;' 2>&1 | grep 'mh_service_registration'",
+    command   => "${mysql_mhorn} < ${staging::path}/avalon/matterhorn.sql",
+    unless    => "${mysql_mhorn} -e 'show tables;' 2>&1 | grep 'mh_service_registration'",
     require   => [Mysql::Db['matterhorn'],Staging::File['matterhorn.sql']]
   }
 
