@@ -25,7 +25,7 @@ class avalon::content::dropbox(
     ensure  => directory,
     owner   => $avalon::info::dropbox_user,
     group   => 'dropbox',
-    mode    => 2775,
+    mode    => 2777,
     require => [File[$avalon::info::root_dir],User[$avalon::info::dropbox_user]]
   }
 
