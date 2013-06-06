@@ -21,17 +21,21 @@ class avalon::security::adobe {
   exec { "add Avalon config to ams.ini":
     command => '/usr/bin/printf "\n\nAVALON.AUTH_URL = ${avalon::info::avalon_url}/authorize\nAVALON.STREAM_PATH = /opt/adobe/ams/webroot/avalon\n" >> ams.ini',
     cwd     => '/opt/adobe/ams/conf',
-    unless  => "/bin/grep '${avalon::info::avalon_url}/authorize' ams.ini"
+    unless  => "/bin/grep '${avalon::info::avalon_url}/authorize' ams.ini",
+    notify  => Service['ams']
   }
 
   file { '/opt/adobe/ams/Apache2.2/conf/avalon.conf':
     content => template('avalon/security/avalon_httpd_ams.conf.erb'),
-    mode    => 0755
+    mode    => 0755,
+    notify  => Service['ams']
   }
 
   exec { '/usr/bin/printf "\n\nInclude conf/avalon.conf\n" >> httpd.conf': 
     cwd     => '/opt/adobe/ams/Apache2.2/conf/',
-    unless  => "/bin/grep avalon.conf httpd.conf"
+    unless  => "/bin/grep avalon.conf httpd.conf",
+    require => File['/opt/adobe/ams/Apache2.2/conf/avalon.conf'],
+    notify  => Service['ams']
   }
 
   file { '/opt/adobe/ams/webroot/avalon':
