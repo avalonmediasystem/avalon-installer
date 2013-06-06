@@ -19,6 +19,7 @@ notify { 'classes':
 include epel
 include nulrepo
 include avalon::info
+include avalon::mysql::params
 include avalon::ports
 
 Firewall {
