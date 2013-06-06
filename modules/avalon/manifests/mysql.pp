@@ -23,7 +23,7 @@ class avalon::mysql {
   mysql::db { 'avalonweb':
     user     => $avalon::mysql::params::user,
     password => $avalon::mysql::params::password,
-    host     => ['localhost',$avalon::mysql::params::host],
+    host     => $avalon::mysql::params::host,
     grant    => $avalon::mysql::params::grant,
     require  => $avalon::mysql::params::require
   }
@@ -31,7 +31,7 @@ class avalon::mysql {
   mysql::db { 'matterhorn':
     user     => $avalon::mysql::params::user,
     password => $avalon::mysql::params::password,
-    host     => ['localhost',$avalon::mysql::params::host],
+    host     => $avalon::mysql::params::host,
     grant    => $avalon::mysql::params::grant,
     require  => $avalon::mysql::params::require
   }
@@ -42,6 +42,10 @@ class avalon::mysql {
   }
 
   $mysql_mhorn = "/usr/bin/mysql --user=${avalon::mysql::params::user} --password=${avalon::mysql::params::password} matterhorn"
+
+  database_grant { "${avalon::mysql::params::user}@localhost/matterhorn":
+    privileges => ['all'],
+  }->
   exec { 'create matterhorn tables':
     command   => "${mysql_mhorn} < ${staging::path}/avalon/matterhorn.sql",
     unless    => "${mysql_mhorn} -e 'show tables;' 2>&1 | grep 'mh_service_registration'",
