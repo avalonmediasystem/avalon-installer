@@ -14,7 +14,8 @@
 
 class avalon::web(
   $ruby_version  = "ruby-1.9.3-p429",
-  $source_branch = "master"
+  $source_branch = "master",
+  $deploy_tag = "deploy-r1"
 ) {
   include apache
   include rvm
@@ -186,23 +187,23 @@ class avalon::web(
     ssl             => false,
   }
 
-  staging::file { "avalon-bare-deploy.tar.gz":
-    source  => "https://codeload.github.com/avalonmediasystem/avalon/tar.gz/bare-deploy",
+  staging::file { "avalon-${deploy_tag}.tar.gz":
+    source  => "https://codeload.github.com/avalonmediasystem/avalon/tar.gz/${deploy_tag}",
     subdir  => avalon,
   }
 
-  staging::extract { "avalon-bare-deploy.tar.gz":
+  staging::extract { "avalon-${deploy_tag}.tar.gz":
     target  => "${staging::path}/avalon",
     subdir  => avalon,
-    require => Staging::File["avalon-bare-deploy.tar.gz"]
+    require => Staging::File["avalon-${deploy_tag}.tar.gz"]
   }
 
   exec { "deploy-setup":
     command => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle install",
     onlyif  => "/usr/bin/test ! -e /var/www/avalon/current",
-    cwd     => "${staging::path}/avalon/avalon-bare-deploy",
+    cwd     => "${staging::path}/avalon/avalon-${deploy_tag}",
     require => [
-      Staging::Extract["avalon-bare-deploy.tar.gz"],
+      Staging::Extract["avalon-${deploy_tag}.tar.gz"],
       Apache::Vhost['avalon'],
       Rvm_gem["${ruby_version}@global/bundler"],
       Rvm_gem['passenger']
@@ -221,7 +222,7 @@ class avalon::web(
     command     => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle exec cap puppet deploy >> ${staging::path}/avalon/deploy.log 2>&1",
     environment => ["HOME=/root", "RAILS_ENV=${rails_env}", "AVALON_BRANCH=${source_branch}"],
     creates     => "/var/www/avalon/current",
-    cwd         => "${staging::path}/avalon/avalon-bare-deploy",
+    cwd         => "${staging::path}/avalon/avalon-${deploy_tag}",
     timeout     => 2400, # It shouldn't take 45 minutes, but Rubygems can be a bear
     require     => [Exec['deploy-setup'],File["${staging::path}/avalon/deployment_key"]]
   }
