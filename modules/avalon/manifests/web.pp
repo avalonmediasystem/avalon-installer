@@ -14,8 +14,8 @@
 
 class avalon::web(
   $ruby_version  = "ruby-1.9.3-p429",
-  $source_branch = "master",
-  $deploy_tag = "deploy-r1"
+  $source_branch = "feature/VOV-1872",
+  $deploy_tag = "bare-deploy"
 ) {
   include apache
   include rvm
@@ -79,7 +79,8 @@ class avalon::web(
     source  => 'puppet:///modules/avalon/shared',
     owner   => 'avalon',
     group   => 'avalon',
-    recurse => true
+    recurse => true,
+    replace => false
   }
 
   file{ '/var/www/avalon/shared/avalon.yml':
@@ -87,6 +88,7 @@ class avalon::web(
     content => template('avalon/shared/avalon_yml.erb'),
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 
@@ -95,6 +97,7 @@ class avalon::web(
     content => template('avalon/shared/authentication.yml.erb'),
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 

@@ -81,4 +81,11 @@ class avalon::framework {
     enable => true,
     ensure => running,
   }
+
+  file { "/usr/local/sbin/fedora_rebuild_db.sh":
+    ensure  => present,
+    source  => 'puppet:///modules/avalon/fedora_rebuild_db.sh',
+    mode    => '0775',
+    require => Package['expect']
+  }
 }

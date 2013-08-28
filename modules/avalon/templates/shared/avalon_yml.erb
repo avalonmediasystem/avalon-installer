@@ -6,6 +6,8 @@
     root: '<%=matterhorn_public_url%>'
     baseApplication: 'avalon'
     cleanup_log: 'log/matterhorn_cleanup.log'
+  ffmpeg:
+    path: '/usr/bin/ffmpeg'
   mediainfo:
     path: '/usr/bin/mediainfo'
   email:
@@ -21,3 +23,6 @@
     stream_token_ttl: 20 #minutes
     rtmp_base: '<%=red5_public_url%>/avalon'
     http_base: '<%=avalon_public_url%>/streams'
+  controlled_vocabulary:
+    path: 'config/controlled_vocabulary.yml'
+    
