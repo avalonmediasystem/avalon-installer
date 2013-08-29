@@ -201,33 +201,37 @@ class avalon::web(
     require => Staging::File["avalon-${deploy_tag}.tar.gz"]
   }
 
+  file { "${staging::path}/avalon/deployment_key":
+    ensure      => present,
+    source      => "puppet:///modules/avalon/deployment_key",
+    owner       => root,
+    mode        => 0600
+  }
+
   exec { "deploy-setup":
     command => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle install",
-    onlyif  => "/usr/bin/test ! -e /var/www/avalon/current",
+    onlyif  => "/usr/bin/test ! -e /var/www/avalon/${deploy_tag}",
     cwd     => "${staging::path}/avalon/avalon-${deploy_tag}",
     require => [
       Staging::Extract["avalon-${deploy_tag}.tar.gz"],
       Apache::Vhost['avalon'],
       Rvm_gem["${ruby_version}@global/bundler"],
-      Rvm_gem['passenger']
+      Rvm_gem['passenger'],
+      File["${staging::path}/avalon/deployment_key"]
     ]
-  }
-
-  file { "${staging::path}/avalon/deployment_key":
-    ensure      => present,
-    source      => "puppet:///modules/avalon/deployment_key",
-    owner       => root,
-    mode        => 0600,
-    require     => Exec['deploy-setup']
   }
 
   exec { "deploy-application":
     command     => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle exec cap puppet deploy >> ${staging::path}/avalon/deploy.log 2>&1",
     environment => ["HOME=/root", "RAILS_ENV=${rails_env}", "AVALON_BRANCH=${source_branch}"],
-    creates     => "/var/www/avalon/current",
+    creates     => "/var/www/avalon/${deploy_tag}",
     cwd         => "${staging::path}/avalon/avalon-${deploy_tag}",
     timeout     => 2400, # It shouldn't take 45 minutes, but Rubygems can be a bear
-    require     => [Exec['deploy-setup'],File["${staging::path}/avalon/deployment_key"]]
+    require     => [Exec['deploy-setup'],Exec['reload-avalon-core']]
+  }->
+  file { "/var/www/avalon/${deploy_tag}":
+    ensure      => present,
+    content     => $deploy_tag
   }
 
   file { '/var/www/avalon/current/.rvmrc':
