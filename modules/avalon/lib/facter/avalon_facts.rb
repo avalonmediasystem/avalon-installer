@@ -12,9 +12,17 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
+require 'etc'
+
 Facter.add("avalon_public_address") do
   setcode do
-    Facter::Util::Resolution.exec('hostname -f')
+    result = Facter::Util::Resolution.exec('hostname -f')
+    confs = Dir['/etc/httpd/conf.d/*avalon*.conf']
+    begin
+      result = File.read(confs.first).split(/\n/).find { |l| l =~ /ServerName/ }.split.last
+    rescue
+    end
+    result
   end
 end
 
@@ -44,7 +52,12 @@ end
 
 Facter.add("avalon_dropbox_user") do
   setcode do 
-    "avalondrop"
+    result = "avalondrop"
+    begin
+      result = Etc.getpwuid(File.stat('/var/avalon/dropbox').uid).name
+    rescue
+    end
+    result
   end
 end
 
@@ -78,12 +91,25 @@ end
 
 Facter.add("avalon_admin_user") do
   setcode do
-    "archivist1@example.com"
+    result = "archivist1@example.com"
+    env = Facter.value("rails_env")
+    begin
+      config = YAML.load(File.read("/var/www/avalon/shared/role_map_#{env}.yml"))
+      result = config['group_manager'].first
+    rescue
+    end
+    result
   end
 end
 
 Facter.add("rails_env") do
   setcode do
-    "production"
+    result = "production"
+    confs = Dir['/etc/httpd/conf.d/*avalon*.conf']
+    begin
+      result = File.read(confs.first).split(/\n/).find { |l| l =~ /R(ails|ack)Env/ }.split.last
+    rescue
+    end
+    result
   end
 end
