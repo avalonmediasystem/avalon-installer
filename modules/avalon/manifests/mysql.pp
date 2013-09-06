@@ -12,12 +12,16 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-class avalon::mysql {
+class avalon::mysql(
+  $database  =  'avalonweb',
+  $username  =  'avalonweb',
+  $password  =  'SW5GI4aQLVmPLg'
+) {
   include mysql
 
-  mysql::db { 'avalonweb':
-    user     => 'avalonweb',
-    password => 'SW5GI4aQLVmPLg',
+  mysql::db { $database:
+    user     => $username,
+    password => $password,
     host     => 'localhost',
     grant    => ['all'],
     require  => Class['mysql::server']

@@ -20,6 +20,7 @@ class avalon::web(
   include apache
   include rvm
   include staging
+  include avalon::mysql
 
   exec { '/usr/local/rvm/scripts/rvm':
     subscribe  => Class['rvm::system']
@@ -106,6 +107,7 @@ class avalon::web(
     content => template('avalon/shared/database.yml.erb'),
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 
@@ -114,6 +116,7 @@ class avalon::web(
     content => template('avalon/shared/fedora.yml.erb'),
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 
@@ -122,6 +125,7 @@ class avalon::web(
     content => template('avalon/shared/matterhorn.yml.erb'),
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 
@@ -130,6 +134,7 @@ class avalon::web(
     content => template('avalon/shared/solr.yml.erb'),
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 
@@ -138,6 +143,7 @@ class avalon::web(
     content => template('avalon/shared/role_map.yml.erb'),
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 
