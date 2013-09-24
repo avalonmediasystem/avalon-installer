@@ -14,7 +14,7 @@
 
 class avalon::web(
   $ruby_version  = "ruby-1.9.3-p429",
-  $source_branch = "develop",
+  $source_branch = "release/2.0.0",
   $deploy_tag = "bare-deploy"
 ) {
   include apache
