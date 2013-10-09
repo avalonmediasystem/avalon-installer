@@ -157,7 +157,12 @@ class avalon::web(
     require => [User['avalon'],Group['rvm']]
   }
 
-  rvm_system_ruby {
+  file{ ['/usr/local/rvm','/usr/local/rvm/user']:
+    ensure  => directory
+  }->file{ '/usr/local/rvm/user/db':
+    ensure  => present,
+    content => 'rubygems_version=2.1.5'
+  }->rvm_system_ruby {
     $ruby_version:
       ensure      => 'present',
       default_use => true,
