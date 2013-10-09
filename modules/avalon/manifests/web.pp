@@ -199,6 +199,7 @@ class avalon::web(
     notify          => Service['httpd'],
     # rvm has a dependency for mod_ssl
     ssl             => false,
+    require         => Class['rvm::passenger::apache'],
   }
 
   staging::file { "avalon-${deploy_tag}.tar.gz":
