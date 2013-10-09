@@ -29,8 +29,9 @@ PORTS = {
 
 gather_facts
 Vagrant.configure("2") do |config|
-  config.vm.box = "nulib"
-  config.vm.box_url = "http://yumrepo-public.library.northwestern.edu/nulib.box"
+  config.vm.box = "centos-minimal"
+#  config.vm.box_url = "http://yumrepo-public.library.northwestern.edu/nulib.box"
+  config.vm.box_url = "http://developer.nrel.gov/downloads/vagrant-boxes/CentOS-6.4-x86_64-v20130427.box"
   config.vm.hostname = "avalon-box"
   config.vm.synced_folder "files", "/etc/puppet/avalon_files"
   config.vm.provider :virtualbox do |vb|
