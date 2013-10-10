@@ -28,7 +28,8 @@ class avalon::framework {
     system => true
   }
 
-  user { $avalon_dropbox_user:
+  user { 'avalon_dropbox_user':
+    name     => $avalon_dropbox_user,
     ensure   => present,
     system   => true,
     gid      => 'dropbox',
@@ -49,7 +50,7 @@ class avalon::framework {
     owner   => $avalon_dropbox_user,
     group   => 'dropbox',
     mode    => 2775,
-    require => [File['/var/avalon'],User[$avalon_dropbox_user]]
+    require => [File['/var/avalon'],User['avalon_dropbox_user']]
   }
 
   file { ['/var/avalon/masterfiles','/var/avalon/hls_streams']:
