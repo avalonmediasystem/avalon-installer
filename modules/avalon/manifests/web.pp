@@ -20,6 +20,7 @@ class avalon::web(
   include apache
   include rvm
   include staging
+  include firewall
   include avalon::mysql
 
   exec { '/usr/local/rvm/scripts/rvm':
@@ -285,5 +286,11 @@ class avalon::web(
     enable     => true,
     hasrestart => true,
     subscribe  => File['/etc/init.d/avalon_delayed_job']
+  }
+
+  firewall { '100 allow http and https access':
+    port   => [80, 443],
+    proto  => tcp,
+    action => accept,
   }
 }

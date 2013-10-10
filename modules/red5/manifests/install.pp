@@ -13,6 +13,8 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 class red5::install {
+  include firewall
+  
   staging::file { "red5-1.0.1.tar.gz":
     source  => "http://red5.org/downloads/red5/1_0_1/red5-1.0.1.tar.gz",
     timeout => 1200,
@@ -58,5 +60,11 @@ class red5::install {
     group   => 'root',
     mode    => 0755,
     content => template("red5/red5_init_script.erb")
+  }
+
+  firewall { '120 allow rtmp access':
+    port   => 1935,
+    proto  => tcp,
+    action => accept,
   }
 }
