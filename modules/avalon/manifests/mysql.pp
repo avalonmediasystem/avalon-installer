@@ -14,15 +14,16 @@
 
 class avalon::mysql(
   $database  =  'avalonweb',
-  $username  =  'avalonweb',
-  $password  =  'SW5GI4aQLVmPLg'
+  $username  =  $avalon_db_user,
+  $password  =  $avalon_db_password,
+  $hostname  =  $avalon_db_host
 ) {
   include mysql
 
   mysql::db { $database:
     user     => $username,
     password => $password,
-    host     => 'localhost',
+    host     => $hostname,
     grant    => ['all'],
     require  => Class['mysql::server']
   }

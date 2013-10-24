@@ -5,4 +5,4 @@
   database: <%= scope.lookupvar('avalon::mysql::database') %>
   username: <%= scope.lookupvar('avalon::mysql::username') %>
   password: <%= scope.lookupvar('avalon::mysql::password') %>
-  host: localhost
+  host:     <%= scope.lookupvar('avalon::mysql::hostname') %>
