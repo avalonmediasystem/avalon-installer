@@ -1,9 +1,9 @@
-<%=rails_env%>: 
+<%=@rails_env%>: 
   dropbox:
     path: '/var/avalon/dropbox/'
     upload_uri: 'sftp://localhost/var/avalon/dropbox'
   matterhorn:
-    root: '<%=matterhorn_public_url%>'
+    root: '<%=@matterhorn_public_url%>'
     baseApplication: 'avalon'
     cleanup_log: 'log/matterhorn_cleanup.log'
   ffmpeg:
@@ -21,8 +21,8 @@
         enable_starttls_auto: false
   streaming:
     stream_token_ttl: 20 #minutes
-    rtmp_base: '<%=red5_public_url%>/avalon'
-    http_base: '<%=avalon_public_url%>/streams'
+    rtmp_base: '<%=@red5_public_url%>/avalon'
+    http_base: '<%=@avalon_public_url%>/streams'
   controlled_vocabulary:
     path: 'config/controlled_vocabulary.yml'
     

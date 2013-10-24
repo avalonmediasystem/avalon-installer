@@ -113,3 +113,40 @@ Facter.add("rails_env") do
     result
   end
 end
+
+def add_database_facts
+  env = Facter.value("rails_env")
+  database_configuration = YAML.load(File.read('/var/www/avalon/shared/database.yml'))[env]
+
+  Facter.add("avalon_db_user") do
+    setcode do
+      begin
+        database_configuration['username']
+      rescue
+        'avalonweb'
+      end
+    end
+  end
+
+  Facter.add("avalon_db_password") do
+    setcode do
+      begin
+        database_configuration['password']
+      rescue
+        'hid2gub8em5ghaf2'
+      end
+    end
+  end
+
+  Facter.add("avalon_db_host") do
+    setcode do
+      begin
+        database_configuration['host']
+      rescue
+        'localhost'
+      end
+    end
+  end
+end
+
+add_database_facts

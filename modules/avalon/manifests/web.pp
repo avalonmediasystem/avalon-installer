@@ -23,6 +23,10 @@ class avalon::web(
   include firewall
   include avalon::mysql
 
+  File {
+    selinux_ignore_defaults => true
+  }
+
   exec { '/usr/local/rvm/scripts/rvm':
     subscribe  => Class['rvm::system']
   }
