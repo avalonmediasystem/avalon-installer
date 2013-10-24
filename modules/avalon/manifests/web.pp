@@ -245,7 +245,8 @@ class avalon::web(
     creates     => "/var/www/avalon/${deploy_tag}",
     cwd         => "${staging::path}/avalon/avalon-${deploy_tag}",
     timeout     => 2400, # It shouldn't take 45 minutes, but Rubygems can be a bear
-    require     => [Exec['deploy-setup'],Exec['reload-avalon-core']]
+    require     => [Exec['deploy-setup'],Exec['reload-avalon-core']],
+    notify      => Service['avalon_delayed_job']
   }->
   file { "/var/www/avalon/${deploy_tag}":
     ensure      => present,
