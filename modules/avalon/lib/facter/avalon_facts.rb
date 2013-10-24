@@ -116,7 +116,7 @@ end
 
 def add_database_facts
   env = Facter.value("rails_env")
-  YAML.load(File.read('/var/www/avalon/shared/database.yml'))[env]
+  database_configuration = YAML.load(File.read('/var/www/avalon/shared/database.yml'))[env]
 
   Facter.add("avalon_db_user") do
     setcode do

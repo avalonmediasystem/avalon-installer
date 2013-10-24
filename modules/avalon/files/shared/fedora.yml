@@ -1,4 +1,4 @@
-<%= rails_env %>:
+<%= @rails_env %>:
   user: fedoraAdmin
   password: fedoraAdmin
   url: http://127.0.0.1:8983/fedora
