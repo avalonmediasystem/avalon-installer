@@ -13,6 +13,7 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 require 'etc'
+require 'securerandom'
 
 Facter.add("avalon_public_address") do
   setcode do
@@ -116,35 +117,31 @@ end
 
 def add_database_facts
   env = Facter.value("rails_env")
-  database_configuration = YAML.load(File.read('/var/www/avalon/shared/database.yml'))[env]
+  database_configuration = begin
+    YAML.load(File.read('/var/www/avalon/shared/database.yml'))[env]
+  rescue
+    {
+      'username' => 'avalonweb',
+      'password' => SecureRandom.hex,
+      'host'     => 'localhost'
+    }
+  end
 
   Facter.add("avalon_db_user") do
     setcode do
-      begin
-        database_configuration['username']
-      rescue
-        'avalonweb'
-      end
+      database_configuration['username']
     end
   end
 
   Facter.add("avalon_db_password") do
     setcode do
-      begin
-        database_configuration['password']
-      rescue
-        'hid2gub8em5ghaf2'
-      end
+      database_configuration['password']
     end
   end
 
   Facter.add("avalon_db_host") do
     setcode do
-      begin
-        database_configuration['host']
-      rescue
-        'localhost'
-      end
+      database_configuration['host']
     end
   end
 end
