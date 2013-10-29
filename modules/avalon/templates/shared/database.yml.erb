@@ -2,7 +2,7 @@
   adapter: mysql2
   encoding: utf8
   reconnect: true
-  database: avalonweb
-  username: avalonweb
-  password: SW5GI4aQLVmPLg
-  host: <%=scope.lookupvar('avalon::info::db_address')%>
+  database: <%= scope.lookupvar('avalon::mysql::database') %>
+  username: <%= scope.lookupvar('avalon::mysql::username') %>
+  password: <%= scope.lookupvar('avalon::mysql::password') %>
+  host:     <%= scope.lookupvar('avalon::mysql::hostname') %>

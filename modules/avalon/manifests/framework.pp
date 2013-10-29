@@ -18,11 +18,74 @@ class avalon::framework {
   include rvm
   include stdlib
 
-#  file { ["${avalon::info::root_dir}/masterfiles","${avalon::info::root_dir}/hls_streams"]:
-#  	ensure  => directory,
-#  	owner   => 'avalon',
-#  	group   => 'avalon',
-#  	mode    => 0775,
-#    require => [File[$avalon::info::root_dir],User['avalon']]
-#	}
+  if $avalon_dropbox_password_hash =~ /^$/  {
+    fail("Missing fact: avalon_dropbox_password")
+  }
+  
+  group { 'dropbox':
+    ensure => present,
+    system => true
+  }
+
+  user { 'avalon_dropbox_user':
+    name     => $avalon_dropbox_user,
+    ensure   => present,
+    system   => true,
+    gid      => 'dropbox',
+    home     => '/dropbox', # because it's already chrooted to /var/avalon
+    password => $avalon_dropbox_password_hash,
+    require  => Group['dropbox']
+  }
+
+  file { '/var/avalon':
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => 0755
+  }
+
+  file { '/var/avalon/dropbox':
+    ensure  => directory,
+    owner   => $avalon_dropbox_user,
+    group   => 'dropbox',
+    mode    => 2775,
+    require => [File['/var/avalon'],User['avalon_dropbox_user']]
+  }
+
+  file { ['/var/avalon/masterfiles','/var/avalon/hls_streams']:
+  	ensure  => directory,
+  	owner   => 'avalon',
+  	group   => 'avalon',
+  	mode    => 0775,
+    require => [File['/var/avalon'],User['avalon']]
+	}
+
+  augeas { "sshd_config":
+    context => "/files/etc/ssh/sshd_config",
+    changes => [
+      "set Subsystem/sftp 'internal-sftp'",
+      "set Match[Condition/User='$avalon_dropbox_user']/Condition/User '$avalon_dropbox_user'",
+      "set Match[Condition/User='$avalon_dropbox_user']/Settings/ChrootDirectory '/var/avalon'",
+      "set Match[Condition/User='$avalon_dropbox_user']/Settings/AllowTcpForwarding 'no'",
+      "set Match[Condition/User='$avalon_dropbox_user']/Settings/ForceCommand 'internal-sftp'"
+    ],
+    notify => Service["sshd"],
+  }
+
+  service { "sshd":
+    name => $operatingsystem ? {
+      Debian => "ssh",
+      default => "sshd",
+    },
+    require => Augeas["sshd_config"],
+    enable => true,
+    ensure => running,
+  }
+
+  file { "/usr/local/sbin/fedora_rebuild_db.sh":
+    ensure  => present,
+    source  => 'puppet:///modules/avalon/fedora_rebuild_db.sh',
+    mode    => '0775',
+    require => Package['expect']
+  }
 }

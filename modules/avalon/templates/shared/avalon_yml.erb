@@ -7,6 +7,8 @@
     root: "<%=scope.lookupvar('avalon::info::matterhorn_url')%>"
     baseApplication: 'avalon'
     cleanup_log: 'log/matterhorn_cleanup.log'
+  ffmpeg:
+    path: '/usr/bin/ffmpeg'
   mediainfo:
     path: '/usr/bin/mediainfo'
   email:
@@ -22,3 +24,5 @@
     stream_token_ttl: 20 #minutes
     rtmp_base: "<%=scope.lookupvar('avalon::info::rtmp_url')%>"
     http_base: "<%=scope.lookupvar('avalon::info::hls_url')%>"
+  controlled_vocabulary:
+    path: 'config/controlled_vocabulary.yml'

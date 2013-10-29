@@ -15,7 +15,7 @@
 class avalon::packages {
   include mediainfo
   
-  package { ['cronie', 'curl', 'sqlite-devel', 'mysql-devel', 'v8-devel', 'zip', 'libyaml-devel', 'libffi-devel', 'lsof']:
+  package { ['cronie', 'curl', 'sqlite-devel', 'mysql-devel', 'v8-devel', 'zip', 'libyaml-devel', 'libffi-devel', 'lsof', 'expect']:
     ensure  => present,
     require => [Class['epel'],Class['nulrepo']],
   }

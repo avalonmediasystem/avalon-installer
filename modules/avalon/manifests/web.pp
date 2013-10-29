@@ -14,12 +14,18 @@
 
 class avalon::web(
   $ruby_version  = "ruby-1.9.3-p429",
-  $source_repo   = $avalon::info::avalon_repo,
-  $source_branch = $avalon::info::avalon_branch
+  $source_branch = "master",
+  $deploy_tag = "bare-deploy"
 ) {
   include apache
   include rvm
   include staging
+  include firewall
+  include avalon::mysql
+
+  File {
+    selinux_ignore_defaults => true
+  }
 
   exec { '/usr/local/rvm/scripts/rvm':
     subscribe  => Class['rvm::system']
@@ -65,15 +71,93 @@ class avalon::web(
     mode    => 755,
   }
 
-  class { 'avalon::shared':
-    require => File['/var/www/avalon']
+  file{ '/var/www/avalon/shared':
+    source  => 'puppet:///modules/avalon/shared',
+    owner   => 'avalon',
+    group   => 'avalon',
+    recurse => true,
+    replace => false
+  }
+
+  file{ '/var/www/avalon/shared/avalon.yml':
+    ensure  => present,
+    content => template('avalon/shared/avalon_yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    replace => false,
+    require => File['/var/www/avalon/shared']
+  }
+
+  file{ "/var/www/avalon/shared/authentication.yml":
+    ensure  => present,
+    content => template('avalon/shared/authentication.yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    replace => false,
+    require => File['/var/www/avalon/shared']
+  }
+
+  file{ "/var/www/avalon/shared/database.yml":
+    ensure  => present,
+    content => template('avalon/shared/database.yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    replace => false,
+    require => File['/var/www/avalon/shared']
+  }
+
+  file{ "/var/www/avalon/shared/fedora.yml":
+    ensure  => present,
+    content => template('avalon/shared/fedora.yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    replace => false,
+    require => File['/var/www/avalon/shared']
+  }
+
+  file{ "/var/www/avalon/shared/matterhorn.yml":
+    ensure  => present,
+    content => template('avalon/shared/matterhorn.yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    replace => false,
+    require => File['/var/www/avalon/shared']
+  }
+
+  file{ "/var/www/avalon/shared/solr.yml":
+    ensure  => present,
+    content => template('avalon/shared/solr.yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    replace => false,
+    require => File['/var/www/avalon/shared']
+  }
+
+  file{ "/var/www/avalon/shared/role_map_${rails_env}.yml":
+    ensure  => present,
+    content => template('avalon/shared/role_map.yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    replace => false,
+    require => File['/var/www/avalon/shared']
+  }
+
+  file{ ['/var/www/avalon/shared/log', '/var/www/avalon/shared/pids']:
+    ensure  => 'directory',
+    owner   => 'avalon',
+    group   => 'avalon',
   }
 
   rvm::system_user { 'avalon': 
     require => [User['avalon'],Group['rvm']]
   }
 
-  rvm_system_ruby {
+  file{ ['/usr/local/rvm','/usr/local/rvm/user']:
+    ensure  => directory
+  }->file{ '/usr/local/rvm/user/db':
+    ensure  => present,
+    content => 'rubygems_version=2.1.5'
+  }->rvm_system_ruby {
     $ruby_version:
       ensure      => 'present',
       default_use => true,
@@ -110,52 +194,53 @@ class avalon::web(
     notify          => Service['httpd'],
     # rvm has a dependency for mod_ssl
     ssl             => false,
-    require         => File['/etc/httpd/conf.d/passenger.conf']
+    # this require is centos-specific, and kludgy!
+    require         => File['/etc/httpd/conf.d/passenger.conf'],
   }
 
-  staging::file { "avalon-bare-deploy.tar.gz":
-    source  => "https://codeload.github.com/avalonmediasystem/avalon/tar.gz/bare-deploy",
+  staging::file { "avalon-${deploy_tag}.tar.gz":
+    source  => "https://codeload.github.com/avalonmediasystem/avalon/tar.gz/${deploy_tag}",
     subdir  => avalon,
   }
 
-  staging::extract { "avalon-bare-deploy.tar.gz":
+  staging::extract { "avalon-${deploy_tag}.tar.gz":
     target  => "${staging::path}/avalon",
     subdir  => avalon,
-    require => Staging::File["avalon-bare-deploy.tar.gz"]
-  }
-
-  exec { "deploy-setup":
-    command => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle install",
-    onlyif  => "/usr/bin/test ! -e /var/www/avalon/current",
-    cwd     => "${staging::path}/avalon/avalon-bare-deploy",
-    require => [
-      Staging::Extract["avalon-bare-deploy.tar.gz"],
-      Apache::Vhost['avalon'],
-      Rvm_gem["${ruby_version}@global/bundler"],
-      Rvm_gem['passenger']
-    ]
+    require => Staging::File["avalon-${deploy_tag}.tar.gz"]
   }
 
   file { "${staging::path}/avalon/deployment_key":
     ensure      => present,
     source      => "puppet:///modules/avalon/deployment_key",
     owner       => root,
-    mode        => 0600,
-    require     => Exec['deploy-setup']
+    mode        => 0600
+  }
+
+  exec { "deploy-setup":
+    command => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle install",
+    onlyif  => "/usr/bin/test ! -e /var/www/avalon/${deploy_tag}",
+    cwd     => "${staging::path}/avalon/avalon-${deploy_tag}",
+    require => [
+      Staging::Extract["avalon-${deploy_tag}.tar.gz"],
+      Apache::Vhost['avalon'],
+      Rvm_gem["${ruby_version}@global/bundler"],
+      Rvm_gem['passenger'],
+      File["${staging::path}/avalon/deployment_key"]
+    ]
   }
 
   exec { "deploy-application":
     command     => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle exec cap puppet deploy >> ${staging::path}/avalon/deploy.log 2>&1",
-    environment => [
-      "HOME=/root", 
-      "RAILS_ENV=${avalon::info::rails_env}", 
-      "AVALON_REPO=${source_repo}",
-      "AVALON_BRANCH=${source_branch}"
-    ],
-    creates     => "/var/www/avalon/current",
-    cwd         => "${staging::path}/avalon/avalon-bare-deploy",
+    environment => ["HOME=/root", "RAILS_ENV=${rails_env}", "AVALON_BRANCH=${source_branch}"],
+    creates     => "/var/www/avalon/${deploy_tag}",
+    cwd         => "${staging::path}/avalon/avalon-${deploy_tag}",
     timeout     => 2400, # It shouldn't take 45 minutes, but Rubygems can be a bear
-    require     => [Exec['deploy-setup'],File["${staging::path}/avalon/deployment_key"],Class['avalon::shared']]
+    require     => [Exec['deploy-setup'],File["${staging::path}/avalon/deployment_key"],Class['avalon::shared']],
+    notify      => Service['avalon_delayed_job']
+  }->
+  file { "/var/www/avalon/${deploy_tag}":
+    ensure      => present,
+    content     => $deploy_tag
   }
 
   file { '/var/www/avalon/current/.rvmrc':
@@ -196,5 +281,11 @@ class avalon::web(
     enable     => true,
     hasrestart => true,
     subscribe  => File['/etc/init.d/avalon_delayed_job']
+  }
+
+  firewall { '100 allow http and https access':
+    port   => [80, 443],
+    proto  => tcp,
+    action => accept,
   }
 }

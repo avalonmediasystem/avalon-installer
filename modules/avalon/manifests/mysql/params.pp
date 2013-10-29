@@ -13,8 +13,9 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 class avalon::mysql::params (
-  $user     = 'avalonweb',
-  $password = 'SW5GI4aQLVmPLg',
-  $host     = $avalon::info::db_address,
+  $database  =  'avalonweb',
+  $username  =  $avalon_db_user,
+  $password  =  $avalon_db_password,
+  $hostname  =  $avalon_db_host,
   $grant    = ['all']
 ) {}

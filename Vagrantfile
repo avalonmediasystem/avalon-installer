@@ -38,12 +38,13 @@ end
 gather_facts(@fact_file)
 
 def common_config(config, purpose, host_ip)
-  config.vm.box = "nulib"
-  config.vm.box_url = "http://yumrepo-public.library.northwestern.edu/nulib.box"
+  config.vm.box = "centos-minimal"
+  config.vm.box_url = "http://yumrepo-public.library.northwestern.edu/CentOS-6.4-x86_64-v20130731.box"
   config.vm.hostname = "avalon-#{purpose}"
   config.vm.network :private_network, :ip => host_ip
   config.vm.synced_folder "files", "/etc/puppet/avalon_files"
   config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "3072"]
     vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   end

@@ -27,7 +27,7 @@
 	url = https://github.com/avalonmediasystem/puppet-matterhorn
 [submodule "modules/rvm"]
 	path = modules/rvm
-	url = https://github.com/avalonmediasystem/puppet-rvm.git
+	url = https://github.com/blt04/puppet-rvm.git
 [submodule "modules/firewall"]
 	path = modules/firewall
 	url = https://github.com/puppetlabs/puppetlabs-firewall

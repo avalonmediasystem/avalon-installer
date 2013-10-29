@@ -13,7 +13,9 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 #builds ffmpeg from a locally supplied ffmpeg srpm
-class ffmpeg {
+class ffmpeg(
+  $binary = 'true'
+) {
   include epel
   include nulrepo
 
@@ -66,12 +68,6 @@ Exec { path => ['/usr/bin', '/usr/sbin/', '/sbin/', '/bin',] }
     system     => true,
   }
   
-  exec { 'install_ffmpeg_rpm':
-    command => "rpm -i /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-libs-${ffmpeg_ver}.x86_64.rpm && rpm -i /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-${ffmpeg_ver}.x86_64.rpm",
-    unless  => 'rpm -q ffmpeg',
-    require => Exec["su -l makerpm -c '/home/makerpm/install_ffmpeg_src.sh'"],
-  }
-
   package { 'rpmdevtools':
     ensure  => present,
     require => [User['makerpm'],Exec['yum Group Install']],
@@ -95,13 +91,22 @@ Exec { path => ['/usr/bin', '/usr/sbin/', '/sbin/', '/bin',] }
     require => Package['rpmdevtools'],
   }
   
-  exec { "su -l makerpm -c '/home/makerpm/install_ffmpeg_src.sh'":
-    cwd     => '/home/makerpm',
-    require => [File['/home/makerpm/install_ffmpeg_src.sh'],File["/home/makerpm/ffmpeg-${ffmpeg_ver}.src.rpm"]],
-    creates => "/home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-${ffmpeg_ver}.x86_64.rpm",
-    timeout => 3000,
+  if $binary == 'true' {
+    exec { 'build_ffmpeg_rpm':
+      command => "su -l makerpm -c '/home/makerpm/install_ffmpeg_src.sh'",
+      cwd     => '/home/makerpm',
+      require => [File['/home/makerpm/install_ffmpeg_src.sh'],File["/home/makerpm/ffmpeg-${ffmpeg_ver}.src.rpm"]],
+      creates => "/home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-${ffmpeg_ver}.x86_64.rpm",
+      timeout => 3000,
+    }
+
+    exec { 'install_ffmpeg_rpm':
+      command => "rpm -i /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-libs-${ffmpeg_ver}.x86_64.rpm && rpm -i /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-${ffmpeg_ver}.x86_64.rpm",
+      unless  => 'rpm -q ffmpeg',
+      require => Exec['build_ffmpeg_rpm'],
+    }
   }
-  
+
   file { "/home/makerpm/ffmpeg-${ffmpeg_ver}.src.rpm":
     source  => "puppet:///local/ffmpeg/ffmpeg-${ffmpeg_ver}.src.rpm",
     ensure  => file,
