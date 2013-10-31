@@ -19,6 +19,7 @@ class avalon::mysql(
   $hostname  =  $avalon_db_host
 ) {
   include mysql
+  include mysql::server
 
   mysql::db { $database:
     user     => $username,

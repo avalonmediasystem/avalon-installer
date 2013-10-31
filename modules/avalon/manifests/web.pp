@@ -18,7 +18,9 @@ class avalon::web(
   $deploy_tag = "bare-deploy"
 ) {
   include apache
+  include solr
   include rvm
+  include red5
   include staging
   include firewall
   include avalon::mysql
