@@ -12,15 +12,14 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-class avalon-demo {
+class avalon-sample {
   include avalon
   include tomcat
-  include avalon-demo
 
-  package {"avalon-demo-content":
+  package {"avalon-sample-content":
     ensure => present,
     provider => rpm,
-    source => "http://www.avalonmediasystem.org/downloads/avalon-demo-content.rpm",
+    source => "http://www.avalonmediasystem.org/downloads/avalon-sample-content.noarch.rpm",
     require => [Class['avalon'], Service['tomcat']] #Avalon has to be installed and fedora/solr running
   }
 }
