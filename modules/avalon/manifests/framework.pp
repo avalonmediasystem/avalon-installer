@@ -34,14 +34,6 @@ class avalon::framework {
     mode    => 0755
   }
 
-  file { '/var/avalon/dropbox':
-    ensure  => directory,
-    owner   => $avalon_dropbox_user,
-    group   => 'dropbox',
-    mode    => 2775,
-    require => [File['/var/avalon'],User['avalon_dropbox_user']]
-  }
-
   file { ['/var/avalon/masterfiles','/var/avalon/hls_streams']:
   	ensure  => directory,
   	owner   => 'avalon',
