@@ -21,7 +21,7 @@ class avalon::mysql {
   }
 
   mysql::db { 'avalonweb':
-    user     => $avalon::mysql::params::user,
+    user     => $avalon::mysql::params::username,
     password => $avalon::mysql::params::password,
     host     => $avalon::mysql::params::host,
     grant    => $avalon::mysql::params::grant,
@@ -29,7 +29,7 @@ class avalon::mysql {
   }
 
   mysql::db { 'matterhorn':
-    user     => $avalon::mysql::params::user,
+    user     => $avalon::mysql::params::username,
     password => $avalon::mysql::params::password,
     host     => $avalon::mysql::params::host,
     grant    => $avalon::mysql::params::grant,
@@ -41,13 +41,13 @@ class avalon::mysql {
     source    => 'puppet:///modules/avalon/matterhorn_schema_mysql5.sql'
   }
 
-  $mysql_mhorn = "/usr/bin/mysql --user=${avalon::mysql::params::user} --password=${avalon::mysql::params::password} matterhorn"
+  $mysql_mhorn = "/usr/bin/mysql --user=${avalon::mysql::params::username} --password=${avalon::mysql::params::password} matterhorn"
 
-  database_user { "${avalon::mysql::params::user}@localhost":
+  database_user { "${avalon::mysql::params::username}@localhost":
     ensure        => present,
     password_hash => mysql_password($avalon::mysql::params::password)
   }->
-  database_grant { "${avalon::mysql::params::user}@localhost/matterhorn":
+  database_grant { "${avalon::mysql::params::username}@localhost/matterhorn":
     privileges => ['all'],
   }->
   exec { 'create matterhorn tables':
