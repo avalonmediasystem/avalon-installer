@@ -12,7 +12,8 @@ class avalon::content::dropbox(
     fail("Missing info: avalon::info::dropbox_password")
   }
 
-  user { $avalon::info::dropbox_user:
+  user { 'avalon_dropbox_user':
+    name     => $avalon::info::dropbox_user,
     ensure   => present,
     system   => true,
     gid      => 'dropbox',
@@ -26,7 +27,7 @@ class avalon::content::dropbox(
     owner   => $avalon::info::dropbox_user,
     group   => 'dropbox',
     mode    => 2777,
-    require => [File[$avalon::info::root_dir],User[$avalon::info::dropbox_user]]
+    require => [File[$avalon::info::root_dir],User['avalon_dropbox_user']]
   }
 
   if $mount {

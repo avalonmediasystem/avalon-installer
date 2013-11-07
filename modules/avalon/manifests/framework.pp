@@ -27,16 +27,6 @@ class avalon::framework {
     system => true
   }
 
-  user { 'avalon_dropbox_user':
-    name     => $avalon_dropbox_user,
-    ensure   => present,
-    system   => true,
-    gid      => 'dropbox',
-    home     => '/dropbox', # because it's already chrooted to /var/avalon
-    password => $avalon_dropbox_password_hash,
-    require  => Group['dropbox']
-  }
-
   file { '/var/avalon':
     ensure  => directory,
     owner   => 'root',

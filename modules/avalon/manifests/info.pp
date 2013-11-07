@@ -30,15 +30,15 @@ class avalon::info {
   $avalon_repo            = hiera('avalon_repo', "git://github.com/avalonmediasystem/avalon.git")
   $avalon_branch          = hiera('avalon_branch', "master")
 
-  group { ['avalon', 'dropbox']:
-    ensure  => present,
-    system  => true,
-  }
-
-  file { $avalon::info::root_dir:
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'root',
-    mode    => 0755
-  }
+#  group { ['avalon', 'dropbox']:
+#    ensure  => present,
+#    system  => true,
+#  }
+#
+#  file { $avalon::info::root_dir:
+#    ensure  => directory,
+#    owner   => 'root',
+#    group   => 'root',
+#    mode    => 0755
+#  }
 }

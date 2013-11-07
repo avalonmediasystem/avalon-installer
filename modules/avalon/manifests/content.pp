@@ -1,6 +1,4 @@
 class avalon::content {
-  include concat::setup
-
   package { ["nfs-utils"]:
       ensure => latest,
   }
