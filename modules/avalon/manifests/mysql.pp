@@ -56,6 +56,10 @@ class avalon::mysql {
     privileges => ['all'],
     table      => '*.*',
     user       => "${avalon::mysql::params::username}@localhost"
+  }->exec { 'create matterhorn tables':
+    command   => "${mysql_mhorn} < ${staging::path}/avalon/matterhorn.sql",
+    unless    => "${mysql_mhorn} -e 'show tables;' 2>&1 | grep 'mh_service_registration'",
+    require   => [Mysql::Db['matterhorn'],Staging::File['matterhorn.sql']]
   }
 
   database_user { "${avalon::mysql::params::username}@${avalon::mysql::params::hostname}":
@@ -69,11 +73,4 @@ class avalon::mysql {
     table      => '*.*',
     user       => "${avalon::mysql::params::username}@${avalon::mysql::params::hostname}"
   }
-
-  exec { 'create matterhorn tables':
-    command   => "${mysql_mhorn} < ${staging::path}/avalon/matterhorn.sql",
-    unless    => "${mysql_mhorn} -e 'show tables;' 2>&1 | grep 'mh_service_registration'",
-    require   => [Mysql::Db['matterhorn'],Staging::File['matterhorn.sql'],Mysql_grant["${avalon::mysql::params::username}@localhost"]]
-  }
-
 }
