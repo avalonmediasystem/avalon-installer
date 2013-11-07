@@ -9,7 +9,8 @@ class avalon::shared {
     source  => 'puppet:///modules/avalon/shared',
     owner   => 'avalon',
     group   => 'avalon',
-    recurse => true
+    recurse => true,
+    replace => false
   }
 
   file{ '/var/www/avalon/shared/avalon.yml':
@@ -17,6 +18,7 @@ class avalon::shared {
     content => template('avalon/shared/avalon_yml.erb'),
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 
@@ -25,6 +27,7 @@ class avalon::shared {
     content => $auth_yaml,
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 
@@ -33,6 +36,7 @@ class avalon::shared {
     content => template('avalon/shared/database.yml.erb'),
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 
@@ -41,6 +45,7 @@ class avalon::shared {
     content => template('avalon/shared/fedora.yml.erb'),
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 
@@ -49,6 +54,7 @@ class avalon::shared {
     content => template('avalon/shared/matterhorn.yml.erb'),
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 
@@ -57,6 +63,7 @@ class avalon::shared {
     content => template('avalon/shared/solr.yml.erb'),
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 
@@ -65,6 +72,7 @@ class avalon::shared {
     content => template('avalon/shared/role_map.yml.erb'),
     owner   => 'avalon',
     group   => 'avalon',
+    replace => false,
     require => File['/var/www/avalon/shared']
   }
 
