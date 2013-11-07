@@ -45,16 +45,15 @@ class avalon::mysql {
 
   $mysql_mhorn = "/usr/bin/mysql --user=${avalon::mysql::params::username} --password=${avalon::mysql::params::password} matterhorn"
 
-  database_user { "${avalon::mysql::params::username}@${avalon::mysql::params::hostname}":
+  database_user { [${avalon::mysql::params::username},"${avalon::mysql::params::username}@${avalon::mysql::params::hostname}"]:
     ensure        => present,
     password_hash => mysql_password($avalon::mysql::params::password)
   }->
-  mysql_grant { "${avalon::mysql::params::username}@${avalon::mysql::params::hostname}/matterhorn":
+  mysql_grant { [${avalon::mysql::params::username},"${avalon::mysql::params::username}@${avalon::mysql::params::hostname}/matterhorn"]:
     ensure     => present,
     options    => ['GRANT'],
     privileges => ['all'],
-    table      => '*.*',
-    user       => "${avalon::mysql::params::username}@${avalon::mysql::params::hostname}"
+    table      => '*.*'
   }->
   exec { 'create matterhorn tables':
     command   => "${mysql_mhorn} < ${staging::path}/avalon/matterhorn.sql",
