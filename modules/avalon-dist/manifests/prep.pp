@@ -17,7 +17,8 @@ class avalon-dist::prep {
   package {"avalon-vm":
     ensure => present,
     provider => rpm,
-    source => "http://www.avalonmediasystem.org/downloads/avalon-vm-2.0-1.noarch.rpm"
+    source => "http://www.avalonmediasystem.org/downloads/avalon-vm-2.0-1.noarch.rpm",
+    require => Class['avalon-dist::web']
   }
 
   exec {'clean-filesystem':
@@ -42,7 +43,7 @@ class avalon-dist::prep {
 
   exec {'dist-prep':
     command => "/usr/share/avalon/dist-prep",
-    require => Package['avalon-vm']
+    require => [Package['avalon-vm'], Exec['clean-disk']]
   }
 
   exec {'clean-history':

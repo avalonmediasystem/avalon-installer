@@ -13,6 +13,8 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 class avalon-dist::web {
+  include avalon-sample
+
   #install home_text and thumbnail images
   file{ '/var/www/avalon/current/app/assets/images/sample-content':
     source  => 'puppet:///modules/avalon-dist/sample-content',
