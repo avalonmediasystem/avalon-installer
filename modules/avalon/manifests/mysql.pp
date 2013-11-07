@@ -16,14 +16,16 @@ class avalon::mysql {
   include avalon::mysql::params
   include staging
   
-  class { ::mysql:
-    bind_address => '0.0.0.0'
+  class { '::mysql::server':
+    override_options => { 
+      mysqld => { bind_address => '0.0.0.0' }
+    }
   }
 
   mysql::db { 'avalonweb':
     user     => $avalon::mysql::params::username,
     password => $avalon::mysql::params::password,
-    host     => $avalon::mysql::params::host,
+    host     => $avalon::mysql::params::hostname,
     grant    => $avalon::mysql::params::grant,
     require  => $avalon::mysql::params::require
   }
@@ -31,7 +33,7 @@ class avalon::mysql {
   mysql::db { 'matterhorn':
     user     => $avalon::mysql::params::username,
     password => $avalon::mysql::params::password,
-    host     => $avalon::mysql::params::host,
+    host     => $avalon::mysql::params::hostname,
     grant    => $avalon::mysql::params::grant,
     require  => $avalon::mysql::params::require
   }
@@ -43,11 +45,11 @@ class avalon::mysql {
 
   $mysql_mhorn = "/usr/bin/mysql --user=${avalon::mysql::params::username} --password=${avalon::mysql::params::password} matterhorn"
 
-  database_user { "${avalon::mysql::params::username}@${avalon::mysql::params::host}":
+  database_user { "${avalon::mysql::params::username}@${avalon::mysql::params::hostname}":
     ensure        => present,
     password_hash => mysql_password($avalon::mysql::params::password)
   }->
-  database_grant { "${avalon::mysql::params::username}@${avalon::mysql::params::host}/matterhorn":
+  database_grant { "${avalon::mysql::params::username}@${avalon::mysql::params::hostname}/matterhorn":
     privileges => ['all'],
   }->
   exec { 'create matterhorn tables':
