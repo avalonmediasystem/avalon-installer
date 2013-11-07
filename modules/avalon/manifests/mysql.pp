@@ -54,7 +54,8 @@ class avalon::mysql {
     ensure     => present,
     options    => ['GRANT'],
     privileges => ['all'],
-    table      => '*.*'
+    table      => '*.*',
+    user       => "${avalon::mysql::params::username}@localhost"
   }
 
   database_user { "${avalon::mysql::params::username}@${avalon::mysql::params::hostname}":
@@ -65,7 +66,8 @@ class avalon::mysql {
     ensure     => present,
     options    => ['GRANT'],
     privileges => ['all'],
-    table      => '*.*'
+    table      => '*.*',
+    user       => "${avalon::mysql::params::username}@${avalon::mysql::params::hostname}"
   }
 
   exec { 'create matterhorn tables':
