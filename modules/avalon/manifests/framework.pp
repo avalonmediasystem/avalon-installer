@@ -34,14 +34,6 @@ class avalon::framework {
     mode    => 0755
   }
 
-  file { ['/var/avalon/masterfiles','/var/avalon/hls_streams']:
-  	ensure  => directory,
-  	owner   => 'avalon',
-  	group   => 'avalon',
-  	mode    => 0775,
-    require => [File['/var/avalon'],User['avalon']]
-	}
-
   augeas { "sshd_config":
     context => "/files/etc/ssh/sshd_config",
     changes => [
