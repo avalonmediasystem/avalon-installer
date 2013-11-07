@@ -13,6 +13,7 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 class avalon-dist::prep {
+  include avalon-dist::web
 
   package {"avalon-vm":
     ensure => present,
