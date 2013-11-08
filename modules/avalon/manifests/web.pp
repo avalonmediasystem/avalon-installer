@@ -21,7 +21,7 @@ class avalon::web(
   include rvm
   include staging
   include firewall
-  include avalon::mysql
+#  include avalon::mysql
 
   File {
     selinux_ignore_defaults => true
