@@ -1,0 +1,12 @@
+---
+classes:
+  - avalon::mysql::params
+  - avalon::mysql
+  - tomcat::install
+  - tomcat
+  - fcrepo::config
+  - fcrepo::mysql
+  - avalon::fcrepo
+  - solr
+  - avalon::ports::tomcat
+  - avalon::ports::db

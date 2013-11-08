@@ -1,5 +1,5 @@
 ---
 tomcat::install::http_port: 8983
-avalon::mysql::params::host: '%'
+avalon::mysql::params::hostname: '%'
 fcrepo::config::user: 'tomcat7'
 fcrepo::config::server_host: 'localhost' 

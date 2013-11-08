@@ -1,0 +1,13 @@
+---
+avalon::content::dropbox::export: avalonweb-r2.library.northwestern.edu
+avalon::content::masterfile::export: avalonweb-r2.library.northwestern.edu
+avalon::content::stream::mount: avalonstream-r2.library.northwestern.edu
+matterhorn::config::static_hls: false
+classes:
+  - matterhorn
+  - avalon::matterhorn
+  - avalon::content::dropbox
+  - avalon::content::masterfile
+  - avalon::content::stream
+  - avalon::ports::matterhorn
+  - avalon::ports::dropbox

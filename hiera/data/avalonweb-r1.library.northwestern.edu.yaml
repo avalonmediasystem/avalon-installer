@@ -6,3 +6,4 @@ classes:
   - avalon::content::dropbox
   - avalon::content::masterfile
   - avalon::ports::web
+  - avalon::shared

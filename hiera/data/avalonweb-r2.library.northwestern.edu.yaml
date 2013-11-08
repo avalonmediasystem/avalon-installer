@@ -1,0 +1,9 @@
+---
+avalon::content::dropbox::mount: avalonmhorn-r2.library.northwestern.edu
+avalon::content::masterfile::mount: avalonmhorn-r2.library.northwestern.edu
+classes:
+  - avalon
+  - avalon::content::dropbox
+  - avalon::content::masterfile
+  - avalon::ports::web
+  - avalon::shared
