@@ -32,7 +32,7 @@ class avalon::content::dropbox(
 
   if $mount {
     mount { "${avalon::info::root_dir}/dropbox":
-      device  => "${mount}:/${avalon::info::root_dir}/dropbox",
+      device  => $mount,
       require => File["${avalon::info::root_dir}/dropbox"]
     }
   } else {

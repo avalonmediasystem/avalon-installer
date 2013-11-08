@@ -16,7 +16,7 @@ class avalon::content::masterfile(
 
   if $mount {
     mount { "${avalon::info::root_dir}/masterfiles":
-      device  => "$mount:/${avalon::info::root_dir}/masterfiles",
+      device  => $mount,
       fstype  => "nfs",
       ensure  => "mounted",
       options => "defaults",
