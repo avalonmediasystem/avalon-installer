@@ -29,9 +29,4 @@ class avalon::info {
   $rails_env              = hiera('rails_env', "production")
   $avalon_repo            = hiera('avalon_repo', "git://github.com/avalonmediasystem/avalon.git")
   $avalon_branch          = hiera('avalon_branch', "master")
-
-  group { ['avalon']:
-    ensure  => present,
-    system  => true,
-  }
 }

@@ -23,11 +23,6 @@ class avalon::framework {
     fail("Missing fact: avalon_dropbox_password")
   }
   
-  group { 'dropbox':
-    ensure => present,
-    system => true
-  }
-
   augeas { "sshd_config":
     context => "/files/etc/ssh/sshd_config",
     changes => [
