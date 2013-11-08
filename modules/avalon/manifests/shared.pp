@@ -1,4 +1,6 @@
 class avalon::shared {
+  include avalon::mysql::params
+  
   $auth_config = hiera('auth_config', '')
   $auth_yaml = $auth_config ? {
     /.+/ => inline_template('<%=YAML.dump(auth_config)%>'),
