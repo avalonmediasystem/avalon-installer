@@ -17,7 +17,8 @@ class avalon::framework {
   include epel
   include rvm
   include stdlib
-
+  include avalon::content::base
+  
   if $avalon_dropbox_password_hash =~ /^$/  {
     fail("Missing fact: avalon_dropbox_password")
   }
@@ -25,13 +26,6 @@ class avalon::framework {
   group { 'dropbox':
     ensure => present,
     system => true
-  }
-
-  file { '/var/avalon':
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'root',
-    mode    => 0755
   }
 
   augeas { "sshd_config":
