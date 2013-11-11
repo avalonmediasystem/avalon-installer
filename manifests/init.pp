@@ -24,7 +24,8 @@ class { tomcat::install:
 include tomcat
 class { fcrepo::config: 
   user => 'tomcat7', 
-  server_host => 'localhost' 
+  server_host => 'localhost',
+  version => '3.6.2' 
 }
 include fcrepo::mysql
 class { fcrepo: 
