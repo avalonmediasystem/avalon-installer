@@ -14,6 +14,9 @@
 
 include epel
 include nulrepo
+class { ffmpeg:
+  binary => 'false'
+}
 class { matterhorn::config:
   http_port => '18080'
 }
