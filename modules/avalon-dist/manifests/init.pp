@@ -13,6 +13,6 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 class avalon-dist {
-  include avalon-dist::packages
+  include avalon-dist::prep
   include avalon-dist::web
 }
