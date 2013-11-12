@@ -1,5 +1,5 @@
 ---
-matterhorn::config::http_port: '10080'
+matterhorn::config::http_port: '18080'
 tomcat::install::http_port: '8983'
 fcrepo::config::user: 'tomcat7'
 fcrepo::config::server_host: 'localhost'
