@@ -12,26 +12,4 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-include epel
-include nulrepo
-class { matterhorn::config:
-  http_port => '18080'
-}
-include matterhorn
-class { tomcat::install: 
-  http_port => '8983'
-}
-include mysql::server
-include tomcat
-class { fcrepo::config: 
-  user => 'tomcat7', 
-  server_host => 'localhost',
-  version => '3.6.2'
-}
-include fcrepo::mysql
-class { fcrepo: 
-	require => [Class['fcrepo::config'], Class['fcrepo::mysql'], Package['tomcat']] 
-}
-include solr
-include red5
-include avalon
+hiera_include('classes')

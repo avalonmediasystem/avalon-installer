@@ -1,5 +1,0 @@
-:backends: yaml
-:yaml:
-  :datadir: /vagrant/hiera/data/
-:hierarchy: common
-:logger: puppet
