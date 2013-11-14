@@ -37,3 +37,5 @@ class { fcrepo:
 include solr
 include red5
 include avalon
+include avalon-sample
+include avalon-dist::web
