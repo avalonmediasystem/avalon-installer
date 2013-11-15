@@ -16,10 +16,12 @@ class avalon-sample {
   include avalon
   include tomcat
 
-  package {"avalon-sample-content":
-    ensure => present,
-    provider => rpm,
-    source => "http://www.avalonmediasystem.org/downloads/avalon-sample-content.noarch.rpm",
+  exec {"avalon-sample-content":
+    command => '/bin/rpm -i "http://www.avalonmediasystem.org/downloads/avalon-sample-content.noarch.rpm"',
+    unless => '/bin/rpm -q avalon-sample-content',
+    environment => ["RAILS_ENV=${rails_env}"],
+    timeout => 2400,
     require => [Class['avalon'], Service['tomcat']] #Avalon has to be installed and fedora/solr running
+    require => [Class['avalon'], Service['tomcat'], Class['avalon::security']] #Avalon has to be installed and fedora/solr running
   }
 }
