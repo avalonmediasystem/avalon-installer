@@ -20,7 +20,7 @@ class avalon-sample(
   include tomcat
 
   exec {"avalon-sample-content":
-    command => '/bin/rpm -i "${rpm_location}"',
+    command => "/bin/rpm -i \"${rpm_location}\"",
     unless => '/bin/rpm -q avalon-sample-content',
     environment => ["RAILS_ENV=${rails_env}"],
     timeout => $timeout,
