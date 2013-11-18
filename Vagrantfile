@@ -45,7 +45,7 @@ Vagrant.configure("2") do |config|
     @facts["#{name}_public_url"] = "#{mapping[:schema]}://localhost:#{mapping[:host]}"
   end
 
-  config.vm.provision :shell, :inline => "authconfig --passalgo=sha512 --update" # use SHA512 hashes in /etc/shadow
+  config.vm.provision :shell, :inline => "hostname avalon-box && authconfig --passalgo=sha512 --update"
 
   config.vm.provision :puppet do |puppet|
     puppet.facter.merge! @facts
