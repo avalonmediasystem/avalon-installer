@@ -19,4 +19,6 @@ echo "Prepping firstboot..."
 /usr/share/avalon/dist-prep
 echo "Clearing command history..."
 history -cw
+echo "Shutting down."
+shutdown -h now
 echo "Done."

@@ -29,7 +29,7 @@ PORTS = {
 
 gather_facts
 Vagrant.configure("2") do |config|
-  config.vm.box = "centos-minimal"
+  config.vm.box = "centos-minimal-desktop"
   config.vm.box_url = "http://yumrepo-public.library.northwestern.edu/centos_x86_64_minimal_desktop.box"
   config.vm.hostname = "avalon-box"
   config.vm.synced_folder "files", "/etc/puppet/avalon_files"
