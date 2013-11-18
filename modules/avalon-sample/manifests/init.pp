@@ -12,16 +12,18 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-class avalon-sample {
+class avalon-sample(
+  $rpm_location = "http://www.avalonmediasystem.org/downloads/avalon-sample-content.noarch.rpm",
+  $timeout      = 2400
+) {
   include avalon
   include tomcat
 
   exec {"avalon-sample-content":
-    command => '/bin/rpm -i "http://www.avalonmediasystem.org/downloads/avalon-sample-content.noarch.rpm"',
+    command => '/bin/rpm -i "${rpm_location}"',
     unless => '/bin/rpm -q avalon-sample-content',
     environment => ["RAILS_ENV=${rails_env}"],
-    timeout => 2400,
-    require => [Class['avalon'], Service['tomcat']] #Avalon has to be installed and fedora/solr running
+    timeout => $timeout,
     require => [Class['avalon'], Service['tomcat'], Class['avalon::security']] #Avalon has to be installed and fedora/solr running
   }
 }
