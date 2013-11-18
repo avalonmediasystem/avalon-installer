@@ -1,6 +1,6 @@
 ---
-avalon::content::dropbox::mount: avalonmhorn-r1.library.northwestern.edu
-avalon::content::masterfile::mount: avalonmhorn-r1.library.northwestern.edu
+avalon::content::dropbox::mount: avalonmhorn-r1.library.northwestern.edu:/var/data/dropbox
+avalon::content::masterfile::mount: avalonmhorn-r1.library.northwestern.edu:/var/data/masterfiles
 classes:
   - avalon
   - avalon::content::dropbox
