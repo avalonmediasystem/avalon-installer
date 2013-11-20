@@ -21,6 +21,7 @@ include matterhorn
 class { tomcat::install: 
   http_port => '8983'
 }
+include mysql::server
 include tomcat
 class { fcrepo::config: 
   user => 'tomcat7', 
