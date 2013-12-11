@@ -14,6 +14,7 @@
 
 require 'etc'
 require 'securerandom'
+require 'open-uri'
 
 Facter.add("avalon_public_address") do
   setcode do
@@ -142,6 +143,12 @@ def add_database_facts
   Facter.add("avalon_db_host") do
     setcode do
       database_configuration['host']
+    end
+  end
+
+  Facter.add("rvm_latest_ruby") do
+    setcode do
+      open('https://raw.github.com/wayneeseguin/rvm/master/config/known_strings') { |io| io.read }.split.reverse.find { |r| r =~ /1.9.3/ }
     end
   end
 end

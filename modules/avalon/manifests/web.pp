@@ -13,7 +13,7 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 class avalon::web(
-  $ruby_version  = "ruby-1.9.3-p429",
+  $ruby_version  = $rvm_latest_ruby,
   $source_branch = "master",
   $deploy_tag = "bare-deploy"
 ) {
@@ -152,6 +152,16 @@ class avalon::web(
     require => File['/var/www/avalon/shared']
   }
 
+  file{ "/var/www/avalon/shared/.ruby-version":
+    ensure  => present,
+    content => $ruby_version,
+    owner   => 'avalon',
+    group   => 'avalon',
+    replace => true,
+    require => File['/var/www/avalon/shared'],
+    subscribe   => Rvm_system_ruby[$ruby_version]
+  }
+
   file{ ['/var/www/avalon/shared/log', '/var/www/avalon/shared/pids']:
     ensure  => 'directory',
     owner   => 'avalon',
@@ -226,6 +236,12 @@ class avalon::web(
     mode        => 0600
   }
 
+  file { "${staging::path}/avalon/avalon-${deploy_tag}/.ruby_version":
+    ensure  => present,
+    content => $ruby_version,
+    replace => true,
+    require => Staging::Extract["avalon-${deploy_tag}.tar.gz"]
+  }->
   exec { "deploy-setup":
     command => "/usr/local/rvm/bin/rvm ${ruby_version} do bundle install",
     onlyif  => "/usr/bin/test ! -e /var/www/avalon/${deploy_tag}",
@@ -255,12 +271,6 @@ class avalon::web(
 
   file { '/var/www/avalon/current/.rvmrc':
     ensure      => absent,
-    require     => Exec['deploy-application']
-  }
-
-  file { '/var/www/avalon/current/.ruby-version':
-    ensure      => present,
-    content     => "$ruby_version\n",
     require     => Exec['deploy-application']
   }
 
