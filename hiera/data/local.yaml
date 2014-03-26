@@ -1,9 +1,6 @@
 ---
 avalon::framework::dropbox_user: 'avalondrop'
 avalon::framework::dropbox_password_hash: $6$hqe0dzub$Y./jp.4cW.W0iO5EmOeSV9taG1l/BWFR3WFcQTe912OAHriB2vhOWcMjbS7oAx0oZ0Ve9/42HK3qNeaOj6oyL/
-avalon::web::source_branch: 'develop'
+avalon::web::source_branch: 'master'
 ffmpeg::binary: 'false'
 rails_env: 'production'
-classes:
-- avalon-sample
-- avalon-dist::web
