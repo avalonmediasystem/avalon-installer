@@ -14,6 +14,7 @@
 
 class avalon {
   include apache
+  include avalon::config
   include avalon::packages
   include avalon::web
   include avalon::framework

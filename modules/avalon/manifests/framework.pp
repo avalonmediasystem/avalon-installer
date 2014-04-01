@@ -14,16 +14,16 @@
 
 # Install and configure the Avalon application
 class avalon::framework(
-  $dropbox_user           = $avalon_dropbox_user,
-  $dropbox_password_hash  = $avalon_dropbox_password_hash
+  $dropbox_user           = $avalon::config::dropbox_user,
+  $dropbox_password_hash  = $avalon::config::dropbox_password_hash
 ) {
   include epel
   include matterhorn
   include rvm
   include stdlib
 
-  if $avalon_dropbox_password_hash =~ /^$/  {
-    fail("Missing fact: avalon_dropbox_password")
+  if $dropbox_password_hash =~ /^$/  {
+    fail("Missing fact: dropbox_password")
   }
   
   group { 'dropbox':
