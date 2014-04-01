@@ -13,14 +13,17 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 # Install and configure the Avalon application
-class avalon::framework {
+class avalon::framework(
+  $dropbox_user           = $avalon::config::dropbox_user,
+  $dropbox_password_hash  = $avalon::config::dropbox_password_hash
+) {
   include epel
   include matterhorn
   include rvm
   include stdlib
 
-  if $avalon_dropbox_password_hash =~ /^$/  {
-    fail("Missing fact: avalon_dropbox_password")
+  if $dropbox_password_hash =~ /^$/  {
+    fail("Missing fact: dropbox_password")
   }
   
   group { 'dropbox':
@@ -29,12 +32,12 @@ class avalon::framework {
   }
 
   user { 'avalon_dropbox_user':
-    name     => $avalon_dropbox_user,
+    name     => $dropbox_user,
     ensure   => present,
     system   => true,
     gid      => 'dropbox',
     home     => '/dropbox', # because it's already chrooted to /var/avalon
-    password => $avalon_dropbox_password_hash,
+    password => $dropbox_password_hash,
     require  => Group['dropbox']
   }
 
@@ -47,7 +50,7 @@ class avalon::framework {
 
   file { '/var/avalon/dropbox':
     ensure  => directory,
-    owner   => $avalon_dropbox_user,
+    owner   => $dropbox_user,
     group   => 'dropbox',
     mode    => 2775,
     require => [File['/var/avalon'],User['avalon_dropbox_user']]
@@ -65,10 +68,10 @@ class avalon::framework {
     context => "/files/etc/ssh/sshd_config",
     changes => [
       "set Subsystem/sftp 'internal-sftp'",
-      "set Match[Condition/User='$avalon_dropbox_user']/Condition/User '$avalon_dropbox_user'",
-      "set Match[Condition/User='$avalon_dropbox_user']/Settings/ChrootDirectory '/var/avalon'",
-      "set Match[Condition/User='$avalon_dropbox_user']/Settings/AllowTcpForwarding 'no'",
-      "set Match[Condition/User='$avalon_dropbox_user']/Settings/ForceCommand 'internal-sftp'"
+      "set Match[Condition/User='$dropbox_user']/Condition/User '$avalon_dropbox_user'",
+      "set Match[Condition/User='$dropbox_user']/Settings/ChrootDirectory '/var/avalon'",
+      "set Match[Condition/User='$dropbox_user']/Settings/AllowTcpForwarding 'no'",
+      "set Match[Condition/User='$dropbox_user']/Settings/ForceCommand 'internal-sftp'"
     ],
     notify => Service["sshd"],
   }

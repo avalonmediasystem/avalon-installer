@@ -12,19 +12,14 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-class avalon::mysql(
-  $database  =  $avalon::config::database_name,
-  $username  =  $avalon::config::database_user,
-  $password  =  $avalon::config::database_pass,
-  $hostname  =  $avalon::config::database_host
-) {
-  include mysql
-
-  mysql::db { $database:
-    user     => $username,
-    password => $password,
-    host     => $hostname,
-    grant    => ['all'],
-    require  => Class['mysql::server']
-  }
+class avalon::params {
+  $ruby_version           = $rvm_latest_ruby
+  $source_branch          = "master"
+  $deploy_tag             = "bare-deploy"
+  $dropbox_user           = $avalon_dropbox_user
+  $dropbox_password_hash  = $avalon_dropbox_password_hash
+  $database_name          = "avalonweb"
+  $database_user          = $avalon_db_user
+  $database_pass          = $avalon_db_password
+  $database_host          = $avalon_db_host
 }

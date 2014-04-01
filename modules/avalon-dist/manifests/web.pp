@@ -12,19 +12,22 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-class avalon::mysql(
-  $database  =  $avalon::config::database_name,
-  $username  =  $avalon::config::database_user,
-  $password  =  $avalon::config::database_pass,
-  $hostname  =  $avalon::config::database_host
-) {
-  include mysql
+class avalon-dist::web {
 
-  mysql::db { $database:
-    user     => $username,
-    password => $password,
-    host     => $hostname,
-    grant    => ['all'],
-    require  => Class['mysql::server']
+  #install home_text and thumbnail images
+  file{ '/var/www/avalon/current/app/assets/images/sample-content':
+    source  => 'puppet:///modules/avalon-dist/sample-content',
+    owner   => 'avalon',
+    group   => 'avalon',
+    recurse => true,
+    replace => false,
+    require => Class['avalon-sample']
+  }
+
+  file {'/var/www/avalon/current/app/views/catalog/_home_text.html.erb':
+    ensure => present,
+    source => 'puppet:///modules/avalon-dist/_home_text.html.erb',
+    notify => Service['httpd'], #Need to restart avalon to recompile erb
+    require => File['/var/www/avalon/current/app/assets/images/sample-content']
   }
 }

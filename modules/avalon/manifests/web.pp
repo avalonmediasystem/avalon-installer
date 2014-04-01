@@ -13,9 +13,9 @@
 # ---  END LICENSE_HEADER BLOCK  ---
 
 class avalon::web(
-  $ruby_version  = $rvm_latest_ruby,
-  $source_branch = "master",
-  $deploy_tag = "bare-deploy"
+  $ruby_version  = $avalon::config::ruby_version,
+  $source_branch = $avalon::config::source_branch,
+  $deploy_tag    = $avalon::config::deploy_tag
 ) {
   include apache
   include rvm

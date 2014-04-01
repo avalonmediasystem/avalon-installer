@@ -12,19 +12,7 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-class avalon::mysql(
-  $database  =  $avalon::config::database_name,
-  $username  =  $avalon::config::database_user,
-  $password  =  $avalon::config::database_pass,
-  $hostname  =  $avalon::config::database_host
-) {
-  include mysql
-
-  mysql::db { $database:
-    user     => $username,
-    password => $password,
-    host     => $hostname,
-    grant    => ['all'],
-    require  => Class['mysql::server']
-  }
+class avalon-dist {
+  include avalon-dist::prep
+  include avalon-dist::web
 }

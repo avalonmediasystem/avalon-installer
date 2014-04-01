@@ -12,19 +12,18 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-class avalon::mysql(
-  $database  =  $avalon::config::database_name,
-  $username  =  $avalon::config::database_user,
-  $password  =  $avalon::config::database_pass,
-  $hostname  =  $avalon::config::database_host
+class avalon-sample(
+  $rpm_location = "http://www.avalonmediasystem.org/downloads/avalon-sample-content.noarch.rpm",
+  $timeout      = 2400
 ) {
-  include mysql
+  include avalon
+  include tomcat
 
-  mysql::db { $database:
-    user     => $username,
-    password => $password,
-    host     => $hostname,
-    grant    => ['all'],
-    require  => Class['mysql::server']
+  exec {"avalon-sample-content":
+    command => "/bin/rpm -i \"${rpm_location}\"",
+    unless => '/bin/rpm -q avalon-sample-content',
+    environment => ["RAILS_ENV=${rails_env}"],
+    timeout => $timeout,
+    require => [Class['avalon'], Service['tomcat'], Class['avalon::security']] #Avalon has to be installed and fedora/solr running
   }
 }
