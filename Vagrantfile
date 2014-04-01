@@ -48,7 +48,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, :inline => "hostname avalon-box && authconfig --passalgo=sha512 --update"
 
   config.vm.provision :puppet do |puppet|
-    puppet.facter.merge! @facts
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "init.pp"
     puppet.options = "--hiera_config=/vagrant/hiera/hiera.yaml --fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules"

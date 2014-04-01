@@ -3,5 +3,6 @@
   :datadir: /vagrant/hiera/data
 :hierarchy: 
   - %{::clientcert}
+  - vagrant
   - local
   - common

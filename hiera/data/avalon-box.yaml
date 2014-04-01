@@ -5,6 +5,7 @@ fcrepo::config::user: 'tomcat7'
 fcrepo::config::server_host: 'localhost'
 fcrepo::config::version: '3.6.1'
 classes:
+  - avalon::config
   - avalon::mysql
   - mysql::server
   - tomcat::install
