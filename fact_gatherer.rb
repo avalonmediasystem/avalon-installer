@@ -37,10 +37,11 @@ sftp-only dropbox user with the credentials you specify.
       __EOC__
       say(HighLine.color(dbtext, :green))
 
-      @facts['avalon::config::dropbox_user'] = ask("Username for Avalon Dropbox: ") do |q|
+      dropbox_user = ask("Username for Avalon Dropbox: ") do |q|
         q.validate = /.+{3}/
         q.default = DEFAULT_FACTS['avalon::config::dropbox_user']
       end
+      @facts['avalon::config::dropbox_user'] = dropbox_user.to_str
     end
 
     unless @facts.has_key?('avalon::config::dropbox_password') or @facts.has_key?('avalon::config::dropbox_password_hash')
@@ -62,18 +63,20 @@ sftp-only dropbox user with the credentials you specify.
     end
 
     unless @facts.has_key?('avalon::config::admin_user')
-      @facts['avalon::config::admin_user'] = ask("Initial Avalon Collection/Group Manager E-Mail: ") do |q|
+      admin_user = ask("Initial Avalon Collection/Group Manager E-Mail: ") do |q|
         q.validate = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
         q.default = DEFAULT_FACTS['avalon::config::admin_user']
       end
+      @facts['avalon::config::admin_user'] = admin_user.to_str
     end
 
     unless @facts.has_key?('rails_env')
-      @facts['rails_env'] = ask("Rails environment to run under: ") do |q|
+      rails_env = ask("Rails environment to run under: ") do |q|
         q.case = :down
         q.default = 'production'
         q.validate = /^production|test|development$/
       end
+      @facts['rails_env'] = rails_env.to_str
     end
     facts_have_changed = true
 
