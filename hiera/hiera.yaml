@@ -1,6 +1,6 @@
 :backends: yaml
 :yaml:
-  :datadir: /vagrant/hiera/data
+  :datadir: hiera/data
 :hierarchy: 
   - %{::clientcert}
   - vagrant

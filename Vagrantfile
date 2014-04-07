@@ -50,7 +50,9 @@ Vagrant.configure("2") do |config|
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "init.pp"
-    puppet.options = "--hiera_config=/vagrant/hiera/hiera.yaml --fileserverconfig=/vagrant/fileserver.conf --modulepath=/vagrant/modules"
+    puppet.hiera_config_path =  "hiera/hiera.yaml"
+    puppet.working_directory = "/vagrant"
+    puppet.options = "--modulepath=/vagrant/modules --fileserverconfig=/vagrant/fileserver.conf"
   end
 
 end
