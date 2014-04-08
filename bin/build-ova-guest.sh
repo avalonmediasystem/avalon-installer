@@ -5,6 +5,11 @@ echo "Installing firstboot and distribution tools..."
 yum install -y NetworkManager-gnome firstboot perl-XML-Twig perl-YAML-LibYAML
 rpm -i "http://www.avalonmediasystem.org/downloads/avalon-vm-2.0-1.noarch.rpm"
 echo "Removing installation cruft..."
+for f in `mount | grep vboxsf | cut -d ' ' -f 1`
+do
+  umount $f
+  rm -rf $f
+done
 rm -rf /root/Downloads/* /var/avalon/dropbox/* /home/makerpm/rpmbuild /opt/staging /root/avalon-installer-flat /root/flat.tar.gz
 yum clean all
 echo "Zeroing empty disk space..."
