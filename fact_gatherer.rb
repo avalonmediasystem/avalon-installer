@@ -20,7 +20,7 @@ module FactGatherer
   }
 
   def gather_facts
-    fact_file = File.expand_path('../hiera/data/vagrant.yaml',__FILE__)
+    fact_file = File.expand_path('../hiera/data/custom.yaml',__FILE__)
     facts_have_changed = false
 
     if File.exists?(fact_file)

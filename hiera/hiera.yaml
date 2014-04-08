@@ -3,6 +3,7 @@
   :datadir: hiera/data
 :hierarchy: 
   - %{::clientcert}
-  - vagrant
+  - single-box
+  - custom
   - local
   - common
