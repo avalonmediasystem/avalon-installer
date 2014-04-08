@@ -87,6 +87,7 @@ sftp-only dropbox user with the credentials you specify.
     end
 
     if facts_have_changed
+      @facts.each_pair { |k,v| @facts[k] = v.to_s if v.is_a?(HighLine::String) }
       File.open(fact_file,'w') { |f| f.write(YAML.dump(@facts)) }
     end
 
