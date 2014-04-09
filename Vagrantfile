@@ -12,13 +12,7 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-Dir[File.expand_path('../vendor/cache/gems/**/lib',__FILE__)].each { |lib| $: << lib }
-require 'highline/import'
-require 'unix_crypt'
-require 'yaml'
 require './fact_gatherer'
-
-include FactGatherer
 
 PORTS = {
   :avalon     => { :host =>  10080, :guest =>    80, :schema => "http" }, # HTTP (Apache => Passenger => Avalon)
@@ -27,7 +21,10 @@ PORTS = {
   :matterhorn => { :host =>  18080, :guest => 18080, :schema => "http" }  # HTTP (Felix => Matterhorn)
 }
 
-gather_facts
+#@facts = {}
+#PORTS.each_pair {|name, mapping| @facts["#{name}_public_url"] = "#{mapping[:schema]}://localhost:#{mapping[:host]}"}
+FactGatherer.gather_facts #@facts
+
 Vagrant.configure("2") do |config|
   config.vm.box = "centos-minimal-desktop"
   config.vm.box_url = "http://yumrepo-public.library.northwestern.edu/centos_x86_64_minimal_desktop.box"
@@ -40,10 +37,7 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--usb", "off"]
   end
 
-  PORTS.each_pair do |name, mapping|
-    config.vm.network :forwarded_port, mapping
-    @facts["#{name}_public_url"] = "#{mapping[:schema]}://localhost:#{mapping[:host]}"
-  end
+  PORTS.each_pair {|name, mapping| config.vm.network :forwarded_port, mapping }
 
   config.vm.provision :shell, :inline => "hostname avalon-box && authconfig --passalgo=sha512 --update"
 
