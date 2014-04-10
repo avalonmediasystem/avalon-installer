@@ -22,4 +22,5 @@ class avalon::params {
   $database_user          = $avalon_db_user
   $database_pass          = $avalon_db_password
   $database_host          = $avalon_db_host
+  $public_url             = $avalon_public_url
 }

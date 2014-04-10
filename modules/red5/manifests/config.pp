@@ -12,6 +12,6 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-class red5 {
-  include staging, red5::config, red5::install, red5::service
-}
+class red5::config (
+  $public_url = $red5_public_url
+) {}
