@@ -81,6 +81,14 @@ sftp-only dropbox user with the credentials you specify.
       end
       facts['rails_env'] = rails_env.to_str
     end
+
+    unless facts.has_key?('avalon::config::public_address')
+      public_address = ask("Hostname clients should connect to: ") do |q|
+        q.default = FactGatherer.default_public_address
+      end
+      facts['avalon::config::public_address'] = public_address.to_str
+    end
+
     facts_have_changed = true
 
     unless facts['avalon::config::dropbox_password'].nil?
@@ -96,4 +104,15 @@ sftp-only dropbox user with the credentials you specify.
 
     return facts
   end
+
+  def self.default_public_address
+    result = %x(hostname -f).strip
+    confs = Dir['/etc/httpd/conf.d/*avalon*.conf']
+    begin
+      result = File.read(confs.first).split(/\n/).find { |l| l =~ /ServerName/ }.split.last
+    rescue
+    end
+    result
+  end
+
 end

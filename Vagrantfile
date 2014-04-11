@@ -21,9 +21,9 @@ PORTS = {
   :matterhorn => { :host =>  18080, :guest => 18080, :schema => "http" }  # HTTP (Felix => Matterhorn)
 }
 
-#@facts = {}
-#PORTS.each_pair {|name, mapping| @facts["#{name}_public_url"] = "#{mapping[:schema]}://localhost:#{mapping[:host]}"}
-FactGatherer.gather_facts #@facts
+@facts = { 'avalon::config::public_address' => "localhost" }
+PORTS.each_pair {|name, mapping| @facts["#{name}::config::public_url"] = "#{mapping[:schema]}://localhost:#{mapping[:host]}"}
+FactGatherer.gather_facts @facts
 
 Vagrant.configure("2") do |config|
   config.vm.box = "centos-minimal-desktop"

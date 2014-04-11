@@ -1,0 +1,11 @@
+---
+avalon::config::public_address: avalon-box
+avalon::config::public_url: http://avalon-box
+red5::config::public_url: rtmp://avalon-box
+tomcat::config::public_url: http://avalon-box:8983
+matterhorn::config::public_url: http://avalon-box:18080
+avalon::config::dropbox_user: avalondrop
+avalon::config::admin_user: archivist1@example.com
+rails_env: production
+avalon::config::dropbox_password_hash: $6$w0yolv8x$qz7ntlos0ntv.6J2cxT4QSecc9VI/J.CqCBLh57Gi6DU45F0uWTQccyQSMVjZBTB6PPfrlwksPOsgvCYLYJB7/
+ffmpeg::binary: false

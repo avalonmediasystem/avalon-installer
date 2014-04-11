@@ -1,6 +1,8 @@
 #!/bin/bash
 
 set -e
+mv hiera/data/custom.yaml hiera/data/custom.yaml.orig
+cp hiera/data/avalon-ova.yaml hiera/data/custom.yaml
 vagrant up
 VM_UUID=$(cat .vagrant/machines/default/virtualbox/id)
 HD_UUID=$(VBoxManage showvminfo --machinereadable $VM_UUID | grep ImageUUID | grep -o '[0-9a-fA-F-]\{36\}')

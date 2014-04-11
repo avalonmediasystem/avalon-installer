@@ -8,6 +8,7 @@ class avalon::config(
   $database_user          = $avalon::params::database_user,
   $database_pass          = $avalon::params::database_pass,
   $database_host          = $avalon::params::database_host,
+  $public_address         = $avalon::params::public_address,
   $public_url             = $avalon::params::public_url
 ) inherits avalon::params {
   notify { 'avalon config':
