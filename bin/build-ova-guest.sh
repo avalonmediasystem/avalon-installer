@@ -21,7 +21,7 @@ rm /tmp/foo
 echo "Deleting vagrant user..."
 /usr/sbin/userdel -rf vagrant
 echo "Prepping firstboot..."
-/usr/share/avalon/dist-prep
+/usr/share/avalon-vm/dist-prep
 echo "Clearing command history..."
 history -cw
 echo "Shutting down."
