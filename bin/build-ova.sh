@@ -26,6 +26,8 @@ do
   VBoxManage modifyvm "${VM_UUID}" --natpf1 delete "${rule}"
 done
 
+VBoxManage modifyvm "${VM_UUID}" --name "Avalon Media System 3.0"
+
 VBoxManage guestproperty set "${VM_UUID}" /VirtualBox/GuestAdd/Vbgl/Video/SavedMode 1024x768x32
 
 VBoxManage export "${VM_UUID}" --output "avalon-vm-${VM_DATE}.ova" --vsys 0 --product "Avalon Media System" --producturl "http://www.avalonmediasystem.org" --version "R3"
