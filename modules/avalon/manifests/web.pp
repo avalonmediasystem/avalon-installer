@@ -197,7 +197,7 @@ class avalon::web(
   }
 
   class { 'rvm::passenger::apache':
-    version => '3.0.19',
+    version => '4.0.53',
     ruby_version => $ruby_version,
     mininstances => '3',
     maxinstancesperapp => '0',
