@@ -148,7 +148,7 @@ def add_database_facts
 
   Facter.add("rvm_latest_ruby") do
     setcode do
-      open('https://raw.githubusercontent.com/wayneeseguin/rvm/master/config/known_strings') { |io| io.read }.split.reverse.find { |r| r =~ /1.9.3/ }
+      open('https://raw.githubusercontent.com/wayneeseguin/rvm/master/config/known_strings') { |io| io.read }.split.reverse.find { |r| r =~ /ruby-2.1./ }
     end
   end
 end
