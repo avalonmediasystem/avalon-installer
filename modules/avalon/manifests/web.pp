@@ -134,6 +134,15 @@ class avalon::web(
     require => File['/var/www/avalon/shared']
   }
 
+  file{ "/var/www/avalon/shared/secrets.yml":
+    ensure  => present,
+    content => template('avalon/shared/secrets.yml.erb'),
+    owner   => 'avalon',
+    group   => 'avalon',
+    replace => false,
+    require => File['/var/www/avalon/shared']
+  }
+
   file{ "/var/www/avalon/shared/solr.yml":
     ensure  => present,
     content => template('avalon/shared/solr.yml.erb'),

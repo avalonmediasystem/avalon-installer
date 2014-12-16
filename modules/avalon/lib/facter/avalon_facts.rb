@@ -104,6 +104,18 @@ Facter.add("avalon_admin_user") do
   end
 end
 
+Facter.add("avalon_secret_key_base") do
+  setcode do
+    env = Facter.value("rails_env")
+    begin
+      config = YAML.load(File.read("/var/www/avalon/shared/secrets.yml"))
+      config[env]['secret_key_base']
+    rescue
+      (Digest::SHA512.new << Time.now.to_i.to_s).to_s
+    end
+  end
+end
+
 Facter.add("rails_env") do
   setcode do
     result = "production"
