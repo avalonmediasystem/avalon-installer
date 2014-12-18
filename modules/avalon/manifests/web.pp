@@ -95,6 +95,7 @@ class avalon::web(
     owner   => 'avalon',
     group   => 'avalon',
     replace => false,
+    before  => Exec['deploy-application'],
     require => File['/var/www/avalon/shared']
   }
 
@@ -104,6 +105,7 @@ class avalon::web(
     owner   => 'avalon',
     group   => 'avalon',
     replace => false,
+    before  => Exec['deploy-application'],
     require => File['/var/www/avalon/shared']
   }
 
@@ -113,6 +115,7 @@ class avalon::web(
     owner   => 'avalon',
     group   => 'avalon',
     replace => false,
+    before  => Exec['deploy-application'],
     require => File['/var/www/avalon/shared']
   }
 
@@ -122,6 +125,7 @@ class avalon::web(
     owner   => 'avalon',
     group   => 'avalon',
     replace => false,
+    before  => Exec['deploy-application'],
     require => File['/var/www/avalon/shared']
   }
 
@@ -131,6 +135,7 @@ class avalon::web(
     owner   => 'avalon',
     group   => 'avalon',
     replace => false,
+    before  => Exec['deploy-application'],
     require => File['/var/www/avalon/shared']
   }
 
@@ -140,6 +145,7 @@ class avalon::web(
     owner   => 'avalon',
     group   => 'avalon',
     replace => false,
+    before  => Exec['deploy-application'],
     require => File['/var/www/avalon/shared']
   }
 
@@ -149,6 +155,7 @@ class avalon::web(
     owner   => 'avalon',
     group   => 'avalon',
     replace => false,
+    before  => Exec['deploy-application'],
     require => File['/var/www/avalon/shared']
   }
 
@@ -158,6 +165,7 @@ class avalon::web(
     owner   => 'avalon',
     group   => 'avalon',
     replace => false,
+    before  => Exec['deploy-application'],
     require => File['/var/www/avalon/shared']
   }
 
@@ -167,6 +175,7 @@ class avalon::web(
     owner   => 'avalon',
     group   => 'avalon',
     replace => true,
+    before  => Exec['deploy-application'],
     require => File['/var/www/avalon/shared'],
     subscribe   => Rvm_system_ruby[$ruby_version]
   }
@@ -191,7 +200,8 @@ class avalon::web(
       ensure      => 'present',
       default_use => true,
       build_opts  => '--movable',
-      require     => Class['avalon::packages']
+      require     => Class['avalon::packages'],
+      notify      => Service['httpd']
   }
 
   rvm_gemset {
