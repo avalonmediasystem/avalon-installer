@@ -194,7 +194,7 @@ class avalon::web(
     ensure  => directory
   }->file{ '/usr/local/rvm/user/db':
     ensure  => present,
-    content => 'rubygems_version=2.1.5'
+    content => 'rubygems_version=2.1.7'
   }->rvm_system_ruby {
     $ruby_version:
       ensure      => 'present',
@@ -216,7 +216,7 @@ class avalon::web(
   }
 
   class { 'rvm::passenger::apache':
-    version => '4.0.53',
+    version => '4.0.59',
     ruby_version => $ruby_version,
     mininstances => '3',
     maxinstancesperapp => '0',
