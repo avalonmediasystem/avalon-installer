@@ -23,6 +23,8 @@
         port: 587
         enable_starttls_auto: false
   streaming:
+    server: :generic
+    content_path: /var/avalon/rtmp_streams
     stream_token_ttl: 20 #minutes
     rtmp_base: '<%=scope.lookupvar("red5::config::public_url")%>/avalon'
     http_base: '<%=scope.lookupvar("avalon::config::public_url")%>/streams'
