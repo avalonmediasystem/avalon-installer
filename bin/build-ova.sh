@@ -1,7 +1,9 @@
 #!/bin/bash
 
 set -e
-mv hiera/data/custom.yaml hiera/data/custom.yaml.orig
+if [ -f hiera/data/custom.yaml ] ; then
+  mv hiera/data/custom.yaml hiera/data/custom.yaml.orig
+fi
 cp hiera/data/avalon-ova.yaml hiera/data/custom.yaml
 vagrant up
 VM_UUID=$(cat .vagrant/machines/default/virtualbox/id)
