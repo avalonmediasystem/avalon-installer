@@ -71,4 +71,13 @@ class red5::install {
     proto  => tcp,
     action => accept,
   }
+
+  package { 'java-1.8.0-openjdk':
+    ensure => present
+  }
+
+  file { '/etc/sysconfig/red5': 
+    ensure  => present,
+    content => "export JAVA_HOME=/usr/lib/jvm/jre-1.8.0"
+  }
 }
