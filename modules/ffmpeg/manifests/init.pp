@@ -15,13 +15,13 @@
 #builds ffmpeg from a locally supplied ffmpeg srpm
 class ffmpeg(
   $binary  = 'true',
-  $version = '2.4.2.el6'
+  $version = '2.4.2-1.el6'
 ) {
   include epel
   include nulrepo
 
   $ffmpeg_ver = $version
-  $specfile   = 'ffmpeg12.spec'
+  $specfile   = 'ffmpeg24.spec'
 
   $ffmpeg     = "ffmpeg-${ffmpeg_ver}.src.rpm"
   $ffmpeg_req = ['SDL-devel',
