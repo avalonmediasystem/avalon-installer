@@ -1,9 +1,9 @@
 ---
-avalon::config::public_address: avalon-box
-avalon::config::public_url: http://avalon-box
-red5::config::public_url: rtmp://avalon-box
-tomcat::config::public_url: http://avalon-box:8983
-matterhorn::config::public_url: http://avalon-box:18080
+avalon::config::public_address: avalon-box.local
+avalon::config::public_url: http://avalon-box.local
+red5::config::public_url: rtmp://avalon-box.local
+tomcat::config::public_url: http://avalon-box.local:8983
+matterhorn::config::public_url: http://avalon-box.local:18080
 avalon::config::dropbox_user: avalondrop
 avalon::config::admin_user: archivist1@example.com
 rails_env: production

@@ -16,6 +16,7 @@ classes:
   - fcrepo
   - solr
   - matterhorn
+  - mdns
   - red5
   - avalon::security
   - avalon
