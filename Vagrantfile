@@ -21,7 +21,7 @@ PORTS = {
   :matterhorn => { :host =>  18080, :guest => 18080, :schema => "http" }  # HTTP (Felix => Matterhorn)
 }
 
-@facts = { 'avalon::config::public_address' => "localhost" }
+@facts = { 'avalon::config::public_address' => "localhost", 'avalon::config::public_port' => PORTS[:avalon][:host] }
 PORTS.each_pair {|name, mapping| @facts["#{name}::config::public_url"] = "#{mapping[:schema]}://localhost:#{mapping[:host]}"}
 FactGatherer.gather_facts @facts
 
