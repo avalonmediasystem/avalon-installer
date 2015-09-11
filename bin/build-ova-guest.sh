@@ -11,6 +11,8 @@ do
   rm -rf $f
 done
 rm -rf /root/Downloads/* /var/avalon/dropbox/* /home/makerpm/rpmbuild /opt/staging /root/avalon-installer-flat /root/flat.tar.gz
+echo "Removing guest additions"
+/opt/VBoxGuestAdditions-4.3.10/uninstall.sh
 yum clean all
 echo "Zeroing empty disk space..."
 swapoff /dev/mapper/VolGroup-lv_swap
