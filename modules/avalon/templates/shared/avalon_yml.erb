@@ -4,7 +4,7 @@
     upload_uri: 'sftp://localhost/var/avalon/dropbox'
   domain:
     host: <%=scope.lookupvar("avalon::config::public_address")%> 
-    port: 80
+    port: <%=scope.lookupvar("avalon::config::public_port")%>
   matterhorn:
     root: '<%=scope.lookupvar("matterhorn::config::public_url")%>'
     baseApplication: 'avalon'
