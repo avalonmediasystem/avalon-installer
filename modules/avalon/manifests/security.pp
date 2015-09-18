@@ -45,6 +45,7 @@ class avalon::security(
   file { '/usr/local/sbin/avalon_auth':
     content => template('avalon/security/avalon_auth.sh.erb'),
     mode    => 0755,
+    notify  => Service['httpd'],
     require => File['/usr/local/sbin']
   }
 
