@@ -3,7 +3,7 @@
 cd /root
 echo "Installing firstboot and distribution tools..."
 yum install -y NetworkManager-gnome firstboot perl-XML-Twig perl-YAML-LibYAML
-rpm -i "http://www.avalonmediasystem.org/downloads/avalon-vm-2.2-4.noarch.rpm"
+rpm -i "http://www.avalonmediasystem.org/downloads/avalon-vm-2.2-5.noarch.rpm"
 echo "Removing installation cruft..."
 for f in `mount | grep vboxsf | cut -d ' ' -f 1`
 do
