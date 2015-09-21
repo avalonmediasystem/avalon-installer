@@ -92,7 +92,7 @@ Exec { path => ['/usr/bin', '/usr/sbin/', '/sbin/', '/bin',] }
     require => Package['rpmdevtools'],
   }
   
-  if $binary == 'true' {
+  if "$binary" in ['true','rpm'] {
     exec { 'build_ffmpeg_rpm':
       command => "su -l makerpm -c '/home/makerpm/install_ffmpeg_src.sh'",
       cwd     => '/home/makerpm',
@@ -100,11 +100,13 @@ Exec { path => ['/usr/bin', '/usr/sbin/', '/sbin/', '/bin',] }
       creates => "/home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-${ffmpeg_ver}.x86_64.rpm",
       timeout => 3000,
     }
-
-    exec { 'install_ffmpeg_rpm':
-      command => "rpm -i /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-libs-${ffmpeg_ver}.x86_64.rpm && rpm -i /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-${ffmpeg_ver}.x86_64.rpm",
-      unless  => 'rpm -q ffmpeg',
-      require => Exec['build_ffmpeg_rpm'],
+    
+    if $binary == 'true' {
+      exec { 'install_ffmpeg_rpm':
+        command => "rpm -i /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-libs-${ffmpeg_ver}.x86_64.rpm && rpm -i /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-${ffmpeg_ver}.x86_64.rpm",
+        unless  => 'rpm -q ffmpeg',
+        require => Exec['build_ffmpeg_rpm'],
+      }
     }
   }
 
