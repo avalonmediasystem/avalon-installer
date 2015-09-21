@@ -3,17 +3,19 @@
 cd /root
 echo "Installing firstboot and distribution tools..."
 yum install -y NetworkManager-gnome firstboot perl-XML-Twig perl-YAML-LibYAML
-rpm -i "http://www.avalonmediasystem.org/downloads/avalon-vm-2.1-1.noarch.rpm"
+rpm -i "http://www.avalonmediasystem.org/downloads/avalon-vm-2.2-4.noarch.rpm"
 echo "Removing installation cruft..."
 for f in `mount | grep vboxsf | cut -d ' ' -f 1`
 do
   umount $f
   rm -rf $f
 done
-rm -rf /root/Downloads/* /var/avalon/dropbox/* /home/makerpm/rpmbuild /opt/staging /root/avalon-installer-flat /root/flat.tar.gz
+rm -rf /root/Downloads/* /var/avalon/dropbox/* /opt/staging /root/avalon-installer-flat /root/flat.tar.gz
 echo "Removing guest additions"
 /opt/VBoxGuestAdditions-4.3.10/uninstall.sh
 yum clean all
+echo "Resetting network configuration"
+echo -n '' > /etc/udev/rules.d/70-persistent-net.rules
 echo "Zeroing empty disk space..."
 swapoff /dev/mapper/VolGroup-lv_swap
 dd if=/dev/zero of=/dev/mapper/VolGroup-lv_swap bs=1M

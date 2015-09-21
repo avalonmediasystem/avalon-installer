@@ -1,11 +1,11 @@
 #!/bin/bash
 
 set -e
-if [ -f hiera/data/custom.yaml ] ; then
-  mv hiera/data/custom.yaml hiera/data/custom.yaml.orig
+if [ ! -f .vagrant/machines/default/virtualbox/id ] ; then
+  [ -f hiera/data/custom.yaml ] && mv hiera/data/custom.yaml hiera/data/custom.yaml.orig
+  cp hiera/data/avalon-ova.yaml hiera/data/custom.yaml
+  vagrant up
 fi
-cp hiera/data/avalon-ova.yaml hiera/data/custom.yaml
-vagrant up
 VM_UUID=$(cat .vagrant/machines/default/virtualbox/id)
 HD_UUID=$(VBoxManage showvminfo --machinereadable $VM_UUID | grep ImageUUID | grep -o '[0-9a-fA-F-]\{36\}')
 VM_DATE=$(date +%y%m%d)
@@ -28,8 +28,15 @@ do
   VBoxManage modifyvm "${VM_UUID}" --natpf1 delete "${rule}"
 done
 
+VBoxManage modifyvm "${VM_UUID}" --nic1 bridged
+
 VBoxManage modifyvm "${VM_UUID}" --name "Avalon Media System 4.0"
 
 VBoxManage guestproperty set "${VM_UUID}" /VirtualBox/GuestAdd/Vbgl/Video/SavedMode 1024x768x32
 
 VBoxManage export "${VM_UUID}" --output "avalon-vm-${VM_DATE}.ova" --vsys 0 --product "Avalon Media System" --producturl "http://www.avalonmediasystem.org" --version "R4"
+
+# wget https://raw.githubusercontent.com/avalonmediasystem/avalon/master/Gemfile
+# wget https://raw.githubusercontent.com/avalonmediasystem/avalon/master/Gemfile.lock
+# ln -s /var/www/avalon/shared/Gemfile.local .
+# rvm_path=/usr/local/rvm /usr/local/rvm/bin/rvm-shell 'default' -c 'bundle install --path /var/www/avalon/shared/bundle --path=/var/www/avalon/shared/gems --without development test'
