@@ -35,8 +35,3 @@ VBoxManage modifyvm "${VM_UUID}" --name "Avalon Media System 4.0"
 VBoxManage guestproperty set "${VM_UUID}" /VirtualBox/GuestAdd/Vbgl/Video/SavedMode 1024x768x32
 
 VBoxManage export "${VM_UUID}" --output "avalon-vm-${VM_DATE}.ova" --vsys 0 --product "Avalon Media System" --producturl "http://www.avalonmediasystem.org" --version "R4"
-
-# wget https://raw.githubusercontent.com/avalonmediasystem/avalon/master/Gemfile
-# wget https://raw.githubusercontent.com/avalonmediasystem/avalon/master/Gemfile.lock
-# ln -s /var/www/avalon/shared/Gemfile.local .
-# rvm_path=/usr/local/rvm /usr/local/rvm/bin/rvm-shell 'default' -c 'bundle install --path /var/www/avalon/shared/bundle --path=/var/www/avalon/shared/gems --without development test'
