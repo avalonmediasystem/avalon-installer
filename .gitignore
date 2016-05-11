@@ -2,3 +2,4 @@
 .DS_Store
 avalon-install.yml
 hiera/data/vagrant.yaml
+deploy_key
