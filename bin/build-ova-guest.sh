@@ -16,12 +16,7 @@ echo "Removing guest additions"
 yum clean all
 echo "Resetting network configuration"
 echo -n '' > /etc/udev/rules.d/70-persistent-net.rules
-echo "Zeroing empty disk space..."
-swapoff /dev/mapper/VolGroup-lv_swap
-dd if=/dev/zero of=/dev/mapper/VolGroup-lv_swap bs=1M
-mkswap /dev/mapper/VolGroup-lv_swap
-dd if=/dev/zero of=/tmp/foo bs=1M oflag=direct
-rm /tmp/foo
+rm -f /tmp/foo
 echo "Deleting vagrant user..."
 /usr/sbin/userdel -rf vagrant
 echo "Prepping firstboot..."
