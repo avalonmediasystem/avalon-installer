@@ -2,7 +2,7 @@
 
 cd /root
 echo "Installing firstboot and distribution tools..."
-yum install -y NetworkManager-gnome firstboot perl-XML-Twig perl-YAML-LibYAML
+yum install -y NetworkManager-gnome firstboot perl-XML-Twig perl-YAML-LibYAML zerofree
 rpm -i "http://www.avalonmediasystem.org/downloads/avalon-vm-2.2-5.noarch.rpm"
 echo "Removing installation cruft..."
 for f in `mount | grep vboxsf | cut -d ' ' -f 1`
@@ -20,8 +20,10 @@ echo "Zeroing empty disk space..."
 swapoff /dev/mapper/VolGroup-lv_swap
 dd if=/dev/zero of=/dev/mapper/VolGroup-lv_swap bs=1M
 mkswap /dev/mapper/VolGroup-lv_swap
-dd if=/dev/zero of=/tmp/foo bs=1M oflag=direct
-rm /tmp/foo
+echo 'u' > /proc/sysrq-trigger
+mount /dev/mapper/vg_avalon-lv_root -o remount,ro
+zerofree -v /dev/mapper/vg_avalon-lv_root
+mount /dev/mapper/vg_avalon-lv_root -o remount,rw
 echo "Deleting vagrant user..."
 /usr/sbin/userdel -rf vagrant
 echo "Prepping firstboot..."
