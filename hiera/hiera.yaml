@@ -2,7 +2,7 @@
 :yaml:
   :datadir: hiera/data
 :hierarchy: 
-  - %{::clientcert}
+  - "%{::clientcert}"
   - single-box
   - custom
   - local
