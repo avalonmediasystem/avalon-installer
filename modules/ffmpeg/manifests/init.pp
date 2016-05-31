@@ -15,7 +15,7 @@
 #builds ffmpeg from a locally supplied ffmpeg srpm
 class ffmpeg(
   $binary  = 'true',
-  $version = '2.4.2-1.el6'
+  $version = '2.4.2-1.el7'
 ) {
   include epel
   include nulrepo
