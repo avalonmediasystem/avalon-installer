@@ -38,6 +38,10 @@ class avalon::security(
     require => Staging::Extract["red5-avalon.tar.gz"]
   }
 
+  file { '/usr/local/red5/webapps':
+    ensure  => directory
+  }
+
   file { '/usr/local/sbin':
     ensure  => directory
   }
