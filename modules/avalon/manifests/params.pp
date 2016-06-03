@@ -14,7 +14,7 @@
 
 class avalon::params {
   $ruby_version           = $rvm_latest_ruby
-  $source_branch          = "develop"
+  $source_branch          = "master"
   $deploy_tag             = "bare-deploy"
   $dropbox_user           = $avalon_dropbox_user
   $dropbox_password_hash  = $avalon_dropbox_password_hash

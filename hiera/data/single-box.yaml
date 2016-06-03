@@ -4,7 +4,8 @@ tomcat::install::http_port: '8983'
 fcrepo::config::user: 'tomcat7'
 fcrepo::config::server_host: 'localhost'
 fcrepo::config::version: '3.6.1'
-avalon::config::ruby_version: 'ruby-2.2.2'
+avalon::config::ruby_version: 'ruby-2.2.5'
+avalon::config::source_branch: 'develop'
 classes:
   - avalon::config
   - avalon::mysql
