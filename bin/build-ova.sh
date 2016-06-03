@@ -30,8 +30,8 @@ done
 
 VBoxManage modifyvm "${VM_UUID}" --nic1 bridged
 
-VBoxManage modifyvm "${VM_UUID}" --name "Avalon Media System 4.0"
+VBoxManage modifyvm "${VM_UUID}" --name "Avalon Media System 5.0"
 
 VBoxManage guestproperty set "${VM_UUID}" /VirtualBox/GuestAdd/Vbgl/Video/SavedMode 1024x768x32
 
-VBoxManage export "${VM_UUID}" --output "avalon-vm-${VM_DATE}.ova" --vsys 0 --product "Avalon Media System" --producturl "http://www.avalonmediasystem.org" --version "R4"
+VBoxManage export "${VM_UUID}" --output "avalon-vm-${VM_DATE}.ova" --vsys 0 --product "Avalon Media System" --producturl "http://www.avalonmediasystem.org" --version "R5"
