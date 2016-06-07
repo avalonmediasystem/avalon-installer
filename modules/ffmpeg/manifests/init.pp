@@ -18,7 +18,7 @@ class ffmpeg(
   $version = '2.4.2-1.el6'
 ) {
   include epel
-  include nulrepo
+  include avalonrepo
 
   $ffmpeg_ver = $version
   $specfile   = 'ffmpeg24.spec'
@@ -75,7 +75,7 @@ Exec { path => ['/usr/bin', '/usr/sbin/', '/sbin/', '/bin',] }
   }
   package { $ffmpeg_req:
     ensure  => installed,
-    require => [Class['epel'],Class['nulrepo']]
+    require => [Class['epel'],Class['avalonrepo']]
   }
 
   exec { 'yum Group Install':
