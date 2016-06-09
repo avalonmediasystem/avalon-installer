@@ -26,8 +26,8 @@ PORTS.each_pair {|name, mapping| @facts["#{name}::config::public_url"] = "#{mapp
 FactGatherer.gather_facts @facts
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "centos-minimal-desktop"
-  config.vm.box_url = "http://yumrepo-public.library.northwestern.edu/centos_x86_64_minimal_desktop.box"
+  config.vm.box = "centos-6-minimal-desktop"
+  config.vm.box_url = "http://repo.avalonmediasystem.org/centos_x86_64_minimal_desktop.box"
   config.vm.hostname = "avalon-box"
   config.vm.synced_folder "files", "/etc/puppet/avalon_files"
   config.vm.provider :virtualbox do |vb|

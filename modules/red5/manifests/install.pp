@@ -20,7 +20,7 @@ class red5::install {
   }
 
   staging::file { "red5-1.0.1.tar.gz":
-    source  => "http://yumrepo-public.library.northwestern.edu/red5-1.0.1.tar.gz",
+    source  => "http://repo.avalonmediasystem.org/red5-1.0.1.tar.gz",
     timeout => 1200,
     subdir  => red5,
   }

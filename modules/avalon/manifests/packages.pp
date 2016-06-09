@@ -17,7 +17,7 @@ class avalon::packages {
   
   package { ['cronie', 'curl', 'sqlite-devel', 'mysql-devel', 'v8-devel', 'zip', 'libyaml-devel', 'libffi-devel', 'lsof', 'expect', 'cmake']:
     ensure  => present,
-    require => [Class['epel'],Class['nulrepo']],
+    require => [Class['epel'],Class['avalonrepo']],
   }
 
   service { 'crond':
