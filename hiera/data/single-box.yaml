@@ -5,7 +5,6 @@ fcrepo::config::user: 'tomcat7'
 fcrepo::config::server_host: 'localhost'
 fcrepo::config::version: '3.6.1'
 avalon::config::ruby_version: 'ruby-2.2.5'
-avalon::config::source_branch: 'develop'
 classes:
   - avalon::config
   - avalon::mysql
