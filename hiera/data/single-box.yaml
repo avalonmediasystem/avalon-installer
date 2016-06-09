@@ -1,0 +1,22 @@
+---
+matterhorn::config::http_port: '18080'
+tomcat::install::http_port: '8983'
+fcrepo::config::user: 'tomcat7'
+fcrepo::config::server_host: 'localhost'
+fcrepo::config::version: '3.6.1'
+avalon::config::ruby_version: 'ruby-2.2.5'
+classes:
+  - avalon::config
+  - avalon::mysql
+  - mysql::server
+  - tomcat::install
+  - tomcat
+  - fcrepo::config
+  - fcrepo::mysql
+  - fcrepo
+  - solr
+  - matterhorn
+  - mdns
+  - red5
+  - avalon::security
+  - avalon

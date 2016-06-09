@@ -1,0 +1,33 @@
+[submodule "modules/staging"]
+	path = modules/staging
+	url = https://github.com/nanliu/puppet-staging.git
+[submodule "modules/concat"]
+	path = modules/concat
+	url = https://github.com/ripienaar/puppet-concat.git
+[submodule "modules/epel"]
+	path = modules/epel
+	url = https://github.com/stahnma/puppet-module-epel.git
+[submodule "modules/fcrepo"]
+	path = modules/fcrepo
+	url = https://github.com/avalonmediasystem/puppet-fcrepo.git
+[submodule "modules/mysql"]
+	path = modules/mysql
+	url = https://github.com/puppetlabs/puppetlabs-mysql.git
+[submodule "modules/solr"]
+	path = modules/solr
+	url = https://github.com/avalonmediasystem/puppet-solr.git
+[submodule "modules/stdlib"]
+	path = modules/stdlib
+	url = https://github.com/puppetlabs/puppetlabs-stdlib.git
+[submodule "modules/tomcat"]
+	path = modules/tomcat
+	url = https://github.com/avalonmediasystem/puppet-tomcat
+[submodule "modules/matterhorn"]
+	path = modules/matterhorn
+	url = https://github.com/avalonmediasystem/puppet-matterhorn
+[submodule "modules/rvm"]
+	path = modules/rvm
+	url = https://github.com/avalonmediasystem/puppet-rvm.git
+[submodule "modules/firewall"]
+	path = modules/firewall
+	url = https://github.com/puppetlabs/puppetlabs-firewall

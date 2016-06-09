@@ -1,0 +1,163 @@
+#!/usr/bin/env ruby
+
+require 'thor'
+require 'time'
+
+class BuildOva < Thor
+  class BuildError < Thor::Error ; end
+  include Thor::Actions
+  
+  class << self
+    def source_root
+      File.expand_path('../..',__FILE__)
+    end
+    
+    def exit_on_failure?
+      true
+    end
+
+    def timestamp
+      Time.now.strftime('%Y%m%d%H%M')
+    end
+  end
+  class_option :machine, alias: '-m', type: :string, default: 'default'
+  
+  desc "config", "Set the configuration for the build"
+  method_option :file, alias: '-f', type: :string, default: 'hiera/data/avalon-ova.yaml'
+  def config
+    target = File.join(self.class.source_root, 'hiera/data/custom.yaml')
+    FileUtils.mv(target,"#{target}.orig", force: true) if File.exists?(target)
+    copy_file "#{options[:file]}", 'hiera/data/custom.yaml'
+  end
+  
+  desc "up", "Ensure the virtual machine is running and ready to build"
+  def up
+    unless running? options[:machine]
+      run "vagrant up #{options[:machine]} --no-provision"
+    end
+  end
+  
+  desc "build", "Build and provision the virtual machine"
+  def build
+    with_status_check do
+      invoke :up
+      run "vagrant provision #{options[:machine]}", capture: false
+    end
+  end
+  
+  desc "bundle", "Recover from a busted bundle install"
+  method_option :branch, alias: '-b', type: :string, default: 'master'
+  def bundle
+    invoke :up
+    run "vagrant ssh #{options[:machine]} -c 'sudo -u avalon -i /vagrant/bin/fix-bundle.sh #{options[:branch]}'"
+  end
+  
+  desc "snapshot", "Take a timestamped snapshot of the machine"
+  def snapshot
+    run %{VBoxManage snapshot #{uuid(options[:machine])} take "avalon-vm-#{timestamp}-bootstrapped"}
+  end
+  
+  desc "prep", "Prepare the guest for distrubution"
+  def prep
+    invoke :up
+    with_status_check do
+      run "vagrant ssh #{options[:machine]} -c 'cp /vagrant/bin/build-ova-guest.sh /tmp; sudo /tmp/build-ova-guest.sh'"
+    end
+    sleep 10
+  end
+
+  desc "devagrant", "Remove Vagrant port forwarding and shared folders"
+  def devagrant
+    get_property(/SharedFolderName/, options[:machine]).each do |share|
+      run "VBoxManage sharedfolder remove #{uuid(options[:machine])} --name #{share}"
+    end
+    
+    get_property(/Forwarding/, options[:machine]).each do |rule|
+      rule_name = rule.split(/,/).first
+      run "VBoxManage modifyvm #{uuid(options[:machine])} --natpf1 delete #{rule_name}"
+    end
+    
+    run "VBoxManage modifyvm #{uuid(options[:machine])} --nic1 bridged"
+  end
+
+  desc "export", "Export Virtual Machine to OVA"
+  method_option :name, alias: '-n', type: :string, default: 'Avalon Media System'
+  method_option :version, alias: '-v', type: :string, default: '4.0'
+  method_option :output, alias: '-o', type: :string, default: "avalon-vm-#{timestamp}.ova"
+  def export
+    run %{VBoxManage modifyvm #{uuid(options[:machine])} --name "#{options[:name]} #{options[:version]}"}
+    run %{VBoxManage guestproperty set #{uuid(options[:machine])} /VirtualBox/GuestAdd/Vbgl/Video/SavedMode 1024x768x32}
+    run %{VBoxManage export #{uuid(options[:machine])} --output "#{options[:output]}" --vsys 0 --product "#{options[:name]}" --producturl "http://www.avalonmediasystem.org" --version #{options[:version]}}
+  end
+  
+  desc "ova", "Build the OVA"
+  method_option :provision, alias: '-n', type: :boolean, default: true
+  def ova
+    a = [[],{}]
+    invoke :config,*a if options[:provision]
+    invoke :up,*a
+    invoke :build if options[:provision]
+    invoke :snapshot,*a
+    invoke :prep,*a
+    sleep 1 while running? options[:machine]
+    invoke :devagrant,*a
+    invoke :export,*a
+  end
+
+  desc "property PROP", "Display machine property"
+  method_option :regex, type: :boolean, default: false
+  def property(prop)
+    re = options[:regex] ? Regexp.new(prop) : prop
+    puts "#{prop}: #{get_property(re).inspect}"
+  end
+
+  no_tasks do
+    def with_status_check
+      yield
+      raise BuildError if $?.exitstatus > 0
+    end
+    
+    def running?(machine)
+      get_property('VMState', machine) == 'running'
+    end
+    
+    def timestamp
+      self.class.timestamp
+    end
+    
+    def get_property(property, machine='default')
+      property_list = `VBoxManage showvminfo --machinereadable #{uuid(machine)}`.split(/\n/)
+      property_hash = property_list.inject({}) do |hash,line|
+        (key,value) = line.split(/=/,2)
+        key.gsub!(/"/,'')
+        value = value = begin; eval(value); rescue SyntaxError; value; end
+        if hash.has_key?(key)
+          hash[key] = [hash[key]] unless hash[key].is_a?(Array)
+          hash[key] << value
+        else
+          hash[key] = value
+        end
+        hash
+      end
+      if property.is_a?(Regexp)
+        result = []
+        property_hash.each_pair { |k,v| result << v if k =~ property }
+        return nil if result.empty?
+        return result.first if result.length == 1
+        return result
+      else
+        property_hash[property]
+      end
+    end
+    
+    def uuid(machine='default')
+      begin
+        File.read(File.expand_path("../../.vagrant/machines/#{machine}/virtualbox/id",__FILE__))
+      rescue
+        nil
+      end
+    end
+  end
+end
+
+BuildOva.start

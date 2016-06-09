@@ -1,0 +1,29 @@
+<IfModule mod_disk_cache.c>
+    CacheEnable disk <%=stream_base%>
+</IfModule>
+
+RewriteEngine on
+RewriteLock /tmp/avalon_rewrite_lock
+RewriteMap avalon_auth prg:/usr/local/sbin/avalon_auth
+
+RewriteCond %{QUERY_STRING} token=([^&]+)
+RewriteRule ^<%=stream_base%> ${avalon_auth:%{REQUEST_URI}?token=%1}
+
+RewriteCond %{REQUEST_URI} !(.+).ts$
+RewriteCond %{QUERY_STRING} !token=
+RewriteRule ^<%=stream_base%> - [F]
+RewriteRule ^<%=stream_base%>/forbidden - [F]
+
+<Location <%=stream_base%>>
+  <% if adobe_hls %>
+  HLSHttpStreamingEnabled true
+  HLSMediaFileDuration 2000
+  HttpStreamingContentPath "<%=stream_dir%>"
+  HLSFmsDirPath "<%=server_home%>"
+  HLSJITConfAllowed true
+  HLSM3U8MaxAge 86400
+  HLSTSSegmentMaxAge 86400
+  HLSMetaMaxAge 3600
+  <% end %>
+  Options -Indexes FollowSymLinks
+</Location>

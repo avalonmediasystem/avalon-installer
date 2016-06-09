@@ -1,0 +1,9 @@
+:backends: yaml
+:yaml:
+  :datadir: hiera/data
+:hierarchy: 
+  - %{::clientcert}
+  - single-box
+  - custom
+  - local
+  - common

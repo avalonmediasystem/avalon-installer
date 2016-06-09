@@ -1,0 +1,33 @@
+<%=@rails_env%>: 
+  dropbox:
+    path: '/var/avalon/dropbox/'
+    upload_uri: 'sftp://localhost/var/avalon/dropbox'
+  domain:
+    host: <%=scope.lookupvar("avalon::config::public_address")%> 
+    port: <%=scope.lookupvar("avalon::config::public_port")%>
+  matterhorn:
+    root: '<%=scope.lookupvar("matterhorn::config::public_url")%>'
+    baseApplication: 'avalon'
+    cleanup_log: 'log/matterhorn_cleanup.log'
+  ffmpeg:
+    path: '/usr/bin/ffmpeg'
+  mediainfo:
+    path: '/usr/bin/mediainfo'
+  email:
+    comments: 'avalon-comments@example.edu'
+    notification: 'avalon-notifications@example.edu'
+    support: 'avalon-support@example.edu'
+    mailer:
+      smtp:
+        address: 'smtp.example.edu'
+        port: 587
+        enable_starttls_auto: false
+  streaming:
+    server: :generic
+    content_path: /var/avalon/rtmp_streams
+    stream_token_ttl: 20 #minutes
+    rtmp_base: '<%=scope.lookupvar("red5::config::public_url")%>/avalon'
+    http_base: '<%=scope.lookupvar("avalon::config::public_url")%>/streams'
+  controlled_vocabulary:
+    path: 'config/controlled_vocabulary.yml'
+    

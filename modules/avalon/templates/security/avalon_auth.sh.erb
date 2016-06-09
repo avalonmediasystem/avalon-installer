@@ -1,0 +1,19 @@
+#!/bin/bash
+
+while read uri; do
+  saveIFS=$IFS
+  IFS='=&'
+  parm=($uri)
+  IFS=$saveIFS
+  curl_cmd="curl -s <%=File.join(@avalon_server,%{/authorize.txt?token=${parm[1]}})%>"
+  raw=`${curl_cmd}`
+  result='<%=File.join(@stream_base,"forbidden")%>'
+  for seg in $raw; do 
+    valid=`echo ${uri} | grep /${seg}`
+    if [ -n "${valid}" ] && [ -n "${seg}" ]; then
+      result=${uri}
+      break
+    fi
+  done
+  echo $result
+done
