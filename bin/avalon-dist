@@ -46,7 +46,7 @@ class BuildOva < Thor
   end
   
   desc "bundle", "Recover from a busted bundle install"
-  method_option :branch, alias: '-b', type: :string, default: 'master'
+  method_option :branch, alias: '-b', type: :string, default: '5.x-stable'
   def bundle
     invoke :up
     run "vagrant ssh #{options[:machine]} -c 'sudo -u avalon -i /vagrant/bin/fix-bundle.sh #{options[:branch]}'"
